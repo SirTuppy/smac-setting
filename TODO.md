@@ -20,6 +20,4 @@
 ---
 *Last updated: 2026-01-27*
 - [ ] **Automation**: Explore automated report generation and delivery.
-- Expand production reports to show a user-defined "baseline" week for comparison.
-    - Use these baseline markers on existing reports
-    - page 2?
+- [ ] **Stretch Goal**: Automated comparative reports (Period-over-period, Year-over-year, etc.).

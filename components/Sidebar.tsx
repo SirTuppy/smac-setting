@@ -1,6 +1,6 @@
 import React from 'react';
-import { FileText, Edit3, Sparkles, LayoutDashboard, Database, LogOut, Layers, ChevronRight, Map, BarChart2, Save, RotateCcw, Mail, Download, Printer, Plus } from 'lucide-react';
-import { AppView } from '../types';
+import { FileText, Edit3, Sparkles, LayoutDashboard, Database, LogOut, Layers, ChevronRight, Map, BarChart2, Save, RotateCcw, Mail, Download, Printer, Plus, Target, MessageSquare, ClipboardList, Zap } from 'lucide-react';
+import { AppView, BaselineSettings } from '../types';
 import { GYM_DISPLAY_NAMES } from '../constants/mapTemplates';
 import { GYM_COLORS, TYPE_COLORS } from '../constants/colors';
 
@@ -22,6 +22,10 @@ interface SidebarProps {
     onPrintGenerator?: () => void;
     onOpenGeneratorSettings?: () => void;
     onOpenGeneratorInstructions?: () => void;
+    onOpenBaselineSettings?: () => void;
+    onOpenCommentModal?: () => void;
+    baselineSettings: BaselineSettings;
+    onUpdateBaselineSettings: (settings: BaselineSettings) => void;
     onUploadMore?: () => void;
     onStartTutorial?: () => void;
 }
@@ -44,6 +48,10 @@ const Sidebar: React.FC<SidebarProps> = ({
     onPrintGenerator,
     onOpenGeneratorSettings,
     onOpenGeneratorInstructions,
+    onOpenBaselineSettings,
+    onOpenCommentModal,
+    baselineSettings,
+    onUpdateBaselineSettings,
     onUploadMore,
     onStartTutorial
 }) => {
@@ -243,28 +251,116 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 </button>
                             </div>
                         </div>
+                    </div>
+                )}
 
+                {/* Production Report Actions */}
+                {activeView === 'report' && (
+                    <div className="space-y-6">
                         <div>
-                            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Config</p>
+                            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Report Actions</p>
                             <div className="space-y-1">
                                 <button
-                                    onClick={onOpenGeneratorSettings}
+                                    onClick={onEmailGenerator}
                                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all group">
-                                    <LayoutDashboard size={16} className="text-white/20 group-hover:text-[#009CA6]" />
-                                    <span className="text-xs font-bold">Email Settings</span>
+                                    <Mail size={16} className="text-white/20 group-hover:text-[#009CA6]" />
+                                    <span className="text-xs font-bold">Email to Leadership</span>
                                 </button>
                                 <button
-                                    id="tour-generator-instructions"
-                                    onClick={onOpenGeneratorInstructions}
+                                    id="tour-baseline-settings"
+                                    onClick={onOpenBaselineSettings}
                                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all group">
-                                    <Sparkles size={16} className="text-white/20 group-hover:text-[#009CA6]" />
-                                    <span className="text-xs font-bold">Instructions</span>
+                                    <Target size={16} className="text-white/20 group-hover:text-[#009CA6]" />
+                                    <span className="text-xs font-bold">Baseline Benchmarks</span>
                                 </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="flex items-center justify-between mb-4 px-2">
+                                <p id="tour-report-summary-label" className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Report Summary</p>
+                                <div
+                                    onClick={() => onUpdateBaselineSettings({ ...baselineSettings, showSummary: !baselineSettings.showSummary })}
+                                    className={`w-8 h-4 rounded-full relative transition-colors cursor-pointer ${baselineSettings.showSummary ? 'bg-[#009CA6]' : 'bg-white/10'}`}>
+                                    <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${baselineSettings.showSummary ? 'left-4.5' : 'left-0.5'}`} style={{ left: baselineSettings.showSummary ? '1.125rem' : '0.125rem' }}></div>
+                                </div>
+                            </div>
+
+                            {baselineSettings.showSummary && (
+                                <div className="px-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                                    <textarea
+                                        id="tour-report-summary-input"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs font-bold text-white outline-none focus:border-[#009CA6]/50 transition-colors placeholder:text-white/20 min-h-[120px] resize-none"
+                                        placeholder="Add context for leadership (e.g. Competition prep, staffing changes...)"
+                                        value={baselineSettings.reportComments}
+                                        onChange={(e) => onUpdateBaselineSettings({ ...baselineSettings, reportComments: e.target.value })}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <div>
+                            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Analysis Toggles</p>
+                            <div className="space-y-3 px-2">
+                                <label className="flex items-center justify-between cursor-pointer group">
+                                    <div className="flex items-center gap-2">
+                                        <Zap size={14} className={baselineSettings.showBaselines ? "text-amber-500" : "text-white/20"} />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Show Benchmarks</span>
+                                    </div>
+                                    <div className={`w-8 h-4 rounded-full relative transition-colors ${baselineSettings.showBaselines ? 'bg-[#009CA6]' : 'bg-white/10'}`}>
+                                        <input
+                                            type="checkbox"
+                                            className="hidden"
+                                            checked={baselineSettings.showBaselines}
+                                            onChange={(e) => onUpdateBaselineSettings({ ...baselineSettings, showBaselines: e.target.checked })}
+                                        />
+                                        <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${baselineSettings.showBaselines ? 'left-4.5' : 'left-0.5'}`} style={{ left: baselineSettings.showBaselines ? '1.125rem' : '0.125rem' }}></div>
+                                    </div>
+                                </label>
+
+                                {/* Removed Show Summary from here as it moved to header */}
+
+                                <label className="flex items-center justify-between cursor-pointer group">
+                                    <div className="flex items-center gap-2">
+                                        <ClipboardList size={14} className={baselineSettings.showReferencePage ? "text-[#009CA6]" : "text-white/20"} />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Reference Page</span>
+                                    </div>
+                                    <div className={`w-8 h-4 rounded-full relative transition-colors ${baselineSettings.showReferencePage ? 'bg-[#009CA6]' : 'bg-white/10'}`}>
+                                        <input
+                                            type="checkbox"
+                                            className="hidden"
+                                            checked={baselineSettings.showReferencePage}
+                                            onChange={(e) => onUpdateBaselineSettings({ ...baselineSettings, showReferencePage: e.target.checked })}
+                                        />
+                                        <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all shadow-sm ${baselineSettings.showReferencePage ? 'left-4.5' : 'left-0.5'}`} style={{ left: baselineSettings.showReferencePage ? '1.125rem' : '0.125rem' }}></div>
+                                    </div>
+                                </label>
                             </div>
                         </div>
                     </div>
                 )}
 
+                {/* Generator Config */}
+                {activeView === 'generator' && (
+                    <div className="pt-2">
+                        <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Config</p>
+                        <div className="space-y-1">
+                            <button
+                                onClick={onOpenGeneratorSettings}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all group">
+                                <LayoutDashboard size={16} className="text-white/20 group-hover:text-[#009CA6]" />
+                                <span className="text-xs font-bold">Email Settings</span>
+                            </button>
+                            <button
+                                id="tour-generator-instructions"
+                                onClick={onOpenGeneratorInstructions}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all group">
+                                <Sparkles size={16} className="text-white/20 group-hover:text-[#009CA6]" />
+                                <span className="text-xs font-bold">Generator Instructions</span>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Footer / Reset */}
@@ -283,8 +379,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <LogOut size={16} />
                     <span>Clear & Start Fresh</span>
                 </button>
-            </div>
-        </aside>
+            </div >
+        </aside >
     );
 };
 

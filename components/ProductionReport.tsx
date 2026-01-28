@@ -10,7 +10,10 @@ interface ProductionReportProps {
     selectedGyms: string[];
     dateRange: { start: Date; end: Date };
     onDateRangeChange: (range: { start: Date; end: Date }) => void;
+    baselineSettings: BaselineSettings;
 }
+
+import { BaselineSettings } from '../types';
 
 
 
@@ -18,7 +21,7 @@ import ProductionReportView from './ProductionReportView';
 import { exportToPDF } from '../utils/ModernPDFExport';
 import UnifiedHeader, { RangeOption } from './UnifiedHeader';
 
-const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms, dateRange, onDateRangeChange }) => {
+const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms, dateRange, onDateRangeChange, baselineSettings }) => {
     const [rangeOption, setRangeOption] = useState<RangeOption>('14d');
     // 1. Filter and Flat data
     const filteredClimbs = useMemo(() => {
@@ -183,7 +186,12 @@ const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms,
         setIsSnapshotting(true);
         // Delay to allow Recharts to re-render without animations
         setTimeout(async () => {
-            await exportToPDF('production-report-content', `Production_Report_${new Date().toISOString().split('T')[0]}`);
+            const exportIds = ['report-main-section'];
+            if (baselineSettings.showReferencePage) {
+                exportIds.push('report-baseline-section');
+            }
+
+            await exportToPDF(exportIds, `Production_Report_${new Date().toISOString().split('T')[0]}`);
             setIsSnapshotting(false);
         }, 100);
     };
@@ -238,6 +246,7 @@ const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms,
                         reportTitle={reportTitle}
                         isPrintMode={isSnapshotting}
                         reportRef={reportRef}
+                        baseline={baselineSettings}
                     />
                 </div>
             </div>

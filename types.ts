@@ -105,6 +105,21 @@ export interface ProductionStats {
   activeGymCodes: string[];
 }
 
+export interface BaselineSettings {
+  boulderTargetPerShift: number;
+  ropeTargetPerShift: number;
+  shiftsPerWeek: number;
+  totalVolumePerWeek: number;
+  routesPerWeek: number;
+  bouldersPerWeek: number;
+  settingDays: number[]; // [0-6] where 0 is Sunday
+  idealDailySplit: { day: number, routes: number, boulders: number }[];
+  showBaselines: boolean;
+  showSummary: boolean;
+  showReferencePage: boolean;
+  reportComments: string;
+}
+
 // Sample CSV Data for testing (KAYA Format)
 export const MOCK_CSV_DATA = `Name,Grade,Setter,Wall,Date_Set,Color,climbType
 "Pinch Me I'm Dreaming",V4,"Alex Handhold, Sarah Sendit",Wall A,Wed Jan 14 2026 10:00:00 GMT+0000 (Coordinated Universal Time),Red,Bouldering

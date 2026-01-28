@@ -6,13 +6,38 @@ import MapGenerator, { MapGeneratorHandle } from './components/MapGenerator';
 import RouteMapper from './components/RouteMapper';
 import ProductionReport from './components/ProductionReport';
 import Sidebar from './components/Sidebar';
-import { Climb, GymSchedule, EmailSettings, AppView, MOCK_CSV_DATA, MOCK_HUMANITY_DATA } from './types';
+import BaselineModal from './components/BaselineModal';
+import CommentModal from './components/CommentModal';
+import { Climb, GymSchedule, EmailSettings, AppView, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, BaselineSettings } from './types';
 
 const DEFAULT_EMAIL_SETTINGS: EmailSettings = {
   to: '',
   cc: '',
   subject: '[GYM_NAME] Setting Schedule: [DATE_RANGE]',
   body: 'Hi Team,\n\nPlease find the setting schedule for [GYM_NAME] for the weeks of [DATE_RANGE].\n\n(Please remember to attach the schedule image to this email before sending.)\n\nThanks!'
+};
+
+const DEFAULT_BASELINE_SETTINGS: BaselineSettings = {
+  boulderTargetPerShift: 4.0,
+  ropeTargetPerShift: 1.5,
+  shiftsPerWeek: 15,
+  totalVolumePerWeek: 150,
+  routesPerWeek: 40,
+  bouldersPerWeek: 110,
+  settingDays: [1, 2, 3, 4], // Mon, Tue, Wed, Thu
+  idealDailySplit: [
+    { day: 0, routes: 0, boulders: 0 },   // Sun
+    { day: 1, routes: 10, boulders: 28 }, // Mon
+    { day: 2, routes: 10, boulders: 28 }, // Tue
+    { day: 3, routes: 10, boulders: 27 }, // Wed
+    { day: 4, routes: 10, boulders: 27 }, // Thu
+    { day: 5, routes: 0, boulders: 0 },   // Fri
+    { day: 6, routes: 0, boulders: 0 }    // Sat
+  ],
+  showBaselines: true,
+  showSummary: true,
+  showReferencePage: true,
+  reportComments: ''
 };
 
 import TutorialGuide, { TutorialStep } from './components/TutorialGuide';
@@ -38,6 +63,10 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   { targetId: 'nav-report', title: 'Phase 3: Production Reports', description: 'Need something clean for the next meeting? The Report view creates presentation-ready summaries.', position: 'right' },
   { targetId: 'tour-date-display', title: 'Sync & Verify', description: 'Your date filters stay in sync here. Verify the range before you export.', position: 'bottom' },
   { targetId: 'tour-report-export', title: 'High-Res Export', description: 'Click here to generate a high-resolution, perfectly formatted PDF. It’s ready to be printed or emailed to leadership.', position: 'bottom' },
+  { targetId: 'tour-baseline-settings', title: 'Set Your Standards', description: 'Defined your regional baselines once, and they’ll apply to every report you generate. Set targets for volume, shifts, and daily splits here.', position: 'right' },
+  { targetId: 'tour-comparison-pill', title: 'Live Benchmarking', description: 'See exactly how current production stacks up against your defined baselines. Green pills mean you’re ahead; red means you’re behind.', position: 'bottom' },
+  { targetId: 'tour-report-summary-label', title: 'Executive Context', description: 'Add your custom summary here. It will appear at the top of the report to give leadership necessary context (like upcoming comps or staffing changes).', position: 'right' },
+  { targetId: 'tour-baseline-reference', title: 'Transparency Page', description: 'Every report can include a Baseline Reference page. This shows leadership exactly what our "perfect world" looks like and how we measure success.', position: 'top' },
 
   // Generator Tour
   { targetId: 'nav-generator', title: 'Phase 4: Map Engine', description: 'The Yellow Map tedium removed. Use this tool to turn Humanity schedules into physical maps automatically.', position: 'right' },
@@ -70,6 +99,8 @@ function App() {
   // Modal states
   const [showInstructions, setShowInstructions] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showBaselineSettings, setShowBaselineSettings] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
   const [showUploadOverlay, setShowUploadOverlay] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
 
@@ -85,20 +116,30 @@ function App() {
   const handleTutorialStepChange = (index: number) => {
     // 1. Deterministic Navigation based on step index
     // Step 0-9: Analytics
-    // Step 10-12: Reports
-    // Step 13-16: Generator
-    // Step 17-18: Mapper
-    // Step 19: Close (Analytics)
+    // Step 10-16: Reports
+    // Step 17-20: Generator
+    // Step 21-22: Mapper
+    // Step 23: Close (Analytics)
 
     if (index >= 0 && index <= 9) setActiveView('analytics');
-    else if (index >= 10 && index <= 12) setActiveView('report');
-    else if (index >= 13 && index <= 16) setActiveView('generator');
-    else if (index >= 17 && index <= 18) setActiveView('mapper');
-    else if (index === 19) setActiveView('analytics');
+    else if (index >= 10 && index <= 16) {
+      setActiveView('report');
+      // Ensure summary is visible for the tour
+      if (!baselineSettings.showSummary || !baselineSettings.reportComments) {
+        setBaselineSettings(prev => ({
+          ...prev,
+          showSummary: true,
+          reportComments: prev.reportComments || 'This dashboard is synchronized with our regional production metrics. We are currently tracking ahead of schedule for the upcoming season.'
+        }));
+      }
+    }
+    else if (index >= 17 && index <= 20) setActiveView('generator');
+    else if (index >= 21 && index <= 22) setActiveView('mapper');
+    else if (index === 23) setActiveView('analytics');
 
     // 2. Inject demo data for feature steps if no real data is present
-    const needsAnalyticsData = index >= 4 && index <= 12;
-    const needsGeneratorData = index >= 13 && index <= 18;
+    const needsAnalyticsData = index >= 4 && index <= 16;
+    const needsGeneratorData = index >= 17 && index <= 22;
 
     if (needsAnalyticsData && !climbData) {
       const data = parseKayaCSV(MOCK_CSV_DATA, "Movement Design District");
@@ -113,11 +154,28 @@ function App() {
 
   const handleTutorialClose = () => {
     setShowTutorial(false);
-    setActiveView('analytics');
+    handleReset();
   };
   const [emailSettings, setEmailSettings] = useState<EmailSettings>(() => {
     const saved = localStorage.getItem('email_settings');
     return saved ? JSON.parse(saved) : DEFAULT_EMAIL_SETTINGS;
+  });
+
+  const [baselineSettings, setBaselineSettings] = useState<BaselineSettings>(() => {
+    const saved = localStorage.getItem('baseline_settings');
+    if (!saved) return DEFAULT_BASELINE_SETTINGS;
+
+    try {
+      const parsed = JSON.parse(saved);
+      // Merge saved settings with defaults to ensure new properties (like idealDailySplit) exist
+      return {
+        ...DEFAULT_BASELINE_SETTINGS,
+        ...parsed
+      };
+    } catch (e) {
+      console.error("Failed to parse baseline settings", e);
+      return DEFAULT_BASELINE_SETTINGS;
+    }
   });
 
   const gymNames = useMemo(() => {
@@ -133,6 +191,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('email_settings', JSON.stringify(emailSettings));
   }, [emailSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('baseline_settings', JSON.stringify(baselineSettings));
+  }, [baselineSettings]);
 
   // Sync selection when data first loads
   React.useEffect(() => {
@@ -204,6 +266,23 @@ function App() {
     setActiveView('analytics');
   };
 
+  const handleEmail = () => {
+    if (activeView === 'report') {
+      const subject = encodeURIComponent(`Production Report: ${selectedGyms.join(', ')}`);
+      const body = encodeURIComponent(`Hi Team,\n\nThe production report for ${selectedGyms.join(', ')} is ready. You can view the full dashboard and benchmarks here: ${window.location.href}\n\nSummary Context: ${baselineSettings.reportComments || 'No additional comments.'}`);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    } else {
+      handleEmailSchedule();
+    }
+  };
+
+  const handleOpenBaselineSettings = () => setShowBaselineSettings(true);
+  const handleOpenCommentModal = () => setShowCommentModal(true);
+
+  const handleUpdateBaselineSettings = (newSettings: BaselineSettings) => {
+    setBaselineSettings(newSettings);
+  };
+
   const hasData = climbData || gymSchedules;
 
   return (
@@ -240,11 +319,15 @@ function App() {
             alert('No saved schedules found.');
           }
         }}
-        onEmailGenerator={handleEmailSchedule}
+        onEmailGenerator={handleEmail}
         onDownloadGenerator={() => generatorRef.current?.downloadAll()}
         onPrintGenerator={() => window.print()}
         onOpenGeneratorSettings={() => setShowSettings(true)}
         onOpenGeneratorInstructions={() => setShowInstructions(true)}
+        onOpenBaselineSettings={handleOpenBaselineSettings}
+        onOpenCommentModal={handleOpenCommentModal}
+        baselineSettings={baselineSettings}
+        onUpdateBaselineSettings={handleUpdateBaselineSettings}
         onUploadMore={() => setShowUploadOverlay(true)}
         onStartTutorial={() => setShowTutorial(true)}
       />
@@ -269,6 +352,7 @@ function App() {
               selectedGyms={selectedGyms}
               dateRange={reportRange}
               onDateRangeChange={setReportRange}
+              baselineSettings={baselineSettings}
             />
           ) : (
             <FileUpload onDataLoaded={handleDataLoaded} />
@@ -318,6 +402,22 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Baseline Settings Modal */}
+      <BaselineModal
+        isOpen={showBaselineSettings}
+        onClose={() => setShowBaselineSettings(false)}
+        settings={baselineSettings}
+        onUpdateSettings={handleUpdateBaselineSettings}
+      />
+
+      {/* Comment Modal */}
+      <CommentModal
+        isOpen={showCommentModal}
+        onClose={() => setShowCommentModal(false)}
+        initialComment={baselineSettings.reportComments}
+        onSave={(comment) => handleUpdateBaselineSettings({ ...baselineSettings, reportComments: comment })}
+      />
 
       {/* Tutorial System */}
       <TutorialGuide
