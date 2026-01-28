@@ -1,0 +1,83 @@
+/* Global Print Styles */
+@media print {
+
+    /* 1. RESET ROOT CONTAINERS to be simple blocks */
+    html,
+    body,
+    #root {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        overflow: visible !important;
+        background: white !important;
+    }
+
+    /* 2. COMPLETELY REMOVE SIDEBAR AND UI */
+    aside,
+    nav,
+    .print\:hidden {
+        display: none !important;
+    }
+
+    /* 3. RESET THE DASHBOARD LAYOUT (Remove the 72px sidebar margin) */
+    main {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-left: 0 !important;
+        /* Extremely important to reset the .ml-72 */
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        position: static !important;
+        overflow: visible !important;
+    }
+
+    /* 4. RESET THE MAP CONTAINER (Remove flex-row and scrolling) */
+    #map-print-section {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Force each gym block to be a vertical section */
+    #map-print-section>div {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* STRIP UI ARTIFACTS: Pure rectangle export */
+    .bg-white.p-4.rounded-2xl.shadow-2xl.shadow-slate-200.border.border-slate-200 {
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* INDIVIDUAL MAP (Canvas) FORMATTING */
+    canvas {
+        display: block !important;
+        margin: 20px auto !important;
+        /* Some separation for debug, but break-after handles page flow */
+        max-width: 100% !important;
+        height: auto !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Avoid page breaks inside table sections if they were separate (not applicable here as it's a canvas, but good practice) */
+}

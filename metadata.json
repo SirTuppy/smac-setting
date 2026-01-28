@@ -1,0 +1,5 @@
+{
+  "name": "SMaC Routesetting Dashboard",
+  "description": "A production dashboard for climbing gyms to analyze setter velocity, wall health, and stewardship time using KAYA CSV exports.",
+  "requestFramePermissions": []
+}
