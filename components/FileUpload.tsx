@@ -75,7 +75,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
         <div
           className="absolute inset-0 z-[-1] opacity-40 scale-105"
           style={{
-            backgroundImage: 'url("/assets/smac-bg.png")',
+            backgroundImage: `url("${import.meta.env.BASE_URL}assets/smac-bg.png")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             filter: 'blur(3px) saturate(1.5)'

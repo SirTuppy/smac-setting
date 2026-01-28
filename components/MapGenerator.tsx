@@ -176,7 +176,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
             filename = `${gymCode}_boulders.png`;
         }
 
-        const templateFile = `/templates/${filename}`;
+        const templateFile = `${import.meta.env.BASE_URL}templates/${filename}`;
 
         return new Promise<void>((resolve) => {
             const img = new Image();
