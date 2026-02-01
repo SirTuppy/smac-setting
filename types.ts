@@ -8,6 +8,7 @@ export interface Climb {
   color?: string; // Optional if CSV has it, otherwise derived
   climbType?: string;
   gym?: string;
+  gymCode?: string;
   // Pre-calculated fields for performance
   isRoute: boolean;
   normalizedGrade: string;
@@ -51,7 +52,7 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
-export type AppView = 'analytics' | 'generator' | 'mapper' | 'report';
+export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer';
 
 export interface WallStats {
   name: string;

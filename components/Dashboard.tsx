@@ -10,15 +10,25 @@ import { generateRegionalSummary } from '../services/reports';
 import { getGymCode, GYM_DISPLAY_NAMES } from '../constants/mapTemplates';
 import UnifiedHeader, { RangeOption } from './UnifiedHeader';
 
-interface DashboardProps {
-  gymData: Record<string, Climb[]>;
-  selectedGyms: string[];
-  isCompareMode: boolean;
-}
+import { useDashboardStore } from '../store/useDashboardStore';
 
 const REGIONAL_GREY = "#475569";
 
-const Dashboard: React.FC<DashboardProps> = ({ gymData, selectedGyms, isCompareMode }) => {
+const Dashboard: React.FC = () => {
+  const {
+    climbData: gymData,
+    selectedGyms,
+    isCompareMode,
+    dateRange,
+    rangeOption,
+    setRangeOption,
+    setDateRange
+  } = useDashboardStore();
+
+  const [visibleSetters, setVisibleSetters] = useState(12);
+
+  if (!gymData) return null;
+
   const gymNames = ["Regional Overview", ...Object.keys(gymData)];
 
   // Helper for single vs multi view
@@ -31,48 +41,6 @@ const Dashboard: React.FC<DashboardProps> = ({ gymData, selectedGyms, isCompareM
     }
     return selectedGyms.flatMap(gym => gymData[gym] || []);
   }, [gymData, selectedGyms]);
-
-  const toggleGymSelection = (name: string) => {
-    // This logic moved to App.tsx
-  };
-
-  // 1. Calculate Data Extents (Min/Max Date)
-  const { minDate, maxDate } = useMemo(() => {
-    if (data.length === 0) return { minDate: new Date(), maxDate: new Date() };
-    const dates = data.map(c => c.dateSet.getTime());
-    return {
-      minDate: new Date(Math.min(...dates)),
-      maxDate: new Date(Math.max(...dates))
-    };
-  }, [data]);
-
-  // 2. State for Range Selection
-  const [rangeOption, setRangeOption] = useState<RangeOption>('14d');
-  const [dateRange, setDateRange] = useState<{ start: Date, end: Date }>({ start: minDate, end: maxDate });
-
-  // 3. Effect to update dateRange
-  useEffect(() => {
-    if (rangeOption === 'custom') return;
-
-    const end = new Date(maxDate);
-    let start = new Date(maxDate);
-
-    switch (rangeOption) {
-      case '7d': start.setDate(maxDate.getDate() - 7); break;
-      case '14d': start.setDate(maxDate.getDate() - 14); break;
-      case '30d': start.setDate(maxDate.getDate() - 30); break;
-      case '90d': start.setDate(maxDate.getDate() - 90); break;
-      case '180d': start.setDate(maxDate.getDate() - 180); break;
-      case 'ytd': start = new Date(maxDate.getFullYear(), 0, 1); break;
-      case '1y': start.setFullYear(maxDate.getFullYear() - 1); break;
-      case 'all': start = new Date(minDate); break;
-    }
-
-    if (start < minDate && rangeOption !== 'all') {
-      start = new Date(minDate);
-    }
-    setDateRange({ start, end });
-  }, [rangeOption, minDate, maxDate]);
 
   // Filtered Climbs for the period
   const filteredClimbs = useMemo<Climb[]>(() => {
@@ -231,8 +199,8 @@ const Dashboard: React.FC<DashboardProps> = ({ gymData, selectedGyms, isCompareM
               <div className="h-56 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={weekdayChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: '11px', fontWeight: 600 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: '9px' }} />
                     <Tooltip cursor={{ fill: '#f1f5f9', opacity: 0.6 }} content={({ active, payload }) => {
                       if (active && payload?.length) {
                         return (
@@ -258,9 +226,19 @@ const Dashboard: React.FC<DashboardProps> = ({ gymData, selectedGyms, isCompareM
             </div>
 
             <div id="tour-setter-cards" className="space-y-6">
-              <h2 className="text-xs font-black text-[#00205B] uppercase tracking-[0.2em] px-1">Setter Performance</h2>
+              <div className="flex justify-between items-center px-1">
+                <h2 className="text-xs font-black text-[#00205B] uppercase tracking-[0.2em]">Setter Performance</h2>
+                {setterStats.length > visibleSetters && (
+                  <button
+                    onClick={() => setVisibleSetters(setterStats.length)}
+                    className="text-[10px] font-black text-[#009CA6] uppercase tracking-widest hover:underline"
+                  >
+                    View All {setterStats.length} Setters
+                  </button>
+                )}
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-4">
-                {setterStats.map(setter => <SetterCard key={setter.name} stats={setter} />)}
+                {setterStats.slice(0, visibleSetters).map(setter => <SetterCard key={setter.name} stats={setter} />)}
               </div>
             </div>
 

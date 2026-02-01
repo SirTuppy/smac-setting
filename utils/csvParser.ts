@@ -45,7 +45,7 @@ export const parseKayaCSV = (csvText: string, gymName?: string): Climb[] => {
     const normalizedGrade = normalizeGrade(rawGrade);
 
     climbs.push({
-      id: `climb-${i}`,
+      id: `climb-${gymName}-${i}-${Math.random().toString(36).substr(2, 5)}`,
       name: row[nameIdx] || 'Untitled',
       grade: rawGrade,
       setter: (row[setterIdx] || 'N/A').trim(),

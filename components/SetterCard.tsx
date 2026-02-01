@@ -39,7 +39,7 @@ const SetterCard: React.FC<SetterCardProps> = React.memo(({ stats }) => {
     if (!X_AXIS_TICKS.includes(payload.value)) return null;
     return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={12} textAnchor="middle" fill="#475569" fontSize={8} fontWeight="bold" className="uppercase">
+        <text x={0} y={0} dy={12} textAnchor="middle" fill="#475569" fontSize="8px" fontWeight="bold" className="uppercase">
           {payload.value.replace('.Intro', '')}
         </text>
       </g>
@@ -72,7 +72,7 @@ const SetterCard: React.FC<SetterCardProps> = React.memo(({ stats }) => {
       </div>
 
       {/* Chart */}
-      <div className="h-44 w-full mb-2 relative">
+      <div className="h-44 min-h-[176px] w-full mb-2 relative">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: -20, left: -25, bottom: 20 }}>
             <XAxis

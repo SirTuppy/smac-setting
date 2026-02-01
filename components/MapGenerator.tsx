@@ -7,18 +7,7 @@ export interface MapGeneratorHandle {
     downloadAll: () => void;
 }
 
-interface MapGeneratorProps {
-    schedules: Record<string, GymSchedule>;
-    onUpdateSchedule: (gymCode: string, updatedSchedule: GymSchedule) => void;
-    onClearAll: () => void;
-    showInstructions: boolean;
-    onCloseInstructions: () => void;
-    showSettings: boolean;
-    onCloseSettings: () => void;
-    emailSettings: EmailSettings;
-    onUpdateEmailSettings: (settings: EmailSettings) => void;
-    onEmailSchedule: () => void;
-}
+import { useDashboardStore } from '../store/useDashboardStore';
 
 interface ClickRegion {
     gymCode: string;
@@ -34,22 +23,41 @@ interface ClickRegion {
     id: string | null;
 }
 
-const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
-    schedules,
-    onUpdateSchedule,
-    onClearAll,
-    showInstructions,
-    onCloseInstructions,
-    showSettings,
-    onCloseSettings,
-    emailSettings,
-    onUpdateEmailSettings,
-    onEmailSchedule
-}, ref) => {
+const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
+    const {
+        gymSchedules: schedules,
+        setGymSchedule,
+        setGymSchedules,
+        showInstructions,
+        setShowInstructions,
+        showSettings,
+        setShowSettings,
+        emailSettings,
+        setEmailSettings
+    } = useDashboardStore();
+
     const [clickRegions, setClickRegions] = useState<ClickRegion[]>([]);
     const [editingRegion, setEditingRegion] = useState<{ region: ClickRegion, rect: DOMRect, canvas: HTMLCanvasElement } | null>(null);
     const [editValue, setEditValue] = useState('');
     const canvasRefs = useRef<Record<string, HTMLCanvasElement[]>>({});
+
+    const handleEmailSchedule = () => {
+        if (!schedules) return;
+        const firstGym = Object.keys(schedules)[0];
+        const schedule = schedules[firstGym];
+
+        let subject = emailSettings.subject
+            .replace('[GYM_NAME]', firstGym)
+            .replace('[DATE_RANGE]', schedule.fileDateRange);
+
+        let body = emailSettings.body
+            .replace('[GYM_NAME]', firstGym)
+            .replace('[DATE_RANGE]', schedule.fileDateRange);
+
+        window.location.href = `mailto:${emailSettings.to}?cc=${emailSettings.cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    };
+
+    if (!schedules) return null;
 
     const activeGyms = useMemo(() => Object.keys(schedules), [schedules]);
 
@@ -295,7 +303,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
             }
         }
 
-        onUpdateSchedule(region.gymCode, gymData);
+        setGymSchedule(region.gymCode, gymData);
         setEditingRegion(null);
     };
 
@@ -321,7 +329,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
             {showInstructions && (
                 <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-200">
                     <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl p-10 relative">
-                        <button onClick={onCloseInstructions} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
+                        <button onClick={() => setShowInstructions(false)} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
                             <X size={24} />
                         </button>
 
@@ -367,7 +375,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
             {showSettings && (
                 <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-200">
                     <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl p-10 relative">
-                        <button onClick={onCloseSettings} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
+                        <button onClick={() => setShowSettings(false)} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
                             <X size={24} />
                         </button>
 
@@ -380,7 +388,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 <input
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                     value={emailSettings.to}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, to: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, to: e.target.value })}
                                     placeholder="manager@gym.com, lead@gym.com"
                                 />
                             </div>
@@ -389,7 +397,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 <input
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                     value={emailSettings.cc}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, cc: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, cc: e.target.value })}
                                 />
                             </div>
                             <div>
@@ -397,7 +405,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 <input
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                     value={emailSettings.subject}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, subject: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, subject: e.target.value })}
                                 />
                             </div>
                             <div>
@@ -406,7 +414,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                     rows={12}
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors resize-y min-h-[250px]"
                                     value={emailSettings.body}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, body: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, body: e.target.value })}
                                 />
                                 <div className="mt-2 flex gap-4 text-[9px] font-bold text-[#009CA6] uppercase tracking-widest">
                                     <span>[GYM_NAME]</span>
@@ -414,7 +422,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 </div>
                             </div>
 
-                            <button onClick={onCloseSettings} className="w-full bg-[#009CA6] text-white py-4 rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#009CA6]/20 hover:scale-[1.02] transition-all">
+                            <button onClick={() => setShowSettings(false)} className="w-full bg-[#009CA6] text-white py-4 rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#009CA6]/20 hover:scale-[1.02] transition-all">
                                 Save Configuration
                             </button>
                         </div>
