@@ -90,11 +90,11 @@ const GymComparison: React.FC<GymComparisonProps> = ({ gymData, selectedGyms, da
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
                     <h3 className="text-sm font-black text-[#00205B] uppercase tracking-widest mb-6">Cross-Gym Volume Breakdown</h3>
-                    <div className="h-72 w-full">
+                    <div className="h-72 min-h-[288px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={comparisonData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                                <XAxis dataKey="shortName" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 700 }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                                <XAxis dataKey="shortName" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: '11px', fontWeight: 700 }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: '10px' }} />
                                 <Tooltip
                                     cursor={{ fill: '#f8fafc', opacity: 0.8 }}
                                     contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#00205B', fontSize: '10px', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
