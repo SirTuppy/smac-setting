@@ -3,15 +3,18 @@ import { Award, BarChart2, LayoutDashboard } from 'lucide-react';
 import { ProductionStats } from '../../types';
 import { TYPE_COLORS, GYM_COLORS } from '../../constants/colors';
 import ComparisonPill from './ComparisonPill';
+import DeltaPill from './DeltaPill';
 
 interface KPICardProps {
     data: ProductionStats;
+    previousData?: ProductionStats | null;
+    comparisonMode?: 'none' | 'pop' | 'yoy';
     isBaseline?: boolean;
-    baseline: any; // We'll use any here for brevity or import BaselineSettings
+    baseline: any;
     weekScalar: number;
 }
 
-export const ProductionSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline, baseline, weekScalar }) => (
+export const ProductionSummaryCard: React.FC<KPICardProps> = ({ data, previousData, comparisonMode, isBaseline, baseline, weekScalar }) => (
     <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group transition-all duration-500">
         <div className="relative z-10">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Production Summary</p>
@@ -26,6 +29,13 @@ export const ProductionSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline
                         />
                     </div>
                 )}
+                {!isBaseline && comparisonMode !== 'none' && (
+                    <DeltaPill
+                        current={data.total}
+                        previous={previousData?.total}
+                        mode={comparisonMode!}
+                    />
+                )}
             </div>
             <p className="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wider mb-4">Total Climbs Set</p>
             <div className="space-y-3 pt-4 border-t border-slate-50">
@@ -37,6 +47,13 @@ export const ProductionSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline
                                 current={data.routes}
                                 target={baseline.routesPerWeek * weekScalar}
                                 showBaselines={baseline.showBaselines}
+                            />
+                        )}
+                        {!isBaseline && comparisonMode !== 'none' && (
+                            <DeltaPill
+                                current={data.routes}
+                                previous={previousData?.routes}
+                                mode={comparisonMode!}
                             />
                         )}
                     </div>
@@ -52,6 +69,13 @@ export const ProductionSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline
                                 showBaselines={baseline.showBaselines}
                             />
                         )}
+                        {!isBaseline && comparisonMode !== 'none' && (
+                            <DeltaPill
+                                current={data.boulders}
+                                previous={previousData?.boulders}
+                                mode={comparisonMode!}
+                            />
+                        )}
                     </div>
                     <span className="text-lg font-black" style={{ color: TYPE_COLORS.boulders }}>{data.boulders}</span>
                 </div>
@@ -60,7 +84,7 @@ export const ProductionSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline
     </div>
 );
 
-export const ShiftSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline, baseline, weekScalar }) => (
+export const ShiftSummaryCard: React.FC<KPICardProps> = ({ data, previousData, comparisonMode, isBaseline, baseline, weekScalar }) => (
     <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 transition-all duration-500">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Shift Summary</p>
         <div className="flex items-center gap-3">
@@ -71,6 +95,14 @@ export const ShiftSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline, bas
                     target={baseline.shiftsPerWeek * weekScalar}
                     reverse
                     showBaselines={baseline.showBaselines}
+                />
+            )}
+            {!isBaseline && comparisonMode !== 'none' && (
+                <DeltaPill
+                    current={data.totalShifts}
+                    previous={previousData?.totalShifts}
+                    mode={comparisonMode!}
+                    reverse
                 />
             )}
         </div>
@@ -93,7 +125,7 @@ export const ShiftSummaryCard: React.FC<KPICardProps> = ({ data, isBaseline, bas
     </div>
 );
 
-export const TeamInsightsCard: React.FC<KPICardProps> = ({ data, isBaseline, baseline }) => (
+export const TeamInsightsCard: React.FC<KPICardProps> = ({ data, previousData, comparisonMode, isBaseline, baseline }) => (
     <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 transition-all duration-500">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Team Insights</p>
         <div className="space-y-4">
@@ -125,6 +157,15 @@ export const TeamInsightsCard: React.FC<KPICardProps> = ({ data, isBaseline, bas
                                     current={Number((data.total / (data.totalShifts || 1)).toFixed(1))}
                                     target={Number((baseline.totalVolumePerWeek / (baseline.shiftsPerWeek || 1)).toFixed(1))}
                                     showBaselines={baseline.showBaselines}
+                                />
+                            </span>
+                        )}
+                        {!isBaseline && comparisonMode !== 'none' && (
+                            <span className="inline-flex ml-2 align-middle">
+                                <DeltaPill
+                                    current={Number((data.total / (data.totalShifts || 1)).toFixed(1))}
+                                    previous={previousData ? Number((previousData.total / (previousData.totalShifts || 1)).toFixed(1)) : undefined}
+                                    mode={comparisonMode!}
                                 />
                             </span>
                         )}

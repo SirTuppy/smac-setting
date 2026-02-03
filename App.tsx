@@ -8,6 +8,7 @@ import ProductionReport from './components/ProductionReport';
 import ShiftAnalyzer from './components/ShiftAnalyzer';
 import Sidebar from './components/Sidebar';
 import BaselineModal from './components/BaselineModal';
+import DiscoveryModal from './components/DiscoveryModal';
 import CommentModal from './components/CommentModal';
 import { Climb, GymSchedule, EmailSettings, AppView, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, BaselineSettings } from './types';
 
@@ -53,13 +54,18 @@ function App() {
     isCompareMode, setIsCompareMode,
     activeView, setActiveView,
     dateRange, setDateRange,
-    baselineSettings, setBaselineSettings,
+    getBaseline, setBaselineSettings,
+    selectedBaselineGym,
     emailSettings, setEmailSettings,
     showSettings, setShowSettings,
     showInstructions, setShowInstructions,
     showUploadOverlay, setShowUploadOverlay,
     showBaselineSettings, setShowBaselineSettings,
     showCommentModal, setShowCommentModal,
+    showDiscoveryModal, setShowDiscoveryModal,
+    unrecognizedWalls, setUnrecognizedWalls, clearUnrecognizedWalls,
+    setGymDisplayName, gymDisplayNames,
+    userWallMappings,
     resetAll
   } = useDashboardStore();
 
@@ -77,14 +83,15 @@ function App() {
   }, []);
 
   const handleTutorialStepChange = React.useCallback((index: number) => {
+    const activeBaseline = getBaseline();
     if (index >= 0 && index <= 9) setActiveView('analytics');
     else if (index >= 10 && index <= 16) {
       setActiveView('report');
-      if (!baselineSettings.showSummary || !baselineSettings.reportComments) {
+      if (!activeBaseline.showSummary || !activeBaseline.reportComments) {
         setBaselineSettings({
-          ...baselineSettings,
+          ...activeBaseline,
           showSummary: true,
-          reportComments: baselineSettings.reportComments || 'This dashboard is synchronized with our regional production metrics. We are currently tracking ahead of schedule for the upcoming season.'
+          reportComments: activeBaseline.reportComments || 'This dashboard is synchronized with our regional production metrics. We are currently tracking ahead of schedule for the upcoming season.'
         });
       }
     }
@@ -101,19 +108,26 @@ function App() {
     }
 
     if (needsGeneratorData && !gymSchedules) {
-      const schedules = parseHumanityCSV(MOCK_HUMANITY_DATA);
+      const { schedules } = parseHumanityCSV(MOCK_HUMANITY_DATA, userWallMappings);
       setGymSchedules(schedules);
     }
-  }, [setActiveView, baselineSettings, setBaselineSettings, climbData, setClimbData, gymSchedules, setGymSchedules]);
+  }, [setActiveView, getBaseline, setBaselineSettings, climbData, setClimbData, gymSchedules, setGymSchedules]);
 
   const gymNames = useMemo(() => {
-    const codes = new Set([
-      ...(climbData ? Object.keys(climbData) : []),
-      ...(gymSchedules ? Object.keys(gymSchedules) : [])
-    ]);
-    if (codes.size === 0) return [];
-    return ["Regional Overview", ...Array.from(codes).sort()];
-  }, [climbData, gymSchedules]);
+    let codes: string[] = [];
+    if (activeView === 'generator') {
+      codes = Object.keys(gymSchedules || {});
+    } else if (activeView === 'analytics' || activeView === 'report' || activeView === 'shift-analyzer') {
+      codes = Object.keys(climbData || {});
+    } else {
+      codes = Array.from(new Set([
+        ...(climbData ? Object.keys(climbData) : []),
+        ...(gymSchedules ? Object.keys(gymSchedules) : [])
+      ]));
+    }
+    if (codes.length === 0) return [];
+    return ["Regional Overview", ...codes.sort()];
+  }, [climbData, gymSchedules, activeView]);
 
   // Sync selection when data first loads
   useEffect(() => {
@@ -122,7 +136,12 @@ function App() {
     }
   }, [gymNames, selectedGyms, setSelectedGyms]);
 
-  const handleDataLoaded = (result: { analytics?: Record<string, Climb[]>, generator?: Record<string, GymSchedule> }) => {
+  const handleDataLoaded = (result: {
+    analytics?: Record<string, Climb[]>,
+    generator?: Record<string, GymSchedule>,
+    unrecognized?: Record<string, string[]>,
+    newGyms?: Record<string, string>
+  }) => {
     if (result.analytics) {
       const currentClimbData = { ...(climbData || {}) };
 
@@ -143,6 +162,16 @@ function App() {
     if (result.generator) {
       setGymSchedules({ ...(gymSchedules || {}), ...result.generator });
       if (!gymSchedules) setActiveView('generator');
+    }
+
+    if (result.unrecognized) {
+      setUnrecognizedWalls(result.unrecognized);
+    }
+
+    if (result.newGyms) {
+      Object.entries(result.newGyms).forEach(([code, name]) => {
+        setGymDisplayName(code, name);
+      });
     }
 
     setShowUploadOverlay(false);
@@ -171,8 +200,9 @@ function App() {
 
   const handleEmail = () => {
     if (activeView === 'report') {
+      const activeBaseline = getBaseline();
       const subject = encodeURIComponent(`Production Report: ${selectedGyms.join(', ')}`);
-      const body = encodeURIComponent(`Hi Team,\n\nThe production report for ${selectedGyms.join(', ')} is ready. You can view the full dashboard and benchmarks here: ${window.location.href}\n\nSummary Context: ${baselineSettings.reportComments || 'No additional comments.'}`);
+      const body = encodeURIComponent(`Hi Team,\n\nThe production report for ${selectedGyms.join(', ')} is ready. You can view the full dashboard and benchmarks here: ${window.location.href}\n\nSummary Context: ${activeBaseline.reportComments || 'No additional comments.'}`);
       window.location.href = `mailto:?subject=${subject}&body=${body}`;
     } else {
       handleEmailSchedule();
@@ -189,6 +219,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 text-[#00205B] flex">
       <Sidebar
         gymNames={gymNames}
+        gymDisplayNames={gymDisplayNames}
         hasGeneratorData={!!gymSchedules}
         hasAnalyticsData={!!climbData}
         onSaveGenerator={() => {
@@ -208,6 +239,11 @@ function App() {
           }
         }}
         onEmailGenerator={handleEmail}
+        onResetAllEdits={() => {
+          if (confirm('Are you sure you want to clear ALL manual text edits for ALL gyms? This cannot be undone.')) {
+            resetAll();
+          }
+        }}
         onDownloadGenerator={() => generatorRef.current?.downloadAll()}
         onPrintGenerator={() => window.print()}
         onStartTutorial={() => setShowTutorial(true)}
@@ -273,16 +309,22 @@ function App() {
       <BaselineModal
         isOpen={showBaselineSettings}
         onClose={() => setShowBaselineSettings(false)}
-        settings={baselineSettings}
-        onUpdateSettings={setBaselineSettings}
+      />
+
+      <DiscoveryModal
+        isOpen={showDiscoveryModal || Object.keys(unrecognizedWalls).length > 0}
+        onClose={() => {
+          setShowDiscoveryModal(false);
+          clearUnrecognizedWalls();
+        }}
       />
 
       {/* Comment Modal */}
       <CommentModal
         isOpen={showCommentModal}
         onClose={() => setShowCommentModal(false)}
-        initialComment={baselineSettings.reportComments}
-        onSave={(comment) => setBaselineSettings({ ...baselineSettings, reportComments: comment })}
+        initialComment={getBaseline(selectedBaselineGym).reportComments}
+        onSave={(comment) => setBaselineSettings({ ...getBaseline(selectedBaselineGym), reportComments: comment }, selectedBaselineGym)}
       />
 
       {/* Tutorial System */}

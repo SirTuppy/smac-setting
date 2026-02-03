@@ -8,6 +8,8 @@ import SummarySection from './report/SummarySection';
 
 interface ProductionReportViewProps {
     stats: ProductionStats;
+    previousStats?: ProductionStats | null;
+    comparisonMode?: 'none' | 'pop' | 'yoy';
     dateRange: { start: Date; end: Date };
     reportTitle: string;
     isPrintMode?: boolean;
@@ -17,6 +19,8 @@ interface ProductionReportViewProps {
 
 const ProductionReportView: React.FC<ProductionReportViewProps> = ({
     stats,
+    previousStats,
+    comparisonMode = 'none',
     dateRange,
     reportTitle,
     isPrintMode = false,
@@ -46,17 +50,23 @@ const ProductionReportView: React.FC<ProductionReportViewProps> = ({
     const period = getPeriodDetails();
 
     const renderReportLayout = (data: ProductionStats, isBaseline: boolean = false) => {
+        // Only show comparison data on the main report, not the baseline reference page
+        const compProps = (!isBaseline && comparisonMode !== 'none') ? {
+            previousData: previousStats,
+            comparisonMode
+        } : {};
+
         return (
             <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <ProductionSummaryCard data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} />
-                    <ShiftSummaryCard data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} />
-                    <TeamInsightsCard data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} />
+                    <ProductionSummaryCard data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} {...compProps} />
+                    <ShiftSummaryCard data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} {...compProps} />
+                    <TeamInsightsCard data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} {...compProps} />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <DailyProductionChart data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} isPrintMode={isPrintMode} />
-                    <WeekdayDistributionChart data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} isPrintMode={isPrintMode} />
+                    <DailyProductionChart data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} isPrintMode={isPrintMode} {...compProps} />
+                    <WeekdayDistributionChart data={data} isBaseline={isBaseline} baseline={baseline} weekScalar={weekScalar} isPrintMode={isPrintMode} {...compProps} />
                 </div>
             </div>
         );
@@ -123,9 +133,13 @@ const ProductionReportView: React.FC<ProductionReportViewProps> = ({
 
                     <div className="flex flex-col items-end">
                         <div className="flex items-center gap-3">
-                            <p className="text-[10px] font-black text-[#009CA6] uppercase tracking-[0.2em]">SMaC Departmental Asset</p>
-                            <div className="bg-[#00205B] p-2 rounded-lg">
-                                <FileText className="text-white" size={18} />
+                            <p className="text-[14px] font-black text-[#009CA6] uppercase tracking-[0.2em]">SMaC Departmental Asset</p>
+                            <div className="flex items-center justify-center p-1 bg-white/50 rounded-lg">
+                                <img
+                                    src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                                    className="w-12 h-12 object-contain"
+                                    alt="Movement"
+                                />
                             </div>
                         </div>
                     </div>
@@ -152,8 +166,12 @@ const ProductionReportView: React.FC<ProductionReportViewProps> = ({
                     )}
 
                     <div id="tour-baseline-reference" className="flex items-center gap-4 mb-12">
-                        <div className="bg-emerald-600 p-4 rounded-[24px] shadow-xl">
-                            <Award className="text-white" size={32} />
+                        <div className="flex items-center justify-center p-2 bg-slate-50 rounded-2xl">
+                            <img
+                                src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                                className="w-12 h-12 object-contain"
+                                alt="Movement"
+                            />
                         </div>
                         <div>
                             <h2 className="text-4xl font-black text-[#00205B] uppercase tracking-tighter italic">Baseline Reference</h2>
@@ -180,14 +198,17 @@ const ProductionReportView: React.FC<ProductionReportViewProps> = ({
                         </div>
                     </div>
                 </div>
-            )}
+            )
+            }
 
-            {isPrintMode && (
-                <div className="text-center pt-8">
-                    <p className="text-[8px] font-black text-slate-300 uppercase tracking-[0.3em]">Generated by SMaC Regional Dashboard</p>
-                </div>
-            )}
-        </div>
+            {
+                isPrintMode && (
+                    <div className="text-center pt-8">
+                        <p className="text-[8px] font-black text-slate-300 uppercase tracking-[0.3em]">SMaC Regional Dashboard</p>
+                    </div>
+                )
+            }
+        </div >
     );
 };
 

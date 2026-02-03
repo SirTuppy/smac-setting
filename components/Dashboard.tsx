@@ -7,7 +7,8 @@ import { GYM_COLORS, TYPE_COLORS } from '../constants/colors';
 import { Calendar, Sparkles, BarChart3, Layers } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { generateRegionalSummary } from '../services/reports';
-import { getGymCode, GYM_DISPLAY_NAMES } from '../constants/mapTemplates';
+import { getGymCode } from '../constants/mapTemplates';
+import { getGymDisplayName } from '../constants/gyms';
 import UnifiedHeader, { RangeOption } from './UnifiedHeader';
 
 import { useDashboardStore } from '../store/useDashboardStore';
@@ -114,7 +115,7 @@ const Dashboard: React.FC = () => {
       const dayIdx = c.dateSet.getDay();
       const rawGym = c.gym || "Unknown";
       // Find the key in gymData that matches this rawGym or its code
-      const gymCode = Object.keys(gymData).find(k => rawGym.includes(k) || rawGym.includes(GYM_DISPLAY_NAMES[k])) || rawGym;
+      const gymCode = Object.keys(gymData).find(k => rawGym.includes(k) || rawGym.includes(getGymDisplayName(k))) || rawGym;
 
       base[dayIdx].total++;
       if (gymCode in base[dayIdx]) {

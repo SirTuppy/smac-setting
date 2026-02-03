@@ -32,8 +32,12 @@ const LaborSimulator: React.FC<LaborSimulatorProps> = ({ analysisData }) => {
 
     return (
         <div className="bg-[#00205B] p-10 rounded-[3rem] shadow-2xl border border-white/10 col-span-1 lg:col-span-2 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-1000">
-                <Sparkles size={160} className="text-[#009CA6]" />
+            <div className="absolute top-0 right-0 p-12 opacity-[0.3] pointer-events-none group-hover:scale-110 group-hover:opacity-[0.15] transition-all duration-1000">
+                <img
+                    src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                    className="w-80 h-80 object-contain brightness-0 invert"
+                    alt=""
+                />
             </div>
 
             <div className="relative z-10 flex flex-col lg:flex-row gap-12 items-center">
@@ -108,11 +112,6 @@ const LaborSimulator: React.FC<LaborSimulatorProps> = ({ analysisData }) => {
                         {modelerMode === 'split' && " Simulated split weight: 60% Boulder / 40% Rope."}
                     </p>
                 </div>
-            </div>
-
-            <div className="mt-12 flex items-center gap-2 text-white/30 text-[10px] font-bold uppercase tracking-widest border-t border-white/5 pt-6">
-                <Zap size={14} className="text-[#009CA6]" />
-                Statistical model verified against {analysisData.totalShifts} regional data points
             </div>
         </div>
     );

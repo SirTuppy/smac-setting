@@ -3,8 +3,9 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { FileText, Users, Calendar, Award, Printer, Mail, BarChart2, LayoutDashboard } from 'lucide-react';
 import { GYM_COLORS, TYPE_COLORS } from '../constants/colors';
 import { Climb, ProductionStats, BaselineSettings } from '../types';
-import { GYM_DISPLAY_NAMES } from '../constants/mapTemplates';
+import { getGymDisplayName } from '../constants/gyms';
 import { calculateProductionStats } from '../utils/analyticsEngine';
+import { getPreviousPeriod } from '../utils/productionStats';
 
 import { useDashboardStore } from '../store/useDashboardStore';
 import ProductionReportView from './ProductionReportView';
@@ -19,15 +20,32 @@ const ProductionReport: React.FC = () => {
         setDateRange,
         rangeOption,
         setRangeOption,
-        baselineSettings
+        getBaseline,
+        comparisonMode
     } = useDashboardStore();
 
-    if (!data) return null;
+    const activeBaseline = useMemo(() => {
+        if (selectedGyms.length === 1 && selectedGyms[0] !== "Regional Overview") {
+            return getBaseline(selectedGyms[0]);
+        }
+        return getBaseline('DEFAULT');
+    }, [selectedGyms, getBaseline]);
 
-    // 1. Core Analytics Logic
+    // 1. Previous Period Calculation
+    const previousRange = useMemo(() => {
+        if (comparisonMode === 'none') return null;
+        return getPreviousPeriod(dateRange, comparisonMode);
+    }, [dateRange, comparisonMode]);
+
+    // 2. Core Analytics Logic
     const stats: ProductionStats = useMemo(() => {
         return calculateProductionStats(data, selectedGyms, dateRange);
     }, [data, selectedGyms, dateRange]);
+
+    const previousStats = useMemo(() => {
+        if (!previousRange) return null;
+        return calculateProductionStats(data, selectedGyms, previousRange);
+    }, [data, selectedGyms, previousRange]);
 
     // For the subtitle count
     const totalClimbsCount = stats.total;
@@ -37,7 +55,7 @@ const ProductionReport: React.FC = () => {
             return "Regional Production Report";
         }
         if (selectedGyms.length === 1) {
-            const gymName = GYM_DISPLAY_NAMES[selectedGyms[0]] || selectedGyms[0];
+            const gymName = getGymDisplayName(selectedGyms[0]);
             return `${gymName} Production Report`;
         }
         if (selectedGyms.length > 1) {
@@ -54,7 +72,7 @@ const ProductionReport: React.FC = () => {
         // Delay to allow Recharts to re-render without animations
         setTimeout(async () => {
             const exportIds = ['report-main-section'];
-            if (baselineSettings.showReferencePage) {
+            if (activeBaseline.showReferencePage) {
                 exportIds.push('report-baseline-section');
             }
 
@@ -80,6 +98,8 @@ const ProductionReport: React.FC = () => {
             </div>
         );
     }
+
+    if (!data) return null;
 
     return (
         <div className="flex flex-col h-full bg-slate-50 relative">
@@ -109,11 +129,13 @@ const ProductionReport: React.FC = () => {
                 <div id="production-report-content" className="p-4">
                     <ProductionReportView
                         stats={stats}
+                        previousStats={previousStats}
+                        comparisonMode={comparisonMode}
                         dateRange={dateRange}
                         reportTitle={reportTitle}
                         isPrintMode={isSnapshotting}
                         reportRef={reportRef}
-                        baseline={baselineSettings}
+                        baseline={activeBaseline}
                     />
                 </div>
             </div>

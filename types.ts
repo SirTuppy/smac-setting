@@ -15,6 +15,14 @@ export interface Climb {
   gradeScore: number;
 }
 
+export interface ScheduleOverride {
+  gymCode: string;
+  dateKey: string; // ISO Date YYYY-MM-DD to persist across sessions
+  dataType: 'routes' | 'boulders';
+  field: 'location' | 'climbType' | 'setterCount';
+  value: string;
+}
+
 export interface SetterStats {
   name: string;
   totalClimbs: number;
@@ -119,6 +127,22 @@ export interface BaselineSettings {
   showSummary: boolean;
   showReferencePage: boolean;
   reportComments: string;
+}
+
+export interface GymSettings {
+  displayMode: 'merged' | 'separate';
+  climbTypeDisplay: 'type' | 'steepness';
+}
+
+export interface GymMeta {
+  code: string;
+  name: string;
+  region: string;
+  searchKeywords: string[];
+  displayMode: 'separate' | 'merged';
+  weekStartDay: 'Monday' | 'Sunday';
+  isBoulderOnly: boolean;
+  ropeTypeName?: string;
 }
 
 // Sample CSV Data for testing (KAYA Format)

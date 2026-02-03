@@ -1,6 +1,6 @@
 import React from 'react';
 import { Zap, Calendar, Filter } from 'lucide-react';
-import { GYM_DISPLAY_NAMES } from '../../constants/mapTemplates';
+import { getGymDisplayName } from '../../constants/gyms';
 import { Climb } from '../../types';
 
 interface AnalyzerHeaderProps {
@@ -51,7 +51,7 @@ const AnalyzerHeader: React.FC<AnalyzerHeaderProps> = ({
                     >
                         <option value="all">All Gyms (Regional Overview)</option>
                         {Object.keys(data).map(code => (
-                            <option key={code} value={code}>{GYM_DISPLAY_NAMES[code] || code}</option>
+                            <option key={code} value={code}>{getGymDisplayName(code)}</option>
                         ))}
                     </select>
                 </div>

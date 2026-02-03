@@ -14,9 +14,11 @@
     "html-to-image": "^1.11.13",
     "jspdf": "^4.0.0",
     "lucide-react": "^0.562.0",
+    "pdf-to-png-converter": "^3.11.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "recharts": "^3.7.0",
+    "sharp": "^0.34.5",
     "zustand": "^5.0.10"
   },
   "devDependencies": {

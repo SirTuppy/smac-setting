@@ -195,8 +195,12 @@ const TutorialGuide: React.FC<TutorialGuideProps> = ({ steps, isOpen, onClose, o
 
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-[#00205B] p-2 rounded-xl shadow-lg">
-                                <Sparkles size={20} className="text-white" />
+                            <div className="bg-white p-1 rounded-xl shadow-md border border-slate-100">
+                                <img
+                                    src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                                    className="w-6 h-6 object-contain"
+                                    alt="Movement Logo"
+                                />
                             </div>
                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Step {currentStep + 1} of {steps.length}</span>
                         </div>

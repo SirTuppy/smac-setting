@@ -17,8 +17,12 @@ export const BreakingPointChart: React.FC<EfficiencyChartsProps> = ({ analysisDa
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
                 <div className="flex items-center gap-3">
-                    <Sparkles className="text-[#009CA6]" />
-                    <h2 className="text-xl font-black text-[#00205B] uppercase tracking-tight">The Breaking Point: Crew Size vs. Efficiency</h2>
+                    <img
+                        src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                        className="w-5 h-5 object-contain"
+                        alt=""
+                    />
+                    <h2 className="text-xl font-black text-[#00205B] uppercase tracking-tight">Crew Size vs. Efficiency</h2>
                 </div>
 
                 <div className="flex bg-slate-100 p-1 rounded-2xl w-fit border border-slate-200">
@@ -185,7 +189,7 @@ export const RhythmAnalyticsChart: React.FC<EfficiencyChartsProps> = ({ analysis
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
                 <div className="flex items-center gap-3">
                     <TrendingUp className="text-[#009CA6]" />
-                    <h2 className="text-xl font-black text-[#00205B] uppercase tracking-tight">Rhythm Analytics: Best Setting Days</h2>
+                    <h2 className="text-xl font-black text-[#00205B] uppercase tracking-tight">Best Setting Days</h2>
                 </div>
 
                 <div className="flex bg-slate-100 p-1 rounded-2xl w-fit border border-slate-200">

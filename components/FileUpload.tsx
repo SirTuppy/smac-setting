@@ -2,16 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Database, LayoutDashboard, Sparkles, ChevronRight, Activity, Map } from 'lucide-react';
 import { parseKayaCSV, parseHumanityCSV } from '../utils/csvParser';
 import { Climb, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, GymSchedule } from '../types';
+import { useDashboardStore } from '../store/useDashboardStore';
 import { FUN_MESSAGES, FunMessage } from '../constants/messages';
 
 interface FileUploadProps {
-  onDataLoaded: (data: { analytics?: Record<string, Climb[]>, generator?: Record<string, GymSchedule> }) => void;
+  onDataLoaded: (data: {
+    analytics?: Record<string, Climb[]>,
+    generator?: Record<string, GymSchedule>,
+    unrecognized?: Record<string, string[]>
+  }) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
   const [isHovering, setIsHovering] = useState<string | null>(null);
   const [currentMessage, setCurrentMessage] = useState<FunMessage>(FUN_MESSAGES[0]);
   const [showStory, setShowStory] = useState(false);
+  const { userWallMappings } = useDashboardStore();
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * FUN_MESSAGES.length);
@@ -24,6 +30,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
 
     let combinedKayaData: Record<string, Climb[]> = {};
     let combinedHumanityData: Record<string, GymSchedule> = {};
+    let allUnrecognized: Record<string, string[]> = {};
 
     const loadFile = (file: File): Promise<void> => {
       return new Promise((resolve) => {
@@ -35,8 +42,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
           try {
             if (firstLine.includes('start date') && firstLine.includes('location')) {
               // Priority: Humanity Schedule
-              const data = parseHumanityCSV(text);
-              combinedHumanityData = { ...combinedHumanityData, ...data };
+              const { schedules, unrecognized } = parseHumanityCSV(text, userWallMappings);
+              combinedHumanityData = { ...combinedHumanityData, ...schedules };
+
+              // Merge unrecognized walls
+              Object.entries(unrecognized).forEach(([gym, walls]) => {
+                if (!allUnrecognized[gym]) allUnrecognized[gym] = [];
+                allUnrecognized[gym] = [...new Set([...allUnrecognized[gym], ...walls])];
+              });
             } else {
               // Default: Kaya Performance
               const gymName = file.name.split('-climbs')[0].trim() || "General";
@@ -57,9 +70,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
 
     await Promise.all(Array.from(files).map(loadFile));
 
-    const result: { analytics?: Record<string, Climb[]>, generator?: Record<string, GymSchedule> } = {};
+    const result: { analytics?: Record<string, Climb[]>, generator?: Record<string, GymSchedule>, unrecognized?: Record<string, string[]> } = {};
     if (Object.keys(combinedKayaData).length > 0) result.analytics = combinedKayaData;
     if (Object.keys(combinedHumanityData).length > 0) result.generator = combinedHumanityData;
+    if (Object.keys(allUnrecognized).length > 0) result.unrecognized = allUnrecognized;
 
     onDataLoaded(result);
   };
@@ -70,8 +84,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
   };
 
   const loadMockHumanity = () => {
-    const data = parseHumanityCSV(MOCK_HUMANITY_DATA);
-    onDataLoaded({ generator: data });
+    const { schedules, unrecognized } = parseHumanityCSV(MOCK_HUMANITY_DATA, userWallMappings);
+    onDataLoaded({ generator: schedules, unrecognized });
   };
 
   return (
@@ -100,17 +114,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
 
         {/* Brand Header */}
         <div className="flex flex-col items-center mb-16 text-center">
-          <div className="mb-6 relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#00205B] to-[#009CA6] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative bg-white p-4 rounded-2xl shadow-xl flex items-center justify-center">
-              <LayoutDashboard size={48} className="text-[#00205B]" />
-            </div>
-          </div>
 
-          <h1 className="text-6xl font-black text-[#00205B] uppercase tracking-tighter leading-tight">
-            SMaC <span className="text-[#009CA6]">Setting</span>
-          </h1>
-          <p className="mt-4 text-slate-400 font-bold uppercase tracking-[0.3em] text-sm">
+          <img
+            src={`${import.meta.env.BASE_URL}assets/logoLong.png`}
+            className="h-24 object-contain"
+            alt="Movement SMaC Setting Dashboard"
+          />
+          <p className="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px] bg-white/50 px-4 py-1 rounded-full border border-slate-100 backdrop-blur-sm">
             Regional Performance Dashboard
           </p>
         </div>
@@ -177,7 +187,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
                       className="ml-2 p-1 bg-[#009CA6]/10 rounded-full hover:bg-[#009CA6]/20 transition-colors"
                       title="Read the full story"
                     >
-                      <Sparkles size={12} />
+                      <img
+                        src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                        className="w-3 h-3 object-contain"
+                        alt=""
+                      />
                     </button>
                   )}
                 </span>

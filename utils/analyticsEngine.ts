@@ -1,4 +1,5 @@
 import { Climb, ProductionStats, SetterProduction } from '../types';
+import { calculateProductionStats as calculateProductionStatsInternal } from './productionStats';
 
 export interface ShiftAnalysisResult {
     efficiencyData: any[];
@@ -266,100 +267,5 @@ export const calculateProductionStats = (
     selectedGyms: string[],
     dateRange: { start: Date; end: Date }
 ): ProductionStats => {
-    const gymsToProcess = selectedGyms.includes("Regional Overview") ? Object.keys(data) : selectedGyms;
-    const filteredClimbs = gymsToProcess.flatMap(gym => {
-        const gClimbs = data[gym] || [];
-        return gClimbs.map(c => ({
-            ...c,
-            gymCode: gym,
-            localDate: new Date(c.dateSet)
-        }));
-    }).filter(climb => {
-        const start = new Date(dateRange.start);
-        start.setHours(0, 0, 0, 0);
-        const end = new Date(dateRange.end);
-        end.setHours(23, 59, 59, 999);
-        return climb.localDate >= start && climb.localDate <= end;
-    });
-
-    const total = filteredClimbs.length;
-    const routes = filteredClimbs.filter(c => c.isRoute).length;
-    const boulders = total - routes;
-
-    const setterMap: Record<string, { total: number; routes: number; boulders: number; gyms: Set<string>; shifts: number }> = {};
-    const shiftMap: Record<string, { type: 'rope' | 'boulder' | 'split' }> = {};
-
-    filteredClimbs.forEach(c => {
-        const d = c.localDate;
-        const dateKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-        const names = c.setter.split(',').map(s => s.trim());
-
-        names.forEach(name => {
-            if (!setterMap[name]) setterMap[name] = { total: 0, routes: 0, boulders: 0, gyms: new Set(), shifts: 0 };
-            setterMap[name].total++;
-            setterMap[name].gyms.add(c.gymCode!);
-            if (c.isRoute) setterMap[name].routes++;
-            else setterMap[name].boulders++;
-
-            const shiftKey = `${name}_${dateKey}_${c.gymCode}`;
-            if (!shiftMap[shiftKey]) {
-                shiftMap[shiftKey] = { type: c.isRoute ? 'rope' : 'boulder' };
-                setterMap[name].shifts++;
-            } else {
-                const currentType = shiftMap[shiftKey].type;
-                if ((currentType === 'rope' && !c.isRoute) || (currentType === 'boulder' && c.isRoute)) {
-                    shiftMap[shiftKey].type = 'split';
-                }
-            }
-        });
-    });
-
-    const setterData: SetterProduction[] = Object.entries(setterMap)
-        .map(([name, s]) => ({
-            name, ...s,
-            gymCodes: Array.from(s.gyms).join(', ')
-        }))
-        .sort((a, b) => b.total - a.total);
-
-    const totalShifts = Object.keys(shiftMap).length;
-    const ropeShifts = Object.values(shiftMap).filter(s => s.type === 'rope').length;
-    const boulderShifts = Object.values(shiftMap).filter(s => s.type === 'boulder').length;
-    const splitShifts = Object.values(shiftMap).filter(s => s.type === 'split').length;
-
-    const dailyMap: Record<string, { date: Date, dateKey: string, [gymCode: string]: Date | string | number }> = {};
-    const weekdayMap: Record<string, { day: string, routes: number, boulders: number, total: number }> = {
-        'Mon': { day: 'Mon', routes: 0, boulders: 0, total: 0 },
-        'Tue': { day: 'Tue', routes: 0, boulders: 0, total: 0 },
-        'Wed': { day: 'Wed', routes: 0, boulders: 0, total: 0 },
-        'Thu': { day: 'Thu', routes: 0, boulders: 0, total: 0 },
-        'Fri': { day: 'Fri', routes: 0, boulders: 0, total: 0 },
-        'Sat': { day: 'Sat', routes: 0, boulders: 0, total: 0 },
-        'Sun': { day: 'Sun', routes: 0, boulders: 0, total: 0 }
-    };
-
-    filteredClimbs.forEach(c => {
-        const d = c.localDate;
-        const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        const dispKey = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-        const weekKey = d.toLocaleDateString(undefined, { weekday: 'short' });
-
-        if (!dailyMap[dateKey]) {
-            dailyMap[dateKey] = { date: d, dateKey: dispKey };
-        }
-        dailyMap[dateKey][c.gymCode!] = ((dailyMap[dateKey][c.gymCode!] as number) || 0) + 1;
-
-        weekdayMap[weekKey].total++;
-        if (c.isRoute) weekdayMap[weekKey].routes++;
-        else weekdayMap[weekKey].boulders++;
-    });
-
-    const dailyData = Object.values(dailyMap).sort((a, b) => a.date.getTime() - b.date.getTime());
-    const weekdayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => weekdayMap[day]);
-
-    return {
-        total, routes, boulders,
-        totalShifts, ropeShifts, boulderShifts, splitShifts,
-        setterData, dailyData, weekdayData,
-        activeGymCodes: Array.from(new Set(filteredClimbs.map(c => c.gymCode!)))
-    };
+    return calculateProductionStatsInternal(data, selectedGyms, dateRange);
 };
