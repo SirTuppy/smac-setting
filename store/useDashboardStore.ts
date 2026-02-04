@@ -72,6 +72,7 @@ interface DashboardState {
     scheduleOverrides: Record<string, ScheduleOverride>; // Key: gymCode-dateKey-dataType-field
     comparisonMode: 'none' | 'pop' | 'yoy';
 
+
     // Actions
     setClimbData: (data: Record<string, Climb[]> | null) => void;
     setGymSchedules: (schedules: Record<string, GymSchedule> | null) => void;
@@ -168,6 +169,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         return saved ? JSON.parse(saved) : {};
     })(),
     comparisonMode: 'none',
+
 
     // Actions
     setClimbData: (climbData) => {
@@ -310,6 +312,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         localStorage.setItem('schedule_overrides', JSON.stringify(newOverrides));
         set({ scheduleOverrides: newOverrides });
     },
+
 
     clearScheduleOverrides: (gymCode) => {
         if (!gymCode) {
