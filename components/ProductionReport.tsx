@@ -21,6 +21,7 @@ const ProductionReport: React.FC = () => {
         rangeOption,
         setRangeOption,
         getBaseline,
+        baselineConfigs,
         comparisonMode
     } = useDashboardStore();
 
@@ -29,7 +30,7 @@ const ProductionReport: React.FC = () => {
             return getBaseline(selectedGyms[0]);
         }
         return getBaseline('DEFAULT');
-    }, [selectedGyms, getBaseline]);
+    }, [selectedGyms, getBaseline, baselineConfigs]);
 
     // 1. Previous Period Calculation
     const previousRange = useMemo(() => {

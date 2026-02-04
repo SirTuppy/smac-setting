@@ -58,6 +58,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
     }, [allGymCodes]);
 
     const activeGyms = useMemo(() => {
+        if (selectedGyms.includes("Regional Overview")) return allGymCodes;
         return allGymCodes.filter(code => selectedGyms.includes(code));
     }, [allGymCodes, selectedGyms]);
 
@@ -624,7 +625,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
                                 onBlur={handleEditorBlur}
                                 className="w-full h-full text-[12px] font-bold p-1 outline-none appearance-none bg-emerald-50 text-emerald-900"
                             >
-                                {['Rope', 'Boulder', 'Slab', 'Vert', 'Overhang', 'Steep'].map(opt => (
+                                {['---', 'Rope', 'Boulder', 'Slab', 'Vert', 'Overhang', 'Steep'].map(opt => (
                                     <option key={opt} value={opt}>{opt}</option>
                                 ))}
                             </select>

@@ -118,7 +118,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     climbData: null,
     gymSchedules: null,
     activeView: 'analytics',
-    selectedGyms: [],
+    selectedGyms: ["Regional Overview"],
     isCompareMode: false,
     dateRange: getInitialDateRange(),
     rangeOption: '14d',

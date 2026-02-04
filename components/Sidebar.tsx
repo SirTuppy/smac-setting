@@ -463,6 +463,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <LogOut size={16} />
                     <span>Clear & Start Fresh</span>
                 </button>
+                <div className="mt-4 text-center">
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">version 0.1</span>
+                </div>
             </div >
         </aside >
     );
