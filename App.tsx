@@ -6,6 +6,7 @@ import MapGenerator, { MapGeneratorHandle } from './components/MapGenerator';
 import RouteMapper from './components/RouteMapper';
 import ProductionReport from './components/ProductionReport';
 import ShiftAnalyzer from './components/ShiftAnalyzer';
+import WallTargetManager from './components/WallTargetManager';
 import Sidebar from './components/Sidebar';
 import BaselineModal from './components/BaselineModal';
 import DiscoveryModal from './components/DiscoveryModal';
@@ -288,6 +289,10 @@ function App() {
           ) : (
             <FileUpload onDataLoaded={handleDataLoaded} />
           )
+        )}
+
+        {activeView === 'wall-targets' && (
+          <WallTargetManager />
         )}
       </main>
 

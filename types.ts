@@ -15,6 +15,15 @@ export interface Climb {
   gradeScore: number;
 }
 
+export interface WallTarget {
+  gymCode: string;
+  wallName: string;
+  targetCount: number;         // Total items that should be on the wall
+  targetClimbsPerSetter: number; // Efficiency target (Climbs per Setter per Shift) for this wall
+  targetGrades?: Record<string, number>; // Distribution (Optional)
+  type: 'rope' | 'boulder';
+}
+
 export interface ScheduleOverride {
   gymCode: string;
   dateKey: string; // ISO Date YYYY-MM-DD to persist across sessions
@@ -60,7 +69,7 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
-export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer';
+export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets';
 
 export interface WallStats {
   name: string;

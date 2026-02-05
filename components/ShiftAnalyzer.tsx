@@ -8,7 +8,9 @@ import { BreakingPointChart, EfficiencyEvolutionChart, RhythmAnalyticsChart } fr
 import { CrewSizeDistribution, LaborProductionOverlay, ShiftTypeDistribution } from './analyzer/DistributionCharts';
 import SynergyTable from './analyzer/SynergyTable';
 import LaborSimulator from './analyzer/LaborSimulator';
+import WallPerformance from './analyzer/WallPerformance';
 import { getGymDisplayName } from '../constants/gyms';
+
 import { Filter } from 'lucide-react';
 
 import { useDashboardStore } from '../store/useDashboardStore';
@@ -105,6 +107,8 @@ const ShiftAnalyzer: React.FC = () => {
                 <AnalyzerKPIs analysisData={analysisData} />
 
                 <BreakingPointChart analysisData={analysisData} />
+
+                <WallPerformance analysisData={analysisData} />
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <CrewSizeDistribution analysisData={analysisData} />

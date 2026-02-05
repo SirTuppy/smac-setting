@@ -6,7 +6,8 @@ import {
     AppView,
     BaselineSettings,
     GymSettings,
-    ScheduleOverride
+    ScheduleOverride,
+    WallTarget
 } from '../types';
 import { GYMS } from '../constants/gyms';
 import { RangeOption } from '../components/UnifiedHeader';
@@ -71,6 +72,9 @@ interface DashboardState {
     unrecognizedWalls: Record<string, string[]>;
     scheduleOverrides: Record<string, ScheduleOverride>; // Key: gymCode-dateKey-dataType-field
     comparisonMode: 'none' | 'pop' | 'yoy';
+    wallTargets: Record<string, Record<string, WallTarget>>; // gymCode -> wallName -> Target
+    remoteTargetUrl: string | null;
+
 
 
     // Actions
@@ -104,6 +108,10 @@ interface DashboardState {
     setUnrecognizedWalls: (walls: Record<string, string[]>) => void;
     setScheduleOverride: (override: ScheduleOverride) => void;
     clearScheduleOverrides: (gymCode?: string) => void;
+    setWallTarget: (gymCode: string, wallName: string, target: Partial<WallTarget>) => void;
+    setRemoteTargetUrl: (url: string | null) => void;
+    fetchRemoteTargets: () => Promise<void>;
+    resetWallTargets: (gymCode?: string) => void;
     resetAll: () => void;
 }
 
@@ -169,6 +177,12 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         return saved ? JSON.parse(saved) : {};
     })(),
     comparisonMode: 'none',
+    wallTargets: (() => {
+        const saved = localStorage.getItem('wall_targets');
+        return saved ? JSON.parse(saved) : {};
+    })(),
+    remoteTargetUrl: localStorage.getItem('remote_target_url'),
+
 
 
     // Actions
@@ -311,6 +325,73 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         const newOverrides = { ...get().scheduleOverrides, [key]: override };
         localStorage.setItem('schedule_overrides', JSON.stringify(newOverrides));
         set({ scheduleOverrides: newOverrides });
+    },
+
+    setWallTarget: (gymCode, wallName, target) => {
+        const current = get().wallTargets;
+        const gymTargets = { ...(current[gymCode] || {}) };
+
+        // Merge with existing OR create new
+        const existing = gymTargets[wallName] || {
+            gymCode,
+            wallName,
+            targetCount: 0,
+            targetClimbsPerSetter: 4.0,
+            type: wallName.toLowerCase().includes('boulder') || wallName.toLowerCase().includes('cave') ? 'boulder' : 'rope'
+        };
+
+        gymTargets[wallName] = { ...existing, ...target };
+
+        const newWallTargets = { ...current, [gymCode]: gymTargets };
+        localStorage.setItem('wall_targets', JSON.stringify(newWallTargets));
+        set({ wallTargets: newWallTargets });
+    },
+
+    setRemoteTargetUrl: (url) => {
+        if (url) localStorage.setItem('remote_target_url', url);
+        else localStorage.removeItem('remote_target_url');
+        set({ remoteTargetUrl: url });
+    },
+
+    fetchRemoteTargets: async () => {
+        let url = get().remoteTargetUrl;
+        if (!url) return;
+
+        // Automatically convert Gist UI URLs to Raw URLs if needed
+        if (url.includes('gist.github.com') && !url.includes('/raw')) {
+            // Convert https://gist.github.com/user/id to https://gist.githubusercontent.com/user/id/raw/
+            url = url.replace('gist.github.com', 'gist.githubusercontent.com') + (url.endsWith('/') ? '' : '/') + 'raw/';
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+            const data = await response.json();
+
+            if (!data || typeof data !== 'object') throw new Error('Invalid data format received');
+
+            const current = get().wallTargets;
+            const newTargets = { ...current, ...data };
+
+            set({ wallTargets: newTargets });
+            localStorage.setItem('wall_targets', JSON.stringify(newTargets));
+            console.log('Remote targets synced successfully');
+        } catch (e) {
+            console.error('Remote Target Sync Failed:', e);
+            throw e; // Re-throw so the UI can catch it if needed
+        }
+    },
+
+    resetWallTargets: (gymCode) => {
+        if (!gymCode) {
+            localStorage.removeItem('wall_targets');
+            set({ wallTargets: {} });
+        } else {
+            const current = { ...get().wallTargets };
+            delete current[gymCode];
+            localStorage.setItem('wall_targets', JSON.stringify(current));
+            set({ wallTargets: current });
+        }
     },
 
 

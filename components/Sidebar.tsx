@@ -162,11 +162,23 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <Edit3 size={18} style={{ color: activeView === 'mapper' ? TYPE_COLORS.routes : undefined }} />
                             <span className="text-xs font-black uppercase tracking-widest">Route Mapper</span>
                         </button>
+
+                        <button
+                            id="nav-wall-targets"
+                            onClick={() => setActiveView('wall-targets')}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'wall-targets'
+                                ? 'bg-[#009CA6] text-white shadow-lg'
+                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
+                                }`}
+                        >
+                            <Target size={18} />
+                            <span className="text-xs font-black uppercase tracking-widest">Wall Targets</span>
+                        </button>
                     </div>
                 </div>
 
                 {/* Dynamic Contextual Tools */}
-                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator') && (
+                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets') && (
                     <div className="mx-auto w-[94%] p-4 bg-black/20 border border-white/5 rounded-2xl space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 shadow-xl">
                         <div className="flex items-center gap-2 mb-2 px-1">
                             <img
@@ -177,8 +189,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">{activeView.replace('-', ' ')} Controls</p>
                         </div>
 
-                        {/* Selection Navigation - Analytics, Report & Generator */}
-                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator') && (
+                        {/* Selection Navigation - Analytics, Report, Generator & Wall Targets */}
+                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets') && (
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex items-center justify-between px-1 mb-4">

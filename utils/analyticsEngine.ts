@@ -21,6 +21,12 @@ export interface ShiftAnalysisResult {
     };
     dataHealth: number;
     totalShifts: number;
+    wallStats: Record<string, {
+        totalClimbs: number;
+        totalSetterShifts: number; // Sum of crewSize for every shift including this wall
+        shiftCount: number;
+        avgEfficiency: number;
+    }>;
 }
 
 export const processShiftAnalysis = (
@@ -51,6 +57,7 @@ export const processShiftAnalysis = (
         climbCount: number;
         routes: number;
         boulders: number;
+        walls: Set<string>;
     }> = {};
 
     filteredClimbs.forEach(climb => {
@@ -64,7 +71,8 @@ export const processShiftAnalysis = (
                 setters: new Set(),
                 climbCount: 0,
                 routes: 0,
-                boulders: 0
+                boulders: 0,
+                walls: new Set()
             };
         }
 
@@ -74,6 +82,7 @@ export const processShiftAnalysis = (
         shifts[dateKey].climbCount++;
         if (climb.isRoute) shifts[dateKey].routes++;
         else shifts[dateKey].boulders++;
+        if (climb.wall) shifts[dateKey].walls.add(climb.wall.toLowerCase().trim());
     });
 
     const shiftArray = Object.values(shifts)
@@ -258,7 +267,35 @@ export const processShiftAnalysis = (
         correlations,
         predictors,
         dataHealth,
-        totalShifts: shiftArray.length
+        totalShifts: shiftArray.length,
+        wallStats: (() => {
+            const stats: Record<string, { totalClimbs: number; totalSetterShifts: number; shiftCount: number; avgEfficiency: number }> = {};
+
+            // 1. Process RAW climbs for totals per wall
+            filteredClimbs.forEach(climb => {
+                if (!climb.wall) return;
+                const wall = climb.wall.toLowerCase().trim();
+                if (!stats[wall]) stats[wall] = { totalClimbs: 0, totalSetterShifts: 0, shiftCount: 0, avgEfficiency: 0 };
+                stats[wall].totalClimbs++;
+            });
+
+            // 2. Process SHIFTS for setter-shifts per wall
+            shiftArray.forEach(s => {
+                s.walls.forEach(wall => {
+                    if (!stats[wall]) return; // Should exist from step 1
+                    stats[wall].totalSetterShifts += s.setters.size;
+                    stats[wall].shiftCount++;
+                });
+            });
+
+            // 3. Finalize Efficiency
+            Object.keys(stats).forEach(wall => {
+                const s = stats[wall];
+                s.avgEfficiency = s.totalSetterShifts > 0 ? s.totalClimbs / s.totalSetterShifts : 0;
+            });
+
+            return stats;
+        })()
     };
 };
 
