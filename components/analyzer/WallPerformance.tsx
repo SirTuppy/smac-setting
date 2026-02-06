@@ -42,7 +42,12 @@ const WallPerformance: React.FC<WallPerformanceProps> = ({ analysisData }) => {
 
     const renderWallCard = (wall: string) => {
         const actual = wallStats[wall] || { totalClimbs: 0, avgEfficiency: 0 };
-        const target = targets[wall] || { targetCount: 0, targetClimbsPerSetter: 4.0, type: wall.toLowerCase().includes('boulder') ? 'boulder' : 'rope' };
+        const target = targets[wall] || {
+            targetCount: 0,
+            targetClimbsPerSetter: 4.0,
+            type: wall.toLowerCase().includes('boulder') ? 'boulder' : 'rope',
+            displayName: wall
+        };
 
         const volPercent = target.targetCount > 0 ? (actual.totalClimbs / target.targetCount) * 100 : 0;
         const effPercent = target.targetClimbsPerSetter > 0 ? (actual.avgEfficiency / target.targetClimbsPerSetter) * 100 : 0;
@@ -52,9 +57,9 @@ const WallPerformance: React.FC<WallPerformanceProps> = ({ analysisData }) => {
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black uppercase shadow-sm ${target.type === 'rope' ? 'bg-[#00205B]' : 'bg-[#009CA6]'}`}>
-                            {wall.charAt(0)}
+                            {(target.displayName || wall).charAt(0)}
                         </div>
-                        <span className="font-black uppercase tracking-tight text-sm text-[#00205B] truncate max-w-[150px]">{wall}</span>
+                        <span className="font-black tracking-tight text-sm text-[#00205B] truncate max-w-[150px]">{target.displayName || wall}</span>
                     </div>
                     <ChevronRight size={14} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
                 </div>

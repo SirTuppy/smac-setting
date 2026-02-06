@@ -228,7 +228,7 @@ export const GYMS: GymMeta[] = [
         isBoulderOnly: false
     },
     {
-        code: 'HMD',
+        code: 'HAM',
         name: 'Hampden',
         region: 'Maryland',
         searchKeywords: ['Hampden', 'Baltimore Hampden'],
@@ -266,7 +266,7 @@ export const GYMS: GymMeta[] = [
         isBoulderOnly: true
     },
     {
-        code: 'HAR',
+        code: 'HLM',
         name: 'Harlem',
         region: 'New York',
         searchKeywords: ['Harlem', 'NYC Harlem'],
@@ -304,7 +304,7 @@ export const GYMS: GymMeta[] = [
         isBoulderOnly: false
     },
     {
-        code: 'FIS',
+        code: 'FSH',
         name: 'Fishtown',
         region: 'Pennsylvania',
         searchKeywords: ['Fishtown', 'Philadelphia Fishtown'],

@@ -22,6 +22,8 @@ export interface WallTarget {
   targetClimbsPerSetter: number; // Efficiency target (Climbs per Setter per Shift) for this wall
   targetGrades?: Record<string, number>; // Distribution (Optional)
   type: 'rope' | 'boulder';
+  displayName?: string;
+  isManual?: boolean;
 }
 
 export interface ScheduleOverride {

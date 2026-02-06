@@ -109,6 +109,7 @@ interface DashboardState {
     setScheduleOverride: (override: ScheduleOverride) => void;
     clearScheduleOverrides: (gymCode?: string) => void;
     setWallTarget: (gymCode: string, wallName: string, target: Partial<WallTarget>) => void;
+    deleteWallTarget: (gymCode: string, wallName: string) => void;
     setRemoteTargetUrl: (url: string | null) => void;
     fetchRemoteTargets: () => Promise<void>;
     resetWallTargets: (gymCode?: string) => void;
@@ -331,16 +332,43 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         const current = get().wallTargets;
         const gymTargets = { ...(current[gymCode] || {}) };
 
+        // Determine initial type if creating new
+        const initialType = wallName.toLowerCase().includes('boulder') || wallName.toLowerCase().includes('cave') ? 'boulder' : 'rope';
+
         // Merge with existing OR create new
         const existing = gymTargets[wallName] || {
             gymCode,
             wallName,
             targetCount: 0,
-            targetClimbsPerSetter: 4.0,
-            type: wallName.toLowerCase().includes('boulder') || wallName.toLowerCase().includes('cave') ? 'boulder' : 'rope'
+            targetClimbsPerSetter: initialType === 'rope' ? 1.0 : 4.0,
+            type: initialType,
+            isManual: target.isManual || false
         };
 
-        gymTargets[wallName] = { ...existing, ...target };
+        // If type is being updated, and efficiency is at a default, update efficiency too
+        let finalTarget = { ...existing, ...target };
+        if (target.type && target.type !== existing.type) {
+            const isAtOldDefault = (existing.type === 'rope' && existing.targetClimbsPerSetter === 1.0) ||
+                (existing.type === 'boulder' && existing.targetClimbsPerSetter === 4.0);
+
+            if (isAtOldDefault) {
+                finalTarget.targetClimbsPerSetter = target.type === 'rope' ? 1.0 : 4.0;
+            }
+        }
+
+        gymTargets[wallName] = finalTarget;
+
+        const newWallTargets = { ...current, [gymCode]: gymTargets };
+        localStorage.setItem('wall_targets', JSON.stringify(newWallTargets));
+        set({ wallTargets: newWallTargets });
+    },
+
+    deleteWallTarget: (gymCode, wallName) => {
+        const current = get().wallTargets;
+        if (!current[gymCode]) return;
+
+        const gymTargets = { ...current[gymCode] };
+        delete gymTargets[wallName];
 
         const newWallTargets = { ...current, [gymCode]: gymTargets };
         localStorage.setItem('wall_targets', JSON.stringify(newWallTargets));

@@ -173,7 +173,8 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
 
                 let dateDrawn = false;
                 if (hasRoutes) {
-                    const fallbackLocation = capitalizeWallNames(day.routes.map((i: any) => i.walls.join(', ')).join(', '));
+                    const allRouteWalls = [...new Set(day.routes.flatMap((i: any) => i.walls))];
+                    const fallbackLocation = capitalizeWallNames(allRouteWalls.join(', '));
                     const locationText = getOverrideValue(dayIndex, 'routes', 'location', fallbackLocation);
 
                     let climbTypeFallback = day.routes[0].climbType;
@@ -199,7 +200,8 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
                     dateDrawn = true;
                 }
                 if (hasBoulders) {
-                    const fallbackLocation = capitalizeWallNames(day.boulders.map((i: any) => i.walls.join(', ')).join(', '));
+                    const allBoulderWalls = [...new Set(day.boulders.flatMap((i: any) => i.walls))];
+                    const fallbackLocation = capitalizeWallNames(allBoulderWalls.join(', '));
                     const locationText = getOverrideValue(dayIndex, 'boulders', 'location', fallbackLocation);
 
                     let climbTypeFallback = day.boulders[0].climbType;
@@ -225,7 +227,8 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
                 }
             } else {
                 const combinedType: 'routes' | 'boulders' = type === 'boulders' ? 'boulders' : 'routes';
-                const fallbackLocation = itemsForDay.length > 0 ? capitalizeWallNames(itemsForDay.map(i => i.walls.join(', ')).join(', ')) : '---';
+                const allCombinedWalls = [...new Set(itemsForDay.flatMap(i => i.walls))];
+                const fallbackLocation = itemsForDay.length > 0 ? capitalizeWallNames(allCombinedWalls.join(', ')) : '---';
                 const locationText = getOverrideValue(dayIndex, combinedType, 'location', fallbackLocation);
 
                 let climbTypeFallback = '---';
