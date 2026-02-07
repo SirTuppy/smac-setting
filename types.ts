@@ -51,7 +51,11 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
+<<<<<<< Updated upstream
 export type AppView = 'analytics' | 'generator' | 'mapper' | 'report';
+=======
+export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets' | 'executive';
+>>>>>>> Stashed changes
 
 export interface WallStats {
   name: string;
@@ -120,6 +124,94 @@ export interface BaselineSettings {
   reportComments: string;
 }
 
+<<<<<<< Updated upstream
+=======
+// --- Executive & Financial Data Models ---
+
+/**
+ * Tracks the "All Orbits" targets for a specific gym/discipline.
+ * Source: "All Orbits Log" Excel Sheet
+ */
+export interface OrbitTarget {
+  id: string;
+  gymCode: string;
+  region: string;
+  orbitName: string;
+  discipline: 'Routes' | 'Boulders';
+  totalClimbs: number;
+  rps: number; // Routes Per Setter
+  shiftDuration: number;
+  rotationTarget: number; // in weeks
+  // Derived metrics from Excel
+  weeklyProductionGoal: number;
+  weeklyShiftGoal: number;
+  payPeriodHoursGoal: number;
+  hoursPerClimbGoal: number;
+}
+
+/**
+ * Raw data from Ryan's Payroll/P&L CSVs.
+ * Source: "Production X Wage Ledger" & "Monthly P&L"
+ */
+export interface FinancialRecord {
+  gymCode: string;
+  payPeriodStart: string;
+  payPeriodEnd: string;
+  totalHours: number;
+  totalWages: number;
+  budgetWages: number;
+  variance: number;
+  glAccount?: string; // e.g., "Total for E01"
+}
+
+/**
+ * The Master Record: Merged data from Kaya (Production) and Payroll (Financial).
+ * This powers the "Production Wage Dashboard" rows.
+ */
+export interface GymPeriodPerformance {
+  gymCode: string;
+  payPeriodEnd: string;
+  dateRange: { start: string; end: string };
+
+  // Financials
+  actualHours: number;
+  actualWages: number;
+  budgetWages: number;
+
+  // Production (Actuals from Kaya)
+  bouldersSet: number;
+  routesSet: number;
+  uniqueSetters: number;
+
+  // Efficiency Metrics (The "Ryan Metrics")
+  costPerClimb: number;
+  hoursPerClimbActual: number;
+  productionContributionRatio: number; // Percentage
+
+  // Variance & Context
+  boulderDensity: number;
+  boulderRotation: number; // calculated weeks
+  wageVariancePercent: number;
+  notes?: string;
+}
+
+export interface GymSettings {
+  displayMode: 'merged' | 'separate';
+  climbTypeDisplay: 'type' | 'steepness';
+}
+
+export interface GymMeta {
+  code: string;
+  name: string;
+  region: string;
+  searchKeywords: string[];
+  displayMode: 'separate' | 'merged';
+  weekStartDay: 'Monday' | 'Sunday';
+  isBoulderOnly: boolean;
+  ropeTypeName?: string;
+}
+
+>>>>>>> Stashed changes
 // Sample CSV Data for testing (KAYA Format)
 export const MOCK_CSV_DATA = `Name,Grade,Setter,Wall,Date_Set,Color,climbType
 "Pinch Me I'm Dreaming",V4,"Alex Handhold, Sarah Sendit",Wall A,Wed Jan 14 2026 10:00:00 GMT+0000 (Coordinated Universal Time),Red,Bouldering
