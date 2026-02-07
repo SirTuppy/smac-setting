@@ -7,6 +7,8 @@ import RouteMapper from './components/RouteMapper';
 import ProductionReport from './components/ProductionReport';
 import ShiftAnalyzer from './components/ShiftAnalyzer';
 import WallTargetManager from './components/WallTargetManager';
+import ExecutiveDashboard from './components/ExecutiveDashboard';
+import OrbitTargetManager from './components/OrbitTargetManager';
 import Sidebar from './components/Sidebar';
 import BaselineModal from './components/BaselineModal';
 import DiscoveryModal from './components/DiscoveryModal';
@@ -67,6 +69,7 @@ function App() {
     unrecognizedWalls, setUnrecognizedWalls, clearUnrecognizedWalls,
     setGymDisplayName, gymDisplayNames,
     userWallMappings,
+    setFinancialRecords,
     resetAll
   } = useDashboardStore();
 
@@ -140,6 +143,7 @@ function App() {
   const handleDataLoaded = (result: {
     analytics?: Record<string, Climb[]>,
     generator?: Record<string, GymSchedule>,
+    financials?: import('./types').FinancialRecord[],
     unrecognized?: Record<string, string[]>,
     newGyms?: Record<string, string>
   }) => {
@@ -173,6 +177,11 @@ function App() {
       Object.entries(result.newGyms).forEach(([code, name]) => {
         setGymDisplayName(code, name);
       });
+    }
+
+    if (result.financials) {
+      setFinancialRecords(result.financials);
+      if (!climbData && !gymSchedules) setActiveView('executive');
     }
 
     setShowUploadOverlay(false);
@@ -293,6 +302,14 @@ function App() {
 
         {activeView === 'wall-targets' && (
           <WallTargetManager />
+        )}
+
+        {activeView === 'orbit-targets' && (
+          <OrbitTargetManager />
+        )}
+
+        {activeView === 'executive' && (
+          <ExecutiveDashboard />
         )}
       </main>
 

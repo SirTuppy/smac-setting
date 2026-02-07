@@ -73,7 +73,7 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
-export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets' | 'executive';
+export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets' | 'orbit-targets' | 'executive';
 
 export interface WallStats {
   name: string;
@@ -240,6 +240,12 @@ export const MOCK_CSV_DATA = `Name,Grade,Setter,Wall,Date_Set,Color,climbType
 "Newbie Route",5.intro,Newbie Nick,Rope Wall 1,Thu Jan 08 2026 14:00:00 GMT+0000 (Coordinated Universal Time),Green,Routes
 "Overhang Beast",5.12c,Alex Handhold,Rope Wall 2,Wed Jan 07 2026 12:00:00 GMT+0000 (Coordinated Universal Time),Red,Routes
 "Introduction",V0,Newbie Nick,Kids Wall,Tue Jan 06 2026 09:00:00 GMT+0000 (Coordinated Universal Time),Blue,Bouldering
+`;
+
+export const MOCK_FINANCIAL_DATA = `Location,Actual Hours,Actual Wages,Budget Wages,Variance,Start Date,End Date
+Movement Design District,160,4000,4200,200,1/1/2026,1/14/2026
+Movement Grapevine,120,3000,3100,100,1/1/2026,1/14/2026
+Movement Plano,140,3500,3400,-100,1/1/2026,1/14/2026
 `;
 
 export const MOCK_HUMANITY_DATA = `Title,Start Date,Location,Employee Names

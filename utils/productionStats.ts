@@ -117,11 +117,7 @@ export const getPreviousPeriod = (
         prevEnd.setFullYear(end.getFullYear() - 1);
         return { start: prevStart, end: prevEnd };
     } else {
-        // PoP: Shift backwards by the duration of the current period
         const durationMs = end.getTime() - start.getTime();
-        // Add 1 day to duration if we want to be strictly adjacent? 
-        // Actually, end-start is the inclusive range if treated as timestamps.
-        // Let's just subtract the duration from both.
         const prevEnd = new Date(start.getTime() - 1);
         const prevStart = new Date(prevEnd.getTime() - durationMs);
         return { start: prevStart, end: prevEnd };
@@ -142,5 +138,17 @@ export const calculateDelta = (current: number, previous: number): ComparisonDel
         absolute,
         percent,
         trend: absolute > 0 ? 'up' : absolute < 0 ? 'down' : 'neutral'
+    };
+};
+
+export const aggregateProductionData = (climbs: Climb[]) => {
+    const total = climbs.length;
+    const routes = climbs.filter(c => c.isRoute).length;
+    const boulders = total - routes;
+
+    return {
+        total,
+        routes,
+        boulders
     };
 };

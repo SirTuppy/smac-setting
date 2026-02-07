@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Database, LayoutDashboard, Sparkles, ChevronRight, Activity, Map } from 'lucide-react';
+import { Upload, Database, LayoutDashboard, Sparkles, ChevronRight, Activity, Map, TrendingUp } from 'lucide-react';
 import { parseKayaCSV, parseHumanityCSV } from '../utils/csvParser';
-import { Climb, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, GymSchedule } from '../types';
+import { parsePayrollCSV } from '../utils/payrollParser';
+import { Climb, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, MOCK_FINANCIAL_DATA, GymSchedule, FinancialRecord } from '../types';
 import { useDashboardStore } from '../store/useDashboardStore';
 import { FUN_MESSAGES, FunMessage } from '../constants/messages';
 
@@ -9,6 +10,7 @@ interface FileUploadProps {
   onDataLoaded: (data: {
     analytics?: Record<string, Climb[]>,
     generator?: Record<string, GymSchedule>,
+    financials?: FinancialRecord[],
     unrecognized?: Record<string, string[]>
   }) => void;
 }
@@ -30,6 +32,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
 
     let combinedKayaData: Record<string, Climb[]> = {};
     let combinedHumanityData: Record<string, GymSchedule> = {};
+    let combinedFinancialData: FinancialRecord[] = [];
     let allUnrecognized: Record<string, string[]> = {};
 
     const loadFile = (file: File): Promise<void> => {
@@ -50,6 +53,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
                 if (!allUnrecognized[gym]) allUnrecognized[gym] = [];
                 allUnrecognized[gym] = [...new Set([...allUnrecognized[gym], ...walls])];
               });
+            } else if (firstLine.includes('hours') && (firstLine.includes('wages') || firstLine.includes('payroll'))) {
+              // Priority: Payroll / P&L
+              const records = parsePayrollCSV(text);
+              combinedFinancialData = [...combinedFinancialData, ...records];
             } else {
               // Default: Kaya Performance
               const gymName = file.name.split('-climbs')[0].trim() || "General";
@@ -70,9 +77,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
 
     await Promise.all(Array.from(files).map(loadFile));
 
-    const result: { analytics?: Record<string, Climb[]>, generator?: Record<string, GymSchedule>, unrecognized?: Record<string, string[]> } = {};
+    const result: {
+      analytics?: Record<string, Climb[]>,
+      generator?: Record<string, GymSchedule>,
+      financials?: FinancialRecord[],
+      unrecognized?: Record<string, string[]>
+    } = {};
+
     if (Object.keys(combinedKayaData).length > 0) result.analytics = combinedKayaData;
     if (Object.keys(combinedHumanityData).length > 0) result.generator = combinedHumanityData;
+    if (combinedFinancialData.length > 0) result.financials = combinedFinancialData;
     if (Object.keys(allUnrecognized).length > 0) result.unrecognized = allUnrecognized;
 
     onDataLoaded(result);
@@ -86,6 +100,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
   const loadMockHumanity = () => {
     const { schedules, unrecognized } = parseHumanityCSV(MOCK_HUMANITY_DATA, userWallMappings);
     onDataLoaded({ generator: schedules, unrecognized });
+  };
+
+  const loadMockFinancials = () => {
+    // We need both production (Kaya) and financials for the executive view to be meaningful
+    const kayaData = parseKayaCSV(MOCK_CSV_DATA, "Movement Design District");
+    const financials = parsePayrollCSV(MOCK_FINANCIAL_DATA);
+    onDataLoaded({
+      analytics: { "Movement Design District": kayaData },
+      financials: financials
+    });
   };
 
   return (
@@ -172,6 +196,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
                     Upload your <strong>biweekly schedule .csv</strong> to automatically generate and edit gym map templates.
                   </p>
                 </div>
+
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:bg-white transition-colors duration-500">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Database size={18} className="text-amber-500" />
+                    <span className="font-black text-xs uppercase tracking-widest text-left">Payroll / P&L (Financials)</span>
+                  </div>
+                  <p className="text-slate-500 text-xs font-medium leading-relaxed">
+                    Upload your <strong>payroll .csv</strong> to compare actual labor costs against production output.
+                  </p>
+                </div>
               </div>
 
               <div className="flex items-center justify-center gap-2 text-[#009CA6] font-black text-xs uppercase tracking-[0.2em] pt-4 group-hover:scale-105 transition-transform duration-300">
@@ -254,6 +288,21 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
               <div className="relative z-20">
                 <h3 className="text-lg font-black text-white uppercase tracking-tight">Yellow Map Generator Demo</h3>
                 <p className="text-white/60 text-xs font-medium mt-1">Generate gym maps from Humanity schedule.</p>
+              </div>
+            </button>
+
+            <button
+              onClick={loadMockFinancials}
+              onMouseEnter={() => setIsHovering('demo-executive')}
+              onMouseLeave={() => setIsHovering(null)}
+              className="group relative bg-[#EDE04B] rounded-3xl p-8 shadow-2xl shadow-[#EDE04B]/20 overflow-hidden border-2 border-transparent hover:border-[#00205B]/50 hover:scale-[1.02] active:scale-[0.96] transition-all duration-500 text-left"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <TrendingUp size={80} className="text-[#00205B]" />
+              </div>
+              <div className="relative z-20">
+                <h3 className="text-lg font-black text-[#00205B] uppercase tracking-tight">Director View Demo</h3>
+                <p className="text-[#00205B]/60 text-xs font-medium mt-1">Merge labor costs with production outputs.</p>
               </div>
             </button>
           </div>

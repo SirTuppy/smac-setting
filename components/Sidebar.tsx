@@ -2,7 +2,8 @@ import React from 'react';
 import {
     FileText, Edit3, Sparkles, LayoutDashboard, Database, LogOut,
     ChevronRight, Map, BarChart2, Save, RotateCcw, Mail,
-    Download, Printer, Plus, Target, ClipboardList, Zap, Compass, HelpCircle
+    Download, Printer, Plus, Target, ClipboardList, Zap, Compass, HelpCircle,
+    TrendingUp, LineChart
 } from 'lucide-react';
 import { useDashboardStore } from '../store/useDashboardStore';
 import { GYM_COLORS, TYPE_COLORS } from '../constants/colors';
@@ -162,23 +163,53 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <Edit3 size={18} style={{ color: activeView === 'mapper' ? TYPE_COLORS.routes : undefined }} />
                             <span className="text-xs font-black uppercase tracking-widest">Route Mapper</span>
                         </button>
+                    </div>
+                </div>
+
+                {/* Executive Oversight */}
+                <div>
+                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Executive Oversight</p>
+                    <div className="grid grid-cols-1 gap-1">
+                        <button
+                            id="nav-executive"
+                            onClick={() => setActiveView('executive')}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'executive'
+                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
+                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
+                                }`}
+                        >
+                            <TrendingUp size={18} style={{ color: activeView === 'executive' ? '#EDE04B' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">Director View</span>
+                        </button>
 
                         <button
                             id="nav-wall-targets"
                             onClick={() => setActiveView('wall-targets')}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'wall-targets'
-                                ? 'bg-[#009CA6] text-white shadow-lg'
+                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
                                 : 'text-white/40 hover:bg-white/5 hover:text-white/60'
                                 }`}
                         >
-                            <Target size={18} />
-                            <span className="text-xs font-black uppercase tracking-widest">Wall Targets</span>
+                            <Target size={18} style={{ color: activeView === 'wall-targets' ? '#009CA6' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">Wall Targets</span>
+                        </button>
+
+                        <button
+                            id="nav-orbit-targets"
+                            onClick={() => setActiveView('orbit-targets')}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'orbit-targets'
+                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
+                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
+                                }`}
+                        >
+                            <LineChart size={18} style={{ color: activeView === 'orbit-targets' ? '#009CA6' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">Orbit Targets</span>
                         </button>
                     </div>
                 </div>
 
                 {/* Dynamic Contextual Tools */}
-                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets') && (
+                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets' || activeView === 'orbit-targets' || activeView === 'executive') && (
                     <div className="mx-auto w-[94%] p-4 bg-black/20 border border-white/5 rounded-2xl space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 shadow-xl">
                         <div className="flex items-center gap-2 mb-2 px-1">
                             <img
@@ -189,8 +220,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">{activeView.replace('-', ' ')} Controls</p>
                         </div>
 
-                        {/* Selection Navigation - Analytics, Report, Generator & Wall Targets */}
-                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets') && (
+                        {/* Selection Navigation - Analytics, Report, Generator, Wall Targets, Orbit Targets, Executive */}
+                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets' || activeView === 'orbit-targets' || activeView === 'executive') && (
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex items-center justify-between px-1 mb-4">
