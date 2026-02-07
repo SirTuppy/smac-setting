@@ -1,21 +1,39 @@
-import React from 'react';
-import { X, Target, Activity, Zap, Layers } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { X, Target, Activity, Zap, Layers, MapPin, ChevronDown } from 'lucide-react';
 import { BaselineSettings } from '../types';
+import { useDashboardStore } from '../store/useDashboardStore';
+import { getGymDisplayName } from '../constants/gyms';
 
 interface BaselineModalProps {
     isOpen: boolean;
     onClose: () => void;
-    settings: BaselineSettings;
-    onUpdateSettings: (settings: BaselineSettings) => void;
 }
 
-const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings, onUpdateSettings }) => {
+const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose }) => {
+    const {
+        selectedBaselineGym,
+        setSelectedBaselineGym,
+        getBaseline,
+        setBaselineSettings,
+        climbData,
+        gymSchedules
+    } = useDashboardStore();
+
+    // Derive available gyms for the selector - MUST BE ABOVE EARLY RETURN
+    const availableGyms = useMemo(() => {
+        const codes = new Set<string>();
+        if (climbData) Object.keys(climbData).forEach(k => codes.add(k));
+        if (gymSchedules) Object.keys(gymSchedules).forEach(k => codes.add(k));
+        return ['DEFAULT', ...Array.from(codes).sort()];
+    }, [climbData, gymSchedules]);
+
     if (!isOpen) return null;
 
+    const settings = getBaseline(selectedBaselineGym);
     const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     const handleChange = (field: keyof BaselineSettings, value: any) => {
-        onUpdateSettings({ ...settings, [field]: value });
+        setBaselineSettings({ ...settings, [field]: value }, selectedBaselineGym);
     };
 
     const toggleDay = (dayIndex: number) => {
@@ -28,7 +46,7 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
             s.day === dayIndex && settings.settingDays.includes(dayIndex) ? { ...s, routes: 0, boulders: 0 } : s
         );
 
-        onUpdateSettings({ ...settings, settingDays: newDays, idealDailySplit: newSplit });
+        setBaselineSettings({ ...settings, settingDays: newDays, idealDailySplit: newSplit }, selectedBaselineGym);
     };
 
     const updateDailySplit = (dayIndex: number, field: 'routes' | 'boulders', value: string) => {
@@ -41,13 +59,13 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
         const totalRoutes = newSplit.reduce((sum, s) => sum + s.routes, 0);
         const totalBoulders = newSplit.reduce((sum, s) => sum + s.boulders, 0);
 
-        onUpdateSettings({
+        setBaselineSettings({
             ...settings,
             idealDailySplit: newSplit,
             routesPerWeek: totalRoutes,
             bouldersPerWeek: totalBoulders,
             totalVolumePerWeek: totalRoutes + totalBoulders
-        });
+        }, selectedBaselineGym);
     };
 
     return (
@@ -73,13 +91,36 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
                 </button>
 
                 <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="bg-[#00205B] p-2 rounded-xl shadow-lg">
-                            <Target className="text-white" size={20} />
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="bg-[#00205B] p-2 rounded-xl shadow-lg">
+                                    <Target className="text-white" size={20} />
+                                </div>
+                                <h2 className="text-3xl font-black text-[#00205B] uppercase tracking-tight">Benchmarks</h2>
+                            </div>
+                            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest ml-11">Define production metrics</p>
                         </div>
-                        <h2 className="text-3xl font-black text-[#00205B] uppercase tracking-tight">Baseline Config</h2>
+
+                        {/* Gym Selector */}
+                        <div className="relative group min-w-[200px]">
+                            <label className="text-[9px] font-black text-[#00205B]/40 uppercase tracking-widest block mb-1.5 ml-1">Context</label>
+                            <div className="relative">
+                                <select
+                                    value={selectedBaselineGym}
+                                    onChange={(e) => setSelectedBaselineGym(e.target.value)}
+                                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl px-4 py-3 text-xs font-black text-[#00205B] appearance-none outline-none focus:border-[#009CA6] transition-all cursor-pointer pr-10"
+                                >
+                                    {availableGyms.map(code => (
+                                        <option key={code} value={code}>
+                                            {code === 'DEFAULT' ? '🌎 Regional (Default)' : `${code} - ${getGymDisplayName(code)}`}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#00205B]/30 pointer-events-none group-hover:text-[#009CA6] transition-colors" />
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-8 ml-11">Define production benchmarks</p>
 
                     <div className="space-y-8">
                         {/* 1. Setting Days Selection */}
@@ -95,8 +136,8 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
                                             key={day}
                                             onClick={() => toggleDay(i)}
                                             className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase transition-all border-2 ${isActive
-                                                    ? 'bg-[#00205B] border-[#00205B] text-white shadow-lg scale-105'
-                                                    : 'bg-slate-50 border-slate-100 text-slate-400 hover:border-slate-200'
+                                                ? 'bg-[#00205B] border-[#00205B] text-white shadow-lg scale-105'
+                                                : 'bg-slate-50 border-slate-100 text-slate-400 hover:border-slate-200'
                                                 }`}
                                         >
                                             {day}
@@ -203,7 +244,7 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
                                         step="0.1"
                                         className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 pl-4 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                         value={settings.boulderTargetPerShift}
-                                        onChange={e => onUpdateSettings({ ...settings, boulderTargetPerShift: parseFloat(e.target.value) || 0 })}
+                                        onChange={e => setBaselineSettings({ ...settings, boulderTargetPerShift: parseFloat(e.target.value) || 0 }, selectedBaselineGym)}
                                     />
                                 </div>
                             </div>
@@ -217,7 +258,7 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
                                         step="0.1"
                                         className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 pl-4 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                         value={settings.ropeTargetPerShift}
-                                        onChange={e => onUpdateSettings({ ...settings, ropeTargetPerShift: parseFloat(e.target.value) || 0 })}
+                                        onChange={e => setBaselineSettings({ ...settings, ropeTargetPerShift: parseFloat(e.target.value) || 0 }, selectedBaselineGym)}
                                     />
                                 </div>
                             </div>
@@ -232,6 +273,7 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose, settings
                             </button>
                             <p className="text-center text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-4">
                                 These values will be used as indicators on the Production Report.
+                                {selectedBaselineGym === 'DEFAULT' ? ' They are currently the Regional Default.' : ` These are specific to ${selectedBaselineGym}.`}
                             </p>
                         </div>
                     </div>

@@ -1,24 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, useImperativeHandle, forwardRef } from 'react';
-import { Download, Printer, Mail, Save, RotateCcw, HelpCircle, Edit3, X } from 'lucide-react';
-import { GymSchedule, ScheduleEntry, EmailSettings } from '../types';
-import { GYM_WALLS, TEMPLATE_COORDS, GYM_DISPLAY_NAMES } from '../constants/mapTemplates';
+import { Download, Printer, Mail, Save, RotateCcw, HelpCircle, Edit3, X, Map, ChevronRight } from 'lucide-react';
+import { GymSchedule, ScheduleEntry, EmailSettings, GymMeta } from '../types';
+import { GYM_WALLS, TEMPLATE_COORDS } from '../constants/mapTemplates';
+import { GYMS, getGymDisplayName, getGymByCode } from '../constants/gyms';
 
 export interface MapGeneratorHandle {
     downloadAll: () => void;
 }
 
-interface MapGeneratorProps {
-    schedules: Record<string, GymSchedule>;
-    onUpdateSchedule: (gymCode: string, updatedSchedule: GymSchedule) => void;
-    onClearAll: () => void;
-    showInstructions: boolean;
-    onCloseInstructions: () => void;
-    showSettings: boolean;
-    onCloseSettings: () => void;
-    emailSettings: EmailSettings;
-    onUpdateEmailSettings: (settings: EmailSettings) => void;
-    onEmailSchedule: () => void;
-}
+import { useDashboardStore } from '../store/useDashboardStore';
 
 interface ClickRegion {
     gymCode: string;
@@ -34,24 +24,61 @@ interface ClickRegion {
     id: string | null;
 }
 
-const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
-    schedules,
-    onUpdateSchedule,
-    onClearAll,
-    showInstructions,
-    onCloseInstructions,
-    showSettings,
-    onCloseSettings,
-    emailSettings,
-    onUpdateEmailSettings,
-    onEmailSchedule
-}, ref) => {
+const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
+    const {
+        gymSchedules: schedules,
+        selectedGyms,
+        setGymSchedule,
+        setGymSchedules,
+        showInstructions,
+        setShowInstructions,
+        showSettings,
+        setShowSettings,
+        emailSettings,
+        setEmailSettings,
+        gymSettings,
+        scheduleOverrides,
+        setScheduleOverride,
+        clearScheduleOverrides
+    } = useDashboardStore();
+
     const [clickRegions, setClickRegions] = useState<ClickRegion[]>([]);
     const [editingRegion, setEditingRegion] = useState<{ region: ClickRegion, rect: DOMRect, canvas: HTMLCanvasElement } | null>(null);
     const [editValue, setEditValue] = useState('');
     const canvasRefs = useRef<Record<string, HTMLCanvasElement[]>>({});
 
-    const activeGyms = useMemo(() => Object.keys(schedules), [schedules]);
+    const allGymCodes = useMemo(() => Object.keys(schedules || {}).sort(), [schedules]);
+
+    const gymDisplayNames = useMemo(() => {
+        const names: Record<string, string> = {};
+        allGymCodes.forEach(code => {
+            names[code] = getGymDisplayName(code);
+        });
+        return names;
+    }, [allGymCodes]);
+
+    const activeGyms = useMemo(() => {
+        if (selectedGyms.includes("Regional Overview")) return allGymCodes;
+        return allGymCodes.filter(code => selectedGyms.includes(code));
+    }, [allGymCodes, selectedGyms]);
+
+    const handleEmailSchedule = () => {
+        if (!schedules) return;
+        const firstGym = Object.keys(schedules)[0];
+        const schedule = schedules[firstGym];
+
+        let subject = emailSettings.subject
+            .replace('[GYM_NAME]', firstGym)
+            .replace('[DATE_RANGE]', schedule.fileDateRange);
+
+        let body = emailSettings.body
+            .replace('[GYM_NAME]', firstGym)
+            .replace('[DATE_RANGE]', schedule.fileDateRange);
+
+        window.location.href = `mailto:${emailSettings.to}?cc=${emailSettings.cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    };
+
+    if (!schedules) return null;
 
     const capitalizeWallNames = (text: string) => {
         if (!text || text === '---') return text;
@@ -74,8 +101,20 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
     const renderTableData = useCallback((ctx: CanvasRenderingContext2D, weekData: any[], type: string, tableCoords: any, tableTop: number, rowHeight: number, weekOffset: number, gymCode: string, regions: ClickRegion[]) => {
         const gymData = schedules[gymCode];
         const startDay = gymData.startDay;
-        const gymConfig = TEMPLATE_COORDS[gymCode];
+        const templateConfig = TEMPLATE_COORDS[gymCode] || TEMPLATE_COORDS['GENERIC'];
+        const settings = gymSettings[gymCode] || {
+            displayMode: templateConfig.displayMode || 'separate',
+            climbTypeDisplay: 'type'
+        };
         let currentY = tableTop;
+
+        const getOverrideValue = (dayIdx: number, dataType: 'routes' | 'boulders', field: 'location' | 'climbType' | 'setterCount', fallback: string) => {
+            const dStr = new Date(startDay);
+            dStr.setDate(dStr.getDate() + dayIdx);
+            const dateKey = dStr.toISOString().split('T')[0];
+            const key = `${gymCode}-${dateKey}-${dataType}-${field}`;
+            return scheduleOverrides[key]?.value ?? fallback;
+        };
 
         weekData.forEach((day, rowIndex) => {
             const dayIndex = weekOffset + rowIndex;
@@ -84,13 +123,13 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
             const dateStr = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
             const dayOfWeek = currentDate.getDay();
 
-            if (gymConfig.displayMode === 'separate' && (dayOfWeek === 0 || dayOfWeek === 6)) return;
+            if (settings.displayMode === 'separate' && (dayOfWeek === 0 || dayOfWeek === 6)) return;
 
             const hasRoutes = day.routes && day.routes.length > 0;
             const hasBoulders = day.boulders && day.boulders.length > 0;
 
             let itemsForDay: ScheduleEntry[] = [];
-            if (gymConfig.combined) {
+            if (templateConfig.combined) {
                 itemsForDay = [...day.routes, ...day.boulders];
             } else {
                 if (type === 'routes') itemsForDay = day.routes;
@@ -100,46 +139,114 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
 
             const textY = currentY - (rowHeight / 2);
 
-            if (gymConfig.displayMode === 'separate') {
-                if (!hasRoutes && !hasBoulders) {
-                    ctx.fillText(dateStr, tableCoords.date.x, currentY);
-                    ctx.fillText('---', tableCoords.location.x, currentY);
-                    ctx.fillText('---', tableCoords.climbType.x, currentY);
-                    ctx.fillText('---', tableCoords.setters.x, currentY);
+            // DRAW ZEBRA STRIPE (Behind text) - Start on row 0
+            if (rowIndex % 2 === 0) {
+                ctx.fillStyle = '#efeff2';
+                // Fine-tuned boundaries to align perfectly with headers
+                const stripeX = tableCoords.date.x - 2;
+                const tableEnd = tableCoords.setters.x + tableCoords.setters.width + 1;
+                const stripeWidth = tableEnd - stripeX;
 
-                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: '---', x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: 'combined', id: null });
+                // Adjust Y calculation to be centred on the row
+                const stripeY = currentY - (rowHeight * 0.55);
+                ctx.fillRect(stripeX, stripeY, stripeWidth, rowHeight);
+                ctx.fillStyle = '#1e3a5f'; // Restore text color
+            }
+
+            if (settings.displayMode === 'separate') {
+                if (!hasRoutes && !hasBoulders) {
+                    const locationVal = getOverrideValue(dayIndex, 'routes', 'location', '---');
+                    const typeVal = getOverrideValue(dayIndex, 'routes', 'climbType', '---');
+                    const settersVal = getOverrideValue(dayIndex, 'routes', 'setterCount', '---');
+
+                    ctx.fillText(dateStr, tableCoords.date.x, currentY);
+                    ctx.fillText(truncateText(ctx, locationVal, tableCoords.location.width), tableCoords.location.x, currentY);
+                    ctx.fillText(typeVal, tableCoords.climbType.x, currentY);
+                    ctx.fillText(settersVal, tableCoords.setters.x, currentY);
+
+                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: locationVal, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: 'combined', id: null });
+                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'climbType', value: typeVal, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: 'combined', id: null });
+                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'setterCount', value: settersVal, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: 'combined', id: null });
                     currentY += rowHeight;
                     return;
                 }
 
                 let dateDrawn = false;
                 if (hasRoutes) {
-                    const locationText = capitalizeWallNames(day.routes.map((i: any) => i.walls.join(', ')).join(', '));
+                    const allRouteWalls = [...new Set(day.routes.flatMap((i: any) => i.walls))];
+                    const fallbackLocation = capitalizeWallNames(allRouteWalls.join(', '));
+                    const locationText = getOverrideValue(dayIndex, 'routes', 'location', fallbackLocation);
+
+                    let climbTypeFallback = day.routes[0].climbType;
+                    if (settings.climbTypeDisplay === 'steepness') {
+                        const wall = day.routes[0].walls[0]?.toLowerCase();
+                        climbTypeFallback = GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback;
+                    }
+                    const climbTypeText = getOverrideValue(dayIndex, 'routes', 'climbType', climbTypeFallback);
+
+                    const currentSetterCount = String(day.routes.reduce((t: number, i: any) => t + i.setterCount, 0));
+                    const setterText = getOverrideValue(dayIndex, 'routes', 'setterCount', currentSetterCount);
+
                     ctx.fillText(dateStr, tableCoords.date.x, currentY);
                     ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
-                    ctx.fillText(day.routes[0].climbType, tableCoords.climbType.x, currentY);
-                    ctx.fillText(String(day.routes.reduce((t: number, i: any) => t + i.setterCount, 0)), tableCoords.setters.x, currentY);
+                    ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
+                    ctx.fillText(setterText, tableCoords.setters.x, currentY);
 
-                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: 'combined', id: day.routes[0].id });
+                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: day.routes[0].id });
+                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: day.routes[0].id });
+                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'setterCount', value: setterText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: day.routes[0].id });
+
                     currentY += rowHeight;
                     dateDrawn = true;
                 }
                 if (hasBoulders) {
-                    const locationText = capitalizeWallNames(day.boulders.map((i: any) => i.walls.join(', ')).join(', '));
+                    const allBoulderWalls = [...new Set(day.boulders.flatMap((i: any) => i.walls))];
+                    const fallbackLocation = capitalizeWallNames(allBoulderWalls.join(', '));
+                    const locationText = getOverrideValue(dayIndex, 'boulders', 'location', fallbackLocation);
+
+                    let climbTypeFallback = day.boulders[0].climbType;
+                    if (settings.climbTypeDisplay === 'steepness') {
+                        const wall = day.boulders[0].walls[0]?.toLowerCase();
+                        climbTypeFallback = GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback;
+                    }
+                    const climbTypeText = getOverrideValue(dayIndex, 'boulders', 'climbType', climbTypeFallback);
+
+                    const currentSetterCount = String(day.boulders.reduce((t: number, i: any) => t + i.setterCount, 0));
+                    const setterText = getOverrideValue(dayIndex, 'boulders', 'setterCount', currentSetterCount);
+
                     if (!dateDrawn) ctx.fillText(dateStr, tableCoords.date.x, currentY);
                     ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
-                    ctx.fillText(day.boulders[0].climbType, tableCoords.climbType.x, currentY);
-                    ctx.fillText(String(day.boulders.reduce((t: number, i: any) => t + i.setterCount, 0)), tableCoords.setters.x, currentY);
-                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: 'combined', id: day.boulders[0].id });
+                    ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
+                    ctx.fillText(setterText, tableCoords.setters.x, currentY);
+
+                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: day.boulders[0].id });
+                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: day.boulders[0].id });
+                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'setterCount', value: setterText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: day.boulders[0].id });
+
                     currentY += rowHeight;
                 }
             } else {
-                let climbTypeText = '---';
+                const combinedType: 'routes' | 'boulders' = type === 'boulders' ? 'boulders' : 'routes';
+                const allCombinedWalls = [...new Set(itemsForDay.flatMap(i => i.walls))];
+                const fallbackLocation = itemsForDay.length > 0 ? capitalizeWallNames(allCombinedWalls.join(', ')) : '---';
+                const locationText = getOverrideValue(dayIndex, combinedType, 'location', fallbackLocation);
+
+                let climbTypeFallback = '---';
                 if (itemsForDay.length > 0) {
-                    climbTypeText = (hasRoutes && hasBoulders) ? 'Both' : itemsForDay[0].climbType;
+                    if (settings.climbTypeDisplay === 'steepness') {
+                        const wall = itemsForDay[0].walls[0]?.toLowerCase();
+                        climbTypeFallback = (hasRoutes && hasBoulders) ? 'Mixed' : (GYM_WALLS[gymCode]?.[wall]?.climb_type || itemsForDay[0].climbType);
+                    } else {
+                        if (hasRoutes && hasBoulders) climbTypeFallback = 'Both';
+                        else if (hasRoutes) climbTypeFallback = 'Rope';
+                        else if (hasBoulders) climbTypeFallback = 'Boulder';
+                        else climbTypeFallback = itemsForDay[0].climbType;
+                    }
                 }
-                const locationText = itemsForDay.length > 0 ? capitalizeWallNames(itemsForDay.map(i => i.walls.join(', ')).join(', ')) : '---';
-                const setterCountText = itemsForDay.length > 0 ? String(itemsForDay.reduce((t, i) => t + i.setterCount, 0)) : '0';
+                const climbTypeText = getOverrideValue(dayIndex, combinedType, 'climbType', climbTypeFallback);
+
+                const currentSetters = itemsForDay.length > 0 ? String(itemsForDay.reduce((t, i) => t + i.setterCount, 0)) : '0';
+                const setterCountText = getOverrideValue(dayIndex, combinedType, 'setterCount', currentSetters);
 
                 ctx.fillText(dateStr, tableCoords.date.x, currentY);
                 ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
@@ -147,15 +254,14 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                 ctx.fillText(setterCountText, tableCoords.setters.x, currentY);
 
                 const firstItem = itemsForDay.length > 0 ? itemsForDay[0] : null;
-                const dataType: 'routes' | 'boulders' = type === 'boulders' ? 'boulders' : 'routes';
 
-                regions.push({ gymCode, dayIndex, dataType, field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
-                regions.push({ gymCode, dayIndex, dataType, field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
-                regions.push({ gymCode, dayIndex, dataType, field: 'setterCount', value: setterCountText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
+                regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
+                regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
+                regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'setterCount', value: setterCountText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
                 currentY += rowHeight;
             }
         });
-    }, [schedules]);
+    }, [schedules, gymSettings, scheduleOverrides]);
 
     const renderPage = useCallback(async (gymCode: string, type: string, canvas: HTMLCanvasElement, regions: ClickRegion[]) => {
         const ctx = canvas.getContext('2d');
@@ -165,32 +271,52 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
         canvas.height = 1024;
 
         const gymData = schedules[gymCode];
-        // --- PORT LOGIC: Map pathing to actual files in /public/templates ---
-        let filename = `${gymCode}_${type}.png`;
 
-        // For combined gyms, the PNG template is named '_routes.png' but it houses both
+        // Define ALL possible filenames we could try for this gym
+        const possibleFilenames = [
+            `${gymCode}_${type}.png`,
+            `${gymCode}_routes.png`, // Mega-gym default
+            `${gymCode}_boulders.png` // Boulder-only default
+        ];
+
+        // Remove duplicates and prioritize 'combined' if applicable
         if (type === 'combined') {
-            filename = `${gymCode}_routes.png`;
-        } else if (['HIL', 'DTN', 'FTW'].includes(gymCode)) {
-            // These are boulder-only and the template is named '_boulders.png'
-            filename = `${gymCode}_boulders.png`;
+            possibleFilenames.unshift(`${gymCode}_routes.png`);
         }
 
-        const templateFile = `${import.meta.env.BASE_URL}templates/${filename}`;
+        const tryFilenames = [...new Set(possibleFilenames)];
 
         return new Promise<void>((resolve) => {
             const img = new Image();
             img.crossOrigin = "anonymous";
-            img.onload = () => {
-                ctx.drawImage(img, 0, 0, 791, 1024);
 
-                const configType = (gymCode === 'GVN' || gymCode === 'PLN' || gymCode === 'DSN') ? 'combined' : type;
-                const coords = TEMPLATE_COORDS[gymCode][configType];
+            const renderFinal = (isFallback: boolean) => {
+                const settings = gymSettings[gymCode] || { displayMode: 'separate' };
+                const isMerged = settings.displayMode === 'merged';
+                const configType = (gymCode === 'GVN' || gymCode === 'PLN' || gymCode === 'DSN' || isMerged || type === 'combined') ? 'combined' : type;
+
+                let coords = (TEMPLATE_COORDS[gymCode] || {})[configType];
+                const hasSpecificCoords = !!coords;
 
                 if (!coords) {
-                    console.error(`No coordinates found for ${gymCode} ${configType}`);
-                    resolve();
-                    return;
+                    coords = TEMPLATE_COORDS['GENERIC']['combined'];
+                }
+
+                if (isFallback) {
+                    // Draw a clean white background if template fails to load
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 791, 1024);
+
+                    // Simple Branding for dynamic gyms
+                    ctx.fillStyle = '#00205B';
+                    ctx.font = '900 32px Montserrat, Arial, sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(gymDisplayNames[gymCode] || gymCode, 50, 80);
+
+                    ctx.fillStyle = '#1e3a5f';
+                    ctx.fillRect(40, 100, 711, 2);
+                } else {
+                    ctx.drawImage(img, 0, 0, 791, 1024);
                 }
 
                 ctx.font = 'bold 24px Montserrat, Arial, sans-serif';
@@ -202,31 +328,67 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                 ctx.font = '14px Montserrat, Arial, sans-serif';
                 ctx.textBaseline = 'middle';
 
-                renderTableData(ctx, gymData.scheduleByDay.slice(0, 7), type, coords.leftTable, coords.tableTop, coords.rowHeight, 0, gymCode, regions);
-                renderTableData(ctx, gymData.scheduleByDay.slice(7, 14), type, coords.rightTable, coords.tableTop, coords.rowHeight, 7, gymCode, regions);
+                const tableType = configType === 'combined' ? 'combined' : type;
+                renderTableData(ctx, gymData.scheduleByDay.slice(0, 7), tableType, coords.leftTable, coords.tableTop, coords.rowHeight, 0, gymCode, regions);
+                renderTableData(ctx, gymData.scheduleByDay.slice(7, 14), tableType, coords.rightTable, coords.tableTop, coords.rowHeight, 7, gymCode, regions);
+
                 resolve();
             };
-            img.onerror = () => {
-                console.error(`Failed to load template: ${templateFile}`);
-                resolve(); // Don't block the loop
+
+            let tryIndex = 0;
+            const loadNext = () => {
+                if (tryIndex >= tryFilenames.length) {
+                    console.error(`Failed to load any templates for ${gymCode}. Tried: ${tryFilenames.join(', ')}`);
+                    renderFinal(true);
+                    return;
+                }
+
+                const currentFile = tryFilenames[tryIndex];
+                const fullPath = `${import.meta.env.BASE_URL}templates/${currentFile}`;
+
+                img.onload = () => renderFinal(false);
+                img.onerror = () => {
+                    console.warn(`Could not find ${currentFile}, retrying...`);
+                    tryIndex++;
+                    loadNext();
+                };
+                img.src = fullPath;
             };
-            img.src = templateFile;
+
+            loadNext();
         });
     }, [schedules, renderTableData]);
 
     const getActiveTypes = useCallback((gymCode: string) => {
         const gymData = schedules[gymCode];
         if (!gymData) return [];
-        if (gymCode === 'GVN' || gymCode === 'PLN' || gymCode === 'DSN') return ['combined'];
-        if (['HIL', 'DTN', 'FTW'].includes(gymCode)) return ['boulders'];
 
-        const types = [];
+        const gymMeta = getGymByCode(gymCode);
+        const settings = gymSettings[gymCode];
+
+        // Priority 1: User-set display mode customization
+        if (settings?.displayMode === 'merged') return ['combined'];
+
         const hasRoutes = gymData.scheduleByDay.some(d => d.routes?.length > 0);
         const hasBoulders = gymData.scheduleByDay.some(d => d.boulders?.length > 0);
+
+        if (settings?.displayMode === 'separate') {
+            const types = [];
+            if (hasRoutes) types.push('routes');
+            if (hasBoulders) types.push('boulders');
+            return types.length > 0 ? types : ['routes'];
+        }
+
+        // Priority 2: Dictionary default for this gym
+        if (gymMeta?.displayMode === 'merged') return ['combined'];
+        if (gymMeta?.isBoulderOnly) return ['boulders'];
+
+        // Fallback: Smart detection based on data
+        const types = [];
         if (hasRoutes) types.push('routes');
         if (hasBoulders) types.push('boulders');
-        return types.length > 0 ? types : ['boulders']; // Fallback
-    }, [schedules]);
+        return types.length > 0 ? types : ['boulders'];
+    }, [schedules, gymSettings]);
 
     useEffect(() => {
         const drawAll = async () => {
@@ -269,33 +431,21 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
     const handleEditorBlur = () => {
         if (!editingRegion) return;
         const { region } = editingRegion;
-        const gymData = { ...schedules[region.gymCode] };
-        const day = gymData.scheduleByDay[region.dayIndex];
+        const gymData = schedules[region.gymCode];
+        if (!gymData) return;
 
-        if (!day[region.dataType]) day[region.dataType] = [];
-        let item = day[region.dataType].find(i => i.id === region.id);
+        const dateObj = new Date(gymData.startDay);
+        dateObj.setDate(dateObj.getDate() + region.dayIndex);
+        const dateKey = dateObj.toISOString().split('T')[0];
 
-        if (!item && editValue.trim() !== '') {
-            item = {
-                id: Math.random().toString(36).substr(2, 9),
-                walls: [],
-                setterCount: 0,
-                climbType: region.dataType === 'routes' ? 'Rope' : 'Boulder'
-            };
-            day[region.dataType].push(item);
-        }
+        setScheduleOverride({
+            gymCode: region.gymCode,
+            dateKey,
+            dataType: region.dataType,
+            field: region.field,
+            value: editValue
+        });
 
-        if (item) {
-            if (region.field === 'location') {
-                item.walls = editValue.split(/[,/]+/).map(s => s.trim()).filter(s => s);
-            } else if (region.field === 'setterCount') {
-                item.setterCount = parseInt(editValue) || 0;
-            } else if (region.field === 'climbType') {
-                item.climbType = editValue;
-            }
-        }
-
-        onUpdateSchedule(region.gymCode, gymData);
         setEditingRegion(null);
     };
 
@@ -316,12 +466,13 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
     }), [downloadAll]);
 
     return (
-        <div className="flex flex-row h-full bg-slate-50 relative">
+        <div className="h-full bg-slate-50 relative overflow-hidden flex flex-col min-w-0">
+            {/* Modal: Instructions */}
             {/* Modal: Instructions */}
             {showInstructions && (
                 <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-200">
                     <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl p-10 relative">
-                        <button onClick={onCloseInstructions} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
+                        <button onClick={() => setShowInstructions(false)} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
                             <X size={24} />
                         </button>
 
@@ -331,33 +482,28 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                             <div className="bg-emerald-50 border-l-4 border-emerald-500 rounded-xl p-6">
                                 <h3 className="text-emerald-800 font-black uppercase text-sm tracking-widest mb-3">Quick Start Workflow</h3>
                                 <ol className="space-y-3 text-emerald-900/70 text-sm font-medium leading-relaxed">
-                                    <li><span className="text-emerald-600 font-bold mr-2">1. Upload CSV(s):</span> Drag & drop one or more Humanity CSV files into the upload area.</li>
-                                    <li><span className="text-emerald-600 font-bold mr-2">2. Auto-Generation:</span> Schedules for all detected gyms are generated instantly.</li>
-                                    <li><span className="text-emerald-600 font-bold mr-2">3. Interactive Editing:</span> Click any field (location, climb type, setter count) to edit in-place.</li>
-                                    <li><span className="text-emerald-600 font-bold mr-2">4. Export:</span> Download images, print to PDF, or email schedules using the sidebar.</li>
+                                    <li><span className="text-emerald-600 font-bold mr-2">1. Upload CSV:</span> Drag & drop your Humanity CSV files into the upload area.</li>
+                                    <li><span className="text-emerald-600 font-bold mr-2">2. Map Walls:</span> If new wall labels are found, a "Wall Discovery" window will pop up to help you categorize them.</li>
+                                    <li><span className="text-emerald-600 font-bold mr-2">3. Customize Layout:</span> Use the "Gym Customization" tab in the Discovery window to toggle between Consolidated (merged) vs. Split styles and Climb Type vs. Steepness display.</li>
+                                    <li><span className="text-emerald-600 font-bold mr-2">4. Live Editing:</span> Click any field on the generated maps to override the value manually.</li>
                                 </ol>
                             </div>
 
                             <div className="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-6">
-                                <h3 className="text-amber-800 font-black uppercase text-sm tracking-widest mb-3">Saving & Loading Schedules</h3>
+                                <h3 className="text-amber-800 font-black uppercase text-sm tracking-widest mb-3">Saving & Local Storage</h3>
                                 <ul className="space-y-3 text-amber-900/70 text-sm font-medium leading-relaxed">
-                                    <li><span className="text-amber-600 font-bold mr-2">• Save Latest:</span> Stores current schedules to your browser's local storage.</li>
-                                    <li><span className="text-amber-600 font-bold mr-2">• Load Latest:</span> Restore previously saved schedules instantly.</li>
-                                    <li><span className="text-amber-600 font-bold mr-2">• Clear All:</span> Remove all schedules from view and start fresh.</li>
+                                    <li><span className="text-amber-600 font-bold mr-2">• Browser Persistent:</span> All wall mappings, gym customizations, and email settings are saved to your local browser storage.</li>
+                                    <li><span className="text-amber-600 font-bold mr-2">• Export Options:</span> Download high-res PNGs or use the sidebar to print/email the schedules directly.</li>
                                 </ul>
                             </div>
 
                             <div className="bg-purple-50 border-l-4 border-purple-500 rounded-xl p-6">
-                                <h3 className="text-purple-800 font-black uppercase text-sm tracking-widest mb-3">Email Integration</h3>
+                                <h3 className="text-purple-800 font-black uppercase text-sm tracking-widest mb-3">Advanced Controls</h3>
                                 <p className="text-purple-900/70 text-sm font-medium leading-relaxed">
-                                    Configure your email template in <span className="text-purple-600 font-bold">Settings</span>, then click <span className="text-purple-600 font-bold">Email Schedule</span> to auto-populate a draft email.
+                                    The schedule generator uses preset templates for each gym. If a template looks incorrect, ensure you've mapped your walls correctly in the <span className="text-purple-600 font-bold">Wall Discovery</span> modal.
                                 </p>
-                                <p className="mt-2 text-[10px] text-purple-400 uppercase font-black tracking-widest">* Attachment must be added manually after download.</p>
                             </div>
 
-                            <div className="bg-slate-100 rounded-xl p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">
-                                Note: Saved schedules are stored locally in your browser, not in the cloud. They're only accessible on this device and browser.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -367,7 +513,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
             {showSettings && (
                 <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-200">
                     <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl p-10 relative">
-                        <button onClick={onCloseSettings} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
+                        <button onClick={() => setShowSettings(false)} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
                             <X size={24} />
                         </button>
 
@@ -380,7 +526,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 <input
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                     value={emailSettings.to}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, to: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, to: e.target.value })}
                                     placeholder="manager@gym.com, lead@gym.com"
                                 />
                             </div>
@@ -389,7 +535,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 <input
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                     value={emailSettings.cc}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, cc: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, cc: e.target.value })}
                                 />
                             </div>
                             <div>
@@ -397,7 +543,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 <input
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors"
                                     value={emailSettings.subject}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, subject: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, subject: e.target.value })}
                                 />
                             </div>
                             <div>
@@ -406,7 +552,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                     rows={12}
                                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-xl p-3 text-sm font-bold text-[#00205B] outline-none focus:border-[#009CA6] transition-colors resize-y min-h-[250px]"
                                     value={emailSettings.body}
-                                    onChange={e => onUpdateEmailSettings({ ...emailSettings, body: e.target.value })}
+                                    onChange={e => setEmailSettings({ ...emailSettings, body: e.target.value })}
                                 />
                                 <div className="mt-2 flex gap-4 text-[9px] font-bold text-[#009CA6] uppercase tracking-widest">
                                     <span>[GYM_NAME]</span>
@@ -414,7 +560,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 </div>
                             </div>
 
-                            <button onClick={onCloseSettings} className="w-full bg-[#009CA6] text-white py-4 rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#009CA6]/20 hover:scale-[1.02] transition-all">
+                            <button onClick={() => setShowSettings(false)} className="w-full bg-[#009CA6] text-white py-4 rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-[#009CA6]/20 hover:scale-[1.02] transition-all">
                                 Save Configuration
                             </button>
                         </div>
@@ -428,7 +574,18 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                         <div key={gymCode} id={activeGyms.indexOf(gymCode) === 0 ? "tour-generator-card" : undefined} className="space-y-6 flex-shrink-0 w-[850px] border-r border-slate-200 last:border-r-0 pr-12">
                             <div className="flex items-center gap-4 print:hidden">
                                 <span className="bg-[#00205B] text-white px-3 py-1 rounded-lg font-black text-xs uppercase tracking-widest shadow-sm">{gymCode}</span>
-                                <h2 className="text-2xl font-black text-[#00205B] uppercase tracking-tight">{GYM_DISPLAY_NAMES[gymCode]} Regional Map</h2>
+                                <h2 className="text-2xl font-black text-[#00205B] uppercase tracking-tight flex-1">{gymDisplayNames[gymCode] || gymCode} Map Preview</h2>
+                                <button
+                                    onClick={() => {
+                                        if (confirm(`Clear all manual edits for ${gymDisplayNames[gymCode] || gymCode}?`)) {
+                                            clearScheduleOverrides(gymCode);
+                                        }
+                                    }}
+                                    className="text-[10px] font-black uppercase text-slate-300 hover:text-rose-500 transition-colors flex items-center gap-1"
+                                >
+                                    <RotateCcw size={12} />
+                                    Reset Gym
+                                </button>
                             </div>
 
                             <div className="flex flex-col gap-8">
@@ -471,7 +628,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle, MapGeneratorProps>(({
                                 onBlur={handleEditorBlur}
                                 className="w-full h-full text-[12px] font-bold p-1 outline-none appearance-none bg-emerald-50 text-emerald-900"
                             >
-                                {['Rope', 'Boulder', 'Slab', 'Vert', 'Overhang', 'Steep'].map(opt => (
+                                {['---', 'Rope', 'Boulder', 'Slab', 'Vert', 'Overhang', 'Steep'].map(opt => (
                                     <option key={opt} value={opt}>{opt}</option>
                                 ))}
                             </select>

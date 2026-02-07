@@ -8,9 +8,17 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+scripts/
 dist
 dist-ssr
 *.local
+TODO.md
+NATIONWIDE_STRATEGY.md
+.gemini/antigravity/brain/
+synthetic_data/
+Setting Schedule Maps/
+Movement Design District-climbs(1).csv
+Movement Grapevine-climbs(1).csv
 
 # Editor directories and files
 .vscode/*

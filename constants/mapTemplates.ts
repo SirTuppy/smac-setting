@@ -1,3 +1,5 @@
+import { GYMS } from './gyms';
+
 export const GYM_WALLS: Record<string, Record<string, { type: 'rope' | 'boulder', climb_type: string }>> = {
     'DSN': {
         "ziggy": { "type": "rope", "climb_type": "Slab" },
@@ -181,7 +183,7 @@ export const TEMPLATE_COORDS: any = {
             tableTop: 775,
             rowHeight: 27,
             leftTable: { date: { x: 48, width: 42 }, location: { x: 94, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
-            rightTable: { date: { x: 408, width: 42 }, location: { x: 457, width: 142 }, climbType: { x: 615, width: 67 }, setters: { x: 698, width: 52 } }
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 454, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
         }
     },
     'GVN': {
@@ -193,7 +195,7 @@ export const TEMPLATE_COORDS: any = {
             tableTop: 775,
             rowHeight: 27,
             leftTable: { date: { x: 48, width: 42 }, location: { x: 100, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
-            rightTable: { date: { x: 408, width: 42 }, location: { x: 463, width: 142 }, climbType: { x: 615, width: 67 }, setters: { x: 698, width: 52 } }
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 460, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
         }
     },
     'PLN': {
@@ -205,7 +207,7 @@ export const TEMPLATE_COORDS: any = {
             tableTop: 775,
             rowHeight: 27,
             leftTable: { date: { x: 48, width: 42 }, location: { x: 100, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
-            rightTable: { date: { x: 408, width: 42 }, location: { x: 463, width: 142 }, climbType: { x: 615, width: 67 }, setters: { x: 698, width: 52 } }
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 460, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
         }
     },
     'HIL': {
@@ -217,7 +219,7 @@ export const TEMPLATE_COORDS: any = {
             tableTop: 775,
             rowHeight: 27,
             leftTable: { date: { x: 48, width: 42 }, location: { x: 94, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
-            rightTable: { date: { x: 408, width: 42 }, location: { x: 457, width: 142 }, climbType: { x: 615, width: 67 }, setters: { x: 698, width: 52 } }
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 454, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
         }
     },
     'DTN': {
@@ -229,7 +231,7 @@ export const TEMPLATE_COORDS: any = {
             tableTop: 775,
             rowHeight: 27,
             leftTable: { date: { x: 48, width: 42 }, location: { x: 94, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
-            rightTable: { date: { x: 408, width: 42 }, location: { x: 457, width: 142 }, climbType: { x: 615, width: 67 }, setters: { x: 698, width: 52 } }
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 454, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
         }
     },
     'FTW': {
@@ -241,42 +243,53 @@ export const TEMPLATE_COORDS: any = {
             tableTop: 775,
             rowHeight: 27,
             leftTable: { date: { x: 48, width: 42 }, location: { x: 94, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
-            rightTable: { date: { x: 408, width: 42 }, location: { x: 457, width: 142 }, climbType: { x: 615, width: 67 }, setters: { x: 698, width: 52 } }
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 454, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
+        }
+    },
+    'GENERIC': {
+        weekStartDay: 'Monday',
+        displayMode: 'merged',
+        ropeTypeName: 'Rope',
+        'combined': {
+            header: { x: 740, y: 115 },
+            tableTop: 775,
+            rowHeight: 27,
+            leftTable: { date: { x: 48, width: 42 }, location: { x: 100, width: 142 }, climbType: { x: 252, width: 67 }, setters: { x: 335, width: 52 } },
+            rightTable: { date: { x: 408, width: 42 }, location: { x: 460, width: 142 }, climbType: { x: 612, width: 67 }, setters: { x: 695, width: 52 } }
         }
     }
-};
-
-export const GYM_DISPLAY_NAMES: Record<string, string> = {
-    'DSN': 'Design District',
-    'PLN': 'Plano',
-    'DTN': 'Denton',
-    'FTW': 'Fort Worth',
-    'GVN': 'Grapevine',
-    'HIL': 'The Hill'
-};
-
-/**
- * Keywords used to identify gyms in CSV 'Location' columns.
- * These should be broad enough to match the CSV but specific enough to be unique.
- */
-export const GYM_SEARCH_KEYWORDS: Record<string, string> = {
-    'DSN': 'Design',
-    'PLN': 'Plano',
-    'DTN': 'Denton',
-    'FTW': 'Fort Worth',
-    'GVN': 'Grapevine',
-    'HIL': 'Dallas Hill'
 };
 
 /**
  * Returns the 3-letter code for a given gym name or keyword.
  */
 export const getGymCode = (name: string): string | null => {
-    const search = name.toLowerCase();
-    for (const [code, keyword] of Object.entries(GYM_SEARCH_KEYWORDS)) {
-        if (search.includes(keyword.toLowerCase()) || search.includes(code.toLowerCase())) {
-            return code;
+    const search = name.toLowerCase().trim();
+    if (!search) return null;
+
+    // 1. Exact Name/Code Match (Highest Priority)
+    for (const gym of GYMS) {
+        if (search === gym.code.toLowerCase() || search === gym.name.toLowerCase()) {
+            return gym.code;
         }
     }
+
+    // 2. Keyword Match (Middle Priority)
+    for (const gym of GYMS) {
+        if (gym.searchKeywords.some(kw => {
+            const lowKw = kw.toLowerCase();
+            return search.includes(lowKw) || lowKw.includes(search);
+        })) {
+            return gym.code;
+        }
+    }
+
+    // 3. Code Segment Match (Lowest Priority)
+    for (const gym of GYMS) {
+        if (search.includes(gym.code.toLowerCase())) {
+            return gym.code;
+        }
+    }
+
     return null;
 };

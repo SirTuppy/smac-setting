@@ -2,175 +2,61 @@ import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 import { FileText, Users, Calendar, Award, Printer, Mail, BarChart2, LayoutDashboard } from 'lucide-react';
 import { GYM_COLORS, TYPE_COLORS } from '../constants/colors';
-import { Climb, ProductionStats } from '../types';
-import { GYM_DISPLAY_NAMES } from '../constants/mapTemplates';
+import { Climb, ProductionStats, BaselineSettings } from '../types';
+import { getGymDisplayName } from '../constants/gyms';
+import { calculateProductionStats } from '../utils/analyticsEngine';
+import { getPreviousPeriod } from '../utils/productionStats';
 
-interface ProductionReportProps {
-    data: Record<string, Climb[]>;
-    selectedGyms: string[];
-    dateRange: { start: Date; end: Date };
-    onDateRangeChange: (range: { start: Date; end: Date }) => void;
-    baselineSettings: BaselineSettings;
-}
-
-import { BaselineSettings } from '../types';
-
-
-
+import { useDashboardStore } from '../store/useDashboardStore';
 import ProductionReportView from './ProductionReportView';
 import { exportToPDF } from '../utils/ModernPDFExport';
-import UnifiedHeader, { RangeOption } from './UnifiedHeader';
+import UnifiedHeader from './UnifiedHeader';
 
-const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms, dateRange, onDateRangeChange, baselineSettings }) => {
-    const [rangeOption, setRangeOption] = useState<RangeOption>('14d');
-    // 1. Filter and Flat data
-    const filteredClimbs = useMemo(() => {
-        const gymsToProcess = selectedGyms.includes("Regional Overview")
-            ? Object.keys(data)
-            : selectedGyms;
+const ProductionReport: React.FC = () => {
+    const {
+        climbData: data,
+        selectedGyms,
+        dateRange,
+        setDateRange,
+        rangeOption,
+        setRangeOption,
+        getBaseline,
+        baselineConfigs,
+        comparisonMode
+    } = useDashboardStore();
 
-        return gymsToProcess.flatMap(gym => {
-            const gClimbs = data[gym] || [];
-            return gClimbs.map(c => ({
-                ...c,
-                gymCode: gym,
-                localDate: new Date(c.dateSet) // Use this for filtering
-            }));
-        }).filter(climb => {
-            // Create date boundaries without time for fair comparison
-            const start = new Date(dateRange.start);
-            start.setHours(0, 0, 0, 0);
-            const end = new Date(dateRange.end);
-            end.setHours(23, 59, 59, 999);
+    const activeBaseline = useMemo(() => {
+        if (selectedGyms.length === 1 && selectedGyms[0] !== "Regional Overview") {
+            return getBaseline(selectedGyms[0]);
+        }
+        return getBaseline('DEFAULT');
+    }, [selectedGyms, getBaseline, baselineConfigs]);
 
-            return climb.localDate >= start && climb.localDate <= end;
-        });
+    // 1. Previous Period Calculation
+    const previousRange = useMemo(() => {
+        if (comparisonMode === 'none') return null;
+        return getPreviousPeriod(dateRange, comparisonMode);
+    }, [dateRange, comparisonMode]);
+
+    // 2. Core Analytics Logic
+    const stats: ProductionStats = useMemo(() => {
+        return calculateProductionStats(data, selectedGyms, dateRange);
     }, [data, selectedGyms, dateRange]);
 
-    // 2. Aggregate Stats
-    const stats: ProductionStats = useMemo(() => {
-        const total = filteredClimbs.length;
-        const routes = filteredClimbs.filter(c => c.isRoute).length;
-        const boulders = total - routes;
+    const previousStats = useMemo(() => {
+        if (!previousRange) return null;
+        return calculateProductionStats(data, selectedGyms, previousRange);
+    }, [data, selectedGyms, previousRange]);
 
-        // Shift & Setter Tracking
-        const setterMap: Record<string, { total: number; routes: number; boulders: number; gyms: Set<string>; shifts: number }> = {};
-
-        // Track unique shifts: setter_date_gym
-        const shiftMap: Record<string, { type: 'rope' | 'boulder' | 'split' }> = {};
-
-        filteredClimbs.forEach(c => {
-            const d = c.localDate;
-            const dateKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-            const names = c.setter.split(',').map(s => s.trim());
-
-            names.forEach(name => {
-                if (!setterMap[name]) setterMap[name] = { total: 0, routes: 0, boulders: 0, gyms: new Set(), shifts: 0 };
-                setterMap[name].total++;
-                setterMap[name].gyms.add(c.gymCode);
-                if (c.isRoute) setterMap[name].routes++;
-                else setterMap[name].boulders++;
-
-                // Detailed Shift Tracking
-                const shiftKey = `${name}_${dateKey}_${c.gymCode}`;
-                if (!shiftMap[shiftKey]) {
-                    shiftMap[shiftKey] = { type: c.isRoute ? 'rope' : 'boulder' };
-                    setterMap[name].shifts++;
-                } else {
-                    const currentType = shiftMap[shiftKey].type;
-                    if ((currentType === 'rope' && !c.isRoute) || (currentType === 'boulder' && c.isRoute)) {
-                        shiftMap[shiftKey].type = 'split';
-                    }
-                }
-            });
-        });
-
-        const setterData = Object.entries(setterMap)
-            .map(([name, s]) => ({ name, ...s, gymCodes: Array.from(s.gyms).join(', ') }))
-            .sort((a, b) => b.total - a.total);
-
-        // Global Shift Stats
-        const totalShifts = Object.keys(shiftMap).length;
-        const ropeShifts = Object.values(shiftMap).filter(s => s.type === 'rope').length;
-        const boulderShifts = Object.values(shiftMap).filter(s => s.type === 'boulder').length;
-        const splitShifts = Object.values(shiftMap).filter(s => s.type === 'split').length;
-
-        // Daily Production (Gym Breakdown) chronologically
-        const dailyMap: Record<string, { date: Date, dateKey: string, [gymCode: string]: Date | string | number }> = {};
-        const weekdayMap: Record<string, { day: string, routes: number, boulders: number, total: number }> = {
-            'Mon': { day: 'Mon', routes: 0, boulders: 0, total: 0 },
-            'Tue': { day: 'Tue', routes: 0, boulders: 0, total: 0 },
-            'Wed': { day: 'Wed', routes: 0, boulders: 0, total: 0 },
-            'Thu': { day: 'Thu', routes: 0, boulders: 0, total: 0 },
-            'Fri': { day: 'Fri', routes: 0, boulders: 0, total: 0 },
-            'Sat': { day: 'Sat', routes: 0, boulders: 0, total: 0 },
-            'Sun': { day: 'Sun', routes: 0, boulders: 0, total: 0 }
-        };
-
-        filteredClimbs.forEach(c => {
-            const d = c.localDate;
-            const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            const dispKey = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-            const weekKey = d.toLocaleDateString(undefined, { weekday: 'short' });
-
-            if (!dailyMap[dateKey]) {
-                dailyMap[dateKey] = { date: d, dateKey: dispKey };
-            }
-            dailyMap[dateKey][c.gymCode] = ((dailyMap[dateKey][c.gymCode] as number) || 0) + 1;
-
-            weekdayMap[weekKey].total++;
-            if (c.isRoute) weekdayMap[weekKey].routes++;
-            else weekdayMap[weekKey].boulders++;
-        });
-
-        const dailyData = Object.values(dailyMap).sort((a, b) => a.date.getTime() - b.date.getTime());
-        const weekdayData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => weekdayMap[day]);
-
-        return {
-            total, routes, boulders,
-            totalShifts, ropeShifts, boulderShifts, splitShifts,
-            setterData, dailyData, weekdayData,
-            activeGymCodes: Array.from(new Set(filteredClimbs.map(c => c.gymCode)))
-        };
-    }, [filteredClimbs]);
-
-    // 3. Range Sync
-    const { minDate, maxDate } = useMemo(() => {
-        const allClimbs = Object.values(data).flat() as Climb[];
-        if (allClimbs.length === 0) return { minDate: new Date(), maxDate: new Date() };
-        const dates = allClimbs.map(c => new Date(c.dateSet).getTime());
-        return {
-            minDate: new Date(Math.min(...dates)),
-            maxDate: new Date(Math.max(...dates))
-        };
-    }, [data]);
-
-    useEffect(() => {
-        if (rangeOption === 'custom') return;
-
-        const end = new Date(maxDate);
-        let start = new Date(maxDate);
-
-        switch (rangeOption) {
-            case '7d': start.setDate(maxDate.getDate() - 7); break;
-            case '14d': start.setDate(maxDate.getDate() - 14); break;
-            case '30d': start.setDate(maxDate.getDate() - 30); break;
-            case '90d': start.setDate(maxDate.getDate() - 90); break;
-            case '180d': start.setDate(maxDate.getDate() - 180); break;
-            case 'ytd': start = new Date(maxDate.getFullYear(), 0, 1); break;
-            case '1y': start.setFullYear(maxDate.getFullYear() - 1); break;
-            case 'all': start = new Date(minDate); break;
-        }
-
-        onDateRangeChange({ start, end });
-    }, [rangeOption, minDate, maxDate]);
+    // For the subtitle count
+    const totalClimbsCount = stats.total;
 
     const reportTitle = useMemo(() => {
         if (selectedGyms.includes("Regional Overview")) {
             return "Regional Production Report";
         }
         if (selectedGyms.length === 1) {
-            const gymName = GYM_DISPLAY_NAMES[selectedGyms[0]] || selectedGyms[0];
+            const gymName = getGymDisplayName(selectedGyms[0]);
             return `${gymName} Production Report`;
         }
         if (selectedGyms.length > 1) {
@@ -187,7 +73,7 @@ const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms,
         // Delay to allow Recharts to re-render without animations
         setTimeout(async () => {
             const exportIds = ['report-main-section'];
-            if (baselineSettings.showReferencePage) {
+            if (activeBaseline.showReferencePage) {
                 exportIds.push('report-baseline-section');
             }
 
@@ -198,7 +84,7 @@ const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms,
 
 
 
-    if (filteredClimbs.length === 0) {
+    if (totalClimbsCount === 0) {
         return (
             <div className="h-full flex flex-col items-center justify-center p-20 animate-in fade-in duration-700">
                 <div className="bg-white p-12 rounded-3xl shadow-2xl shadow-slate-200 flex flex-col items-center text-center max-w-md border border-slate-100">
@@ -214,17 +100,19 @@ const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms,
         );
     }
 
+    if (!data) return null;
+
     return (
         <div className="flex flex-col h-full bg-slate-50 relative">
             <UnifiedHeader
                 title={reportTitle}
-                subtitle={`${filteredClimbs.length} Production Records`}
+                subtitle={`${totalClimbsCount} Production Records`}
                 dateRange={dateRange}
                 rangeOption={rangeOption}
                 onRangeOptionChange={setRangeOption}
                 onCustomDateChange={(start, end) => {
                     setRangeOption('custom');
-                    onDateRangeChange({ start, end });
+                    setDateRange({ start, end });
                 }}
                 actions={
                     <button
@@ -242,11 +130,13 @@ const ProductionReport: React.FC<ProductionReportProps> = ({ data, selectedGyms,
                 <div id="production-report-content" className="p-4">
                     <ProductionReportView
                         stats={stats}
+                        previousStats={previousStats}
+                        comparisonMode={comparisonMode}
                         dateRange={dateRange}
                         reportTitle={reportTitle}
                         isPrintMode={isSnapshotting}
                         reportRef={reportRef}
-                        baseline={baselineSettings}
+                        baseline={activeBaseline}
                     />
                 </div>
             </div>

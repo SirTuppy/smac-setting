@@ -8,10 +8,30 @@ export interface Climb {
   color?: string; // Optional if CSV has it, otherwise derived
   climbType?: string;
   gym?: string;
+  gymCode?: string;
   // Pre-calculated fields for performance
   isRoute: boolean;
   normalizedGrade: string;
   gradeScore: number;
+}
+
+export interface WallTarget {
+  gymCode: string;
+  wallName: string;
+  targetCount: number;         // Total items that should be on the wall
+  targetClimbsPerSetter: number; // Efficiency target (Climbs per Setter per Shift) for this wall
+  targetGrades?: Record<string, number>; // Distribution (Optional)
+  type: 'rope' | 'boulder';
+  displayName?: string;
+  isManual?: boolean;
+}
+
+export interface ScheduleOverride {
+  gymCode: string;
+  dateKey: string; // ISO Date YYYY-MM-DD to persist across sessions
+  dataType: 'routes' | 'boulders';
+  field: 'location' | 'climbType' | 'setterCount';
+  value: string;
 }
 
 export interface SetterStats {
@@ -51,11 +71,15 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 export type AppView = 'analytics' | 'generator' | 'mapper' | 'report';
 =======
 export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets' | 'executive';
 >>>>>>> Stashed changes
+=======
+export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets';
+>>>>>>> feat/ai-analyst
 
 export interface WallStats {
   name: string;
@@ -124,6 +148,7 @@ export interface BaselineSettings {
   reportComments: string;
 }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 // --- Executive & Financial Data Models ---
@@ -195,6 +220,8 @@ export interface GymPeriodPerformance {
   notes?: string;
 }
 
+=======
+>>>>>>> feat/ai-analyst
 export interface GymSettings {
   displayMode: 'merged' | 'separate';
   climbTypeDisplay: 'type' | 'steepness';
@@ -211,7 +238,10 @@ export interface GymMeta {
   ropeTypeName?: string;
 }
 
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> feat/ai-analyst
 // Sample CSV Data for testing (KAYA Format)
 export const MOCK_CSV_DATA = `Name,Grade,Setter,Wall,Date_Set,Color,climbType
 "Pinch Me I'm Dreaming",V4,"Alex Handhold, Sarah Sendit",Wall A,Wed Jan 14 2026 10:00:00 GMT+0000 (Coordinated Universal Time),Red,Bouldering

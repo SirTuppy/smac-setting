@@ -26,9 +26,6 @@ const TutorialGuide: React.FC<TutorialGuideProps> = ({ steps, isOpen, onClose, o
 
         const step = steps[currentStep];
 
-        // Notify parent so it can handle navigation/demo data
-        onStepChange?.(currentStep);
-
         if (step.targetId === 'center') {
             setHighlightStyle({
                 width: 2,
@@ -78,35 +75,27 @@ const TutorialGuide: React.FC<TutorialGuideProps> = ({ steps, isOpen, onClose, o
                 const spaceAbove = top;
 
                 let verticalStyle: React.CSSProperties = {};
-                // If the element is very tall (like the DataExplorer), we need to clamp the modal
-                // so it doesn't go off screen.
                 if (spaceBelow < modalHeight + 20 && spaceAbove < modalHeight + 20) {
-                    // Element is so big it fills the screen, place modal inside at bottom?
-                    // Or just stick it where there is MOST room.
                     if (spaceBelow > spaceAbove) {
                         verticalStyle = { top: viewportHeight - modalHeight - 20, bottom: 'auto' };
                     } else {
                         verticalStyle = { top: 20, bottom: 'auto' };
                     }
                 } else if (spaceBelow < modalHeight + 40 && spaceAbove > modalHeight + 40) {
-                    // Place above
                     verticalStyle = {
                         top: Math.max(20, top - modalHeight - 20),
                         bottom: 'auto'
                     };
                 } else {
-                    // Place below
                     verticalStyle = {
                         top: Math.min(viewportHeight - modalHeight - 20, top + height + 20),
                         bottom: 'auto'
                     };
                 }
 
-                // Horizontal centering with clamping
                 let leftPos = left + width / 2;
                 const halfModal = modalWidth / 2;
 
-                // Clamp to screen edges with 20px margin
                 if (leftPos - halfModal < 20) {
                     leftPos = halfModal + 20;
                 } else if (leftPos + halfModal > viewportWidth - 20) {
@@ -120,7 +109,7 @@ const TutorialGuide: React.FC<TutorialGuideProps> = ({ steps, isOpen, onClose, o
                 });
             }, 10);
         }
-    }, [currentStep, isOpen, steps, onStepChange]);
+    }, [currentStep, isOpen, steps]);
 
     useEffect(() => {
         if (isOpen) {
@@ -128,10 +117,16 @@ const TutorialGuide: React.FC<TutorialGuideProps> = ({ steps, isOpen, onClose, o
         }
     }, [isOpen]);
 
+    // Notify parent on step change separately from rendering logic
     useEffect(() => {
-        // Run update twice to ensure modal dimensions are captured
+        if (isOpen) {
+            onStepChange?.(currentStep);
+        }
+    }, [isOpen, currentStep, onStepChange]);
+
+    useEffect(() => {
         updateHighlight();
-        const timer = setTimeout(updateHighlight, 50);
+        const timer = setTimeout(updateHighlight, 100); // Slightly longer delay for initial render
         window.addEventListener('resize', updateHighlight);
         return () => {
             window.removeEventListener('resize', updateHighlight);
@@ -200,8 +195,12 @@ const TutorialGuide: React.FC<TutorialGuideProps> = ({ steps, isOpen, onClose, o
 
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-[#00205B] p-2 rounded-xl shadow-lg">
-                                <Sparkles size={20} className="text-white" />
+                            <div className="bg-white p-1 rounded-xl shadow-md border border-slate-100">
+                                <img
+                                    src={`${import.meta.env.BASE_URL}assets/justLogo.png`}
+                                    className="w-6 h-6 object-contain"
+                                    alt="Movement Logo"
+                                />
                             </div>
                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Step {currentStep + 1} of {steps.length}</span>
                         </div>

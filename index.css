@@ -51,6 +51,17 @@
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Hide the preview header text in print */
+    #map-print-section h2,
+    #map-print-section .bg-\[\#00205B\],
+    #map-print-section button {
+        display: none !important;
     }
 
     /* STRIP UI ARTIFACTS: Pure rectangle export */
@@ -63,21 +74,38 @@
         border-radius: 0 !important;
         display: block !important;
         width: 100% !important;
+        height: auto !important;
     }
 
     /* INDIVIDUAL MAP (Canvas) FORMATTING */
     canvas {
         display: block !important;
-        margin: 20px auto !important;
-        /* Some separation for debug, but break-after handles page flow */
+        margin: 0 auto !important;
         max-width: 100% !important;
         height: auto !important;
         box-shadow: none !important;
         border-radius: 0 !important;
-        page-break-after: always !important;
-        break-after: page !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
     /* Avoid page breaks inside table sections if they were separate (not applicable here as it's a canvas, but good practice) */
+}
+
+/* Custom Scrollbar for Sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
