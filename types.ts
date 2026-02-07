@@ -13,6 +13,8 @@ export interface Climb {
   isRoute: boolean;
   normalizedGrade: string;
   gradeScore: number;
+  isNobo?: boolean; // New Boulder
+  isNew?: boolean;  // General new flag
 }
 
 export interface WallTarget {
@@ -71,15 +73,7 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-export type AppView = 'analytics' | 'generator' | 'mapper' | 'report';
-=======
 export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets' | 'executive';
->>>>>>> Stashed changes
-=======
-export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'wall-targets';
->>>>>>> feat/ai-analyst
 
 export interface WallStats {
   name: string;
@@ -148,9 +142,6 @@ export interface BaselineSettings {
   reportComments: string;
 }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 // --- Executive & Financial Data Models ---
 
 /**
@@ -220,8 +211,6 @@ export interface GymPeriodPerformance {
   notes?: string;
 }
 
-=======
->>>>>>> feat/ai-analyst
 export interface GymSettings {
   displayMode: 'merged' | 'separate';
   climbTypeDisplay: 'type' | 'steepness';
@@ -238,10 +227,6 @@ export interface GymMeta {
   ropeTypeName?: string;
 }
 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> feat/ai-analyst
 // Sample CSV Data for testing (KAYA Format)
 export const MOCK_CSV_DATA = `Name,Grade,Setter,Wall,Date_Set,Color,climbType
 "Pinch Me I'm Dreaming",V4,"Alex Handhold, Sarah Sendit",Wall A,Wed Jan 14 2026 10:00:00 GMT+0000 (Coordinated Universal Time),Red,Bouldering

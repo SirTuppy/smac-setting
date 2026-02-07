@@ -7,7 +7,9 @@ import {
     BaselineSettings,
     GymSettings,
     ScheduleOverride,
-    WallTarget
+    WallTarget,
+    OrbitTarget,
+    FinancialRecord
 } from '../types';
 import { GYMS } from '../constants/gyms';
 import { RangeOption } from '../components/UnifiedHeader';
@@ -75,6 +77,10 @@ interface DashboardState {
     wallTargets: Record<string, Record<string, WallTarget>>; // gymCode -> wallName -> Target
     remoteTargetUrl: string | null;
 
+    // Executive / Financial State
+    orbitTargets: Record<string, OrbitTarget[]>; // gymCode -> Targets
+    financialRecords: FinancialRecord[];
+
 
 
     // Actions
@@ -113,6 +119,13 @@ interface DashboardState {
     setRemoteTargetUrl: (url: string | null) => void;
     fetchRemoteTargets: () => Promise<void>;
     resetWallTargets: (gymCode?: string) => void;
+
+    // Executive Actions
+    setOrbitTargets: (gymCode: string, targets: OrbitTarget[]) => void;
+    addFinancialRecord: (record: FinancialRecord) => void;
+    setFinancialRecords: (records: FinancialRecord[]) => void;
+    clearFinancialData: () => void;
+
     resetAll: () => void;
 }
 
@@ -183,6 +196,16 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         return saved ? JSON.parse(saved) : {};
     })(),
     remoteTargetUrl: localStorage.getItem('remote_target_url'),
+
+    // Executive / Financial Initial State
+    orbitTargets: (() => {
+        const saved = localStorage.getItem('orbit_targets');
+        return saved ? JSON.parse(saved) : {};
+    })(),
+    financialRecords: (() => {
+        const saved = localStorage.getItem('financial_records');
+        return saved ? JSON.parse(saved) : [];
+    })(),
 
 
 
@@ -451,6 +474,28 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         showBaselineSettings: false,
         showCommentModal: false,
         showDiscoveryModal: false,
-        selectedBaselineGym: 'DEFAULT'
-    })
+        selectedBaselineGym: 'DEFAULT',
+        financialRecords: [],
+        orbitTargets: {}
+    }),
+
+    // Executive Actions
+    setOrbitTargets: (gymCode, targets) => {
+        const newTargets = { ...get().orbitTargets, [gymCode]: targets };
+        localStorage.setItem('orbit_targets', JSON.stringify(newTargets));
+        set({ orbitTargets: newTargets });
+    },
+    addFinancialRecord: (record) => {
+        const newRecords = [...get().financialRecords, record];
+        localStorage.setItem('financial_records', JSON.stringify(newRecords));
+        set({ financialRecords: newRecords });
+    },
+    setFinancialRecords: (financialRecords) => {
+        localStorage.setItem('financial_records', JSON.stringify(financialRecords));
+        set({ financialRecords });
+    },
+    clearFinancialData: () => {
+        localStorage.removeItem('financial_records');
+        set({ financialRecords: [] });
+    }
 }));
