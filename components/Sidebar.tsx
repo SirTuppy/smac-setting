@@ -3,7 +3,7 @@ import {
     FileText, Edit3, Sparkles, LayoutDashboard, Database, LogOut,
     ChevronRight, Map, BarChart2, Save, RotateCcw, Mail,
     Download, Printer, Plus, Target, ClipboardList, Zap, Compass, HelpCircle,
-    TrendingUp, LineChart
+    TrendingUp, LineChart, Gauge
 } from 'lucide-react';
 import { useDashboardStore } from '../store/useDashboardStore';
 import { GYM_COLORS, TYPE_COLORS } from '../constants/colors';
@@ -163,6 +163,18 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <Edit3 size={18} style={{ color: activeView === 'mapper' ? TYPE_COLORS.routes : undefined }} />
                             <span className="text-xs font-black uppercase tracking-widest">Route Mapper</span>
                         </button>
+
+                        <button
+                            id="nav-simulator"
+                            onClick={() => setActiveView('simulator')}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'simulator'
+                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
+                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
+                                }`}
+                        >
+                            <Gauge size={18} style={{ color: activeView === 'simulator' ? '#EDE04B' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">Rotation Simulator</span>
+                        </button>
                     </div>
                 </div>
 
@@ -182,17 +194,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <span className="text-xs font-black uppercase tracking-widest text-left">Director View</span>
                         </button>
 
-                        <button
-                            id="nav-wall-targets"
-                            onClick={() => setActiveView('wall-targets')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'wall-targets'
-                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
-                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
-                                }`}
-                        >
-                            <Target size={18} style={{ color: activeView === 'wall-targets' ? '#009CA6' : undefined }} />
-                            <span className="text-xs font-black uppercase tracking-widest text-left">Wall Targets</span>
-                        </button>
 
                         <button
                             id="nav-orbit-targets"
@@ -202,14 +203,14 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 : 'text-white/40 hover:bg-white/5 hover:text-white/60'
                                 }`}
                         >
-                            <LineChart size={18} style={{ color: activeView === 'orbit-targets' ? '#009CA6' : undefined }} />
-                            <span className="text-xs font-black uppercase tracking-widest text-left">Orbit Targets</span>
+                            <Compass size={18} style={{ color: activeView === 'orbit-targets' ? '#FFD700' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">All Orbits Log</span>
                         </button>
                     </div>
                 </div>
 
                 {/* Dynamic Contextual Tools */}
-                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets' || activeView === 'orbit-targets' || activeView === 'executive') && (
+                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'orbit-targets' || activeView === 'executive') && (
                     <div className="mx-auto w-[94%] p-4 bg-black/20 border border-white/5 rounded-2xl space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 shadow-xl">
                         <div className="flex items-center gap-2 mb-2 px-1">
                             <img
@@ -221,7 +222,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         </div>
 
                         {/* Selection Navigation - Analytics, Report, Generator, Wall Targets, Orbit Targets, Executive */}
-                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'wall-targets' || activeView === 'orbit-targets' || activeView === 'executive') && (
+                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'orbit-targets' || activeView === 'executive') && (
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex items-center justify-between px-1 mb-4">

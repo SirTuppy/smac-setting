@@ -6,14 +6,15 @@ import MapGenerator, { MapGeneratorHandle } from './components/MapGenerator';
 import RouteMapper from './components/RouteMapper';
 import ProductionReport from './components/ProductionReport';
 import ShiftAnalyzer from './components/ShiftAnalyzer';
-import WallTargetManager from './components/WallTargetManager';
 import ExecutiveDashboard from './components/ExecutiveDashboard';
 import OrbitTargetManager from './components/OrbitTargetManager';
+import SimulatorView from './components/SimulatorView';
 import Sidebar from './components/Sidebar';
 import BaselineModal from './components/BaselineModal';
 import DiscoveryModal from './components/DiscoveryModal';
 import CommentModal from './components/CommentModal';
-import { Climb, GymSchedule, EmailSettings, AppView, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, BaselineSettings } from './types';
+import { Climb, GymSchedule, EmailSettings, AppView, BaselineSettings } from './types';
+import { MOCK_CSV_DATA, MOCK_HUMANITY_DATA } from './constants/mockData';
 
 import { useDashboardStore } from './store/useDashboardStore';
 import TutorialGuide, { TutorialStep } from './components/TutorialGuide';
@@ -45,7 +46,12 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   { targetId: 'tour-generator-instructions', title: 'Technical Guide', description: 'Need help with the Map Generator workflow? This guide covers saving, loading, and email integration in detail.', position: 'right' },
   { targetId: 'nav-mapper', title: 'Phase 5: Route Mapper', description: 'For precise competition scoring. Use this to overlay scoring markers on high-res wall photos.', position: 'right' },
   { targetId: 'tour-mapper-upload', title: 'Drop & Map', description: 'Simply drop a photo of a wall, click to add hold markers, and drag labels to clear paths for judges to read.', position: 'bottom' },
-  { targetId: 'center', title: 'Dashboard Synchronized', description: 'You’re all set! If you ever need another tour, just click "Tutorial Tour" at the bottom of the sidebar. Happy setting!', position: 'center' },
+  { targetId: 'nav-orbit-targets', title: 'Phase 6: National Aggregation', description: 'This is the "Command Center" for national directors to gather data from across all gyms.', position: 'right' },
+  { targetId: 'tour-share-setup', title: 'Gathering Gym Data', description: 'Each head setter creates their orbits here and clicks the "Share Gym Setup Code" button to send you their configuration.', position: 'bottom' },
+  { targetId: 'tour-merge-gym', title: 'The Merge Process', description: 'Click "Import/Merge Gym Setup" and paste the codes from your head setters. This builds a master session containing every gym side-by-side.', position: 'bottom' },
+  { targetId: 'nav-executive', title: 'Executive Oversight', description: 'Once all gyms are imported, switch to the Executive view for a high-level national performance breakdown.', position: 'right' },
+  { targetId: 'tour-national-exports', title: 'National Reporting', description: 'One click to export the entire nation’s configuration as a JSON Master, or performance data as a Master CSV for your master spreadsheet.', position: 'bottom' },
+  { targetId: 'center', title: 'Mission Complete!', description: 'You’re all set to lead! If you ever need another tour, just click "Tutorial Tour" at the bottom of the sidebar. Happy setting!', position: 'center' },
 ];
 
 function App() {
@@ -101,7 +107,9 @@ function App() {
     }
     else if (index >= 17 && index <= 20) setActiveView('generator');
     else if (index >= 21 && index <= 22) setActiveView('mapper');
-    else if (index === 23) setActiveView('analytics');
+    else if (index >= 23 && index <= 25) setActiveView('orbit-targets');
+    else if (index >= 26 && index <= 27) setActiveView('executive');
+    else if (index === 28) setActiveView('analytics'); // Final step, can go back to analytics or stay on current view
 
     const needsAnalyticsData = index >= 4 && index <= 16;
     const needsGeneratorData = index >= 17 && index <= 22;
@@ -136,7 +144,8 @@ function App() {
   // Sync selection when data first loads
   useEffect(() => {
     if (gymNames.length > 0 && selectedGyms.length === 0) {
-      setSelectedGyms([gymNames[0]]);
+      const code = getGymCode(gymNames[0]) || gymNames[0];
+      setSelectedGyms([code]);
     }
   }, [gymNames, selectedGyms, setSelectedGyms]);
 
@@ -300,16 +309,16 @@ function App() {
           )
         )}
 
-        {activeView === 'wall-targets' && (
-          <WallTargetManager />
-        )}
-
         {activeView === 'orbit-targets' && (
           <OrbitTargetManager />
         )}
 
         {activeView === 'executive' && (
           <ExecutiveDashboard />
+        )}
+
+        {activeView === 'simulator' && (
+          <SimulatorView />
         )}
       </main>
 

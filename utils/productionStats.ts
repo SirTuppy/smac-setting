@@ -31,14 +31,15 @@ export const calculateProductionStats = (
     filteredClimbs.forEach(c => {
         const d = c.localDate;
         const dateKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-        const names = c.setter.split(',').map(s => s.trim());
+        const names = c.setter.split(/[,&/]+/).map(s => s.trim()).filter(Boolean);
+        const weight = 1 / (names.length || 1);
 
         names.forEach(name => {
             if (!setterMap[name]) setterMap[name] = { total: 0, routes: 0, boulders: 0, gyms: new Set(), shifts: 0 };
-            setterMap[name].total++;
+            setterMap[name].total += weight;
             setterMap[name].gyms.add(c.gymCode!);
-            if (c.isRoute) setterMap[name].routes++;
-            else setterMap[name].boulders++;
+            if (c.isRoute) setterMap[name].routes += weight;
+            else setterMap[name].boulders += weight;
 
             const shiftKey = `${name}_${dateKey}_${c.gymCode}`;
             if (!shiftMap[shiftKey]) {

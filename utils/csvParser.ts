@@ -32,6 +32,7 @@ export const parseKayaCSV = (csvText: string, gymName?: string): Climb[] => {
   const dateIdx = getIndex(['dateset', 'date', 'createdat']);
   const colorIdx = getIndex(['color', 'holdcolor']);
   const typeIdx = getIndex(['climbtype', 'type']);
+  const gymIdx = getIndex(['gym', 'location', 'gymname']);
 
   if (nameIdx === -1 || gradeIdx === -1 || setterIdx === -1) {
     throw new Error("Invalid CSV format. Missing required columns (Name, Grade, Setter).");
@@ -45,8 +46,12 @@ export const parseKayaCSV = (csvText: string, gymName?: string): Climb[] => {
     const rawGrade = row[gradeIdx] || 'Unrated';
     const normalizedGrade = normalizeGrade(rawGrade);
 
+    // Resolve gym: check CSV column first, then fallback to argument
+    const rawGymName = gymIdx !== -1 ? (row[gymIdx] || gymName) : gymName;
+    const resolvedGymCode = getGymCode(rawGymName || '') || rawGymName;
+
     climbs.push({
-      id: `climb-${gymName}-${i}-${Math.random().toString(36).substr(2, 5)}`,
+      id: `climb-${resolvedGymCode}-${i}-${Math.random().toString(36).substr(2, 5)}`,
       name: row[nameIdx] || 'Untitled',
       grade: rawGrade,
       setter: (row[setterIdx] || 'N/A').trim(),
@@ -54,7 +59,8 @@ export const parseKayaCSV = (csvText: string, gymName?: string): Climb[] => {
       dateSet: cleanKayaDate(row[dateIdx]),
       color: colorIdx !== -1 ? row[colorIdx] : undefined,
       climbType: row[typeIdx],
-      gym: gymName,
+      gym: rawGymName,
+      gymCode: resolvedGymCode,
       isRoute: (row[typeIdx] || '').toLowerCase().includes('route') || rawGrade.startsWith('5.'),
       normalizedGrade,
       gradeScore: getGradeScore(normalizedGrade)
