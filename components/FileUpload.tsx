@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Database, LayoutDashboard, Sparkles, ChevronRight, Activity, Map, TrendingUp } from 'lucide-react';
 import { parseKayaCSV, parseHumanityCSV } from '../utils/csvParser';
 import { parsePayrollCSV } from '../utils/payrollParser';
-import { Climb, MOCK_CSV_DATA, MOCK_HUMANITY_DATA, MOCK_FINANCIAL_DATA, GymSchedule, FinancialRecord } from '../types';
+import { Climb, GymSchedule, FinancialRecord } from '../types';
+import { MOCK_CSV_DATA, MOCK_HUMANITY_DATA, MOCK_FINANCIAL_DATA } from '../constants/mockData';
 import { useDashboardStore } from '../store/useDashboardStore';
 import { FUN_MESSAGES, FunMessage } from '../constants/messages';
 

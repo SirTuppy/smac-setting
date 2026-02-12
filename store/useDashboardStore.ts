@@ -9,10 +9,13 @@ import {
     ScheduleOverride,
     WallTarget,
     OrbitTarget,
-    FinancialRecord
+    FinancialRecord,
+    SimulatorSetter,
+    SimulatorShift
 } from '../types';
 import { GYMS } from '../constants/gyms';
 import { RangeOption } from '../components/UnifiedHeader';
+import { getGymCode } from '../constants/mapTemplates';
 
 export const DEFAULT_EMAIL_SETTINGS: EmailSettings = {
     to: '',
@@ -80,6 +83,14 @@ interface DashboardState {
     // Executive / Financial State
     orbitTargets: Record<string, OrbitTarget[]>; // gymCode -> Targets
     financialRecords: FinancialRecord[];
+    activeOrbitGym: string | null;
+
+    // Simulator State
+    simulatorSetters: Record<string, SimulatorSetter>; // Key: setterName
+    simulatorOverrides: Record<string, SimulatorShift>; // Key: dateKey-gymCode-type
+    simulatorVarianceBuffer: number; // Global buffer slider %
+    simulatorGymDebt: Record<string, number>; // gymCode -> total boulders/routes needed
+
 
 
 
@@ -122,9 +133,21 @@ interface DashboardState {
 
     // Executive Actions
     setOrbitTargets: (gymCode: string, targets: OrbitTarget[]) => void;
+    assignWallToOrbit: (gymCode: string, orbitId: string, wallName: string) => void;
+    removeWallFromOrbit: (gymCode: string, orbitId: string, wallName: string) => void;
+    reorderOrbit: (gymCode: string, orbitId: string, direction: 'up' | 'down') => void;
+    updateOrbit: (gymCode: string, orbitId: string, updates: Partial<OrbitTarget>) => void;
+    setWallCharacteristic: (gymCode: string, wallName: string, angle: WallTarget['angle']) => void;
     addFinancialRecord: (record: FinancialRecord) => void;
     setFinancialRecords: (records: FinancialRecord[]) => void;
     clearFinancialData: () => void;
+    setActiveOrbitGym: (gymCode: string | null) => void;
+
+    // Simulator Actions
+    setSimulatorSetter: (setter: SimulatorSetter) => void;
+    setSimulatorOverride: (shift: SimulatorShift) => void;
+    setSimulatorVarianceBuffer: (buffer: number) => void;
+    setSimulatorGymDebt: (gymCode: string, debt: number) => void;
 
     resetAll: () => void;
 }
@@ -206,7 +229,22 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         const saved = localStorage.getItem('financial_records');
         return saved ? JSON.parse(saved) : [];
     })(),
+    activeOrbitGym: localStorage.getItem('active_orbit_gym'),
 
+    // Simulator Initial State
+    simulatorSetters: (() => {
+        const saved = localStorage.getItem('simulator_setters');
+        return saved ? JSON.parse(saved) : {};
+    })(),
+    simulatorOverrides: (() => {
+        const saved = localStorage.getItem('simulator_overrides');
+        return saved ? JSON.parse(saved) : {};
+    })(),
+    simulatorVarianceBuffer: Number(localStorage.getItem('simulator_variance_buffer') || '0'),
+    simulatorGymDebt: (() => {
+        const saved = localStorage.getItem('simulator_gym_debt');
+        return saved ? JSON.parse(saved) : {};
+    })(),
 
 
     // Actions
@@ -225,19 +263,23 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     setActiveView: (activeView) => set({ activeView }),
     setSelectedGyms: (selectedGyms) => set({ selectedGyms }),
 
-    toggleGymSelection: (name) => set((state) => {
-        if (!state.isCompareMode || name === "Regional Overview") {
-            return { selectedGyms: [name] };
-        }
+    toggleGymSelection: (nameOrCode) => {
+        const code = getGymCode(nameOrCode) || nameOrCode;
 
-        const prev = state.selectedGyms;
-        if (prev.includes("Regional Overview")) return { selectedGyms: [name] };
+        set((state) => {
+            if (!state.isCompareMode || code === "Regional Overview") {
+                return { selectedGyms: [code] };
+            }
 
-        if (prev.includes(name)) {
-            return { selectedGyms: prev.length > 1 ? prev.filter(g => g !== name) : prev };
-        }
-        return { selectedGyms: [...prev, name] };
-    }),
+            const prev = state.selectedGyms;
+            if (prev.includes("Regional Overview")) return { selectedGyms: [code] };
+
+            if (prev.includes(code)) {
+                return { selectedGyms: prev.length > 1 ? prev.filter(g => g !== code) : prev };
+            }
+            return { selectedGyms: [...prev, code] };
+        });
+    },
 
     setIsCompareMode: (isCompareMode) => set((state) => {
         const newState: Partial<DashboardState> = { isCompareMode };
@@ -382,8 +424,25 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         gymTargets[wallName] = finalTarget;
 
         const newWallTargets = { ...current, [gymCode]: gymTargets };
+
+        // Atomic recalculation of any orbits that contain this wall
+        const currentOrbits = get().orbitTargets[gymCode] || [];
+        const updatedOrbits = currentOrbits.map(o => {
+            if (o.assignedWalls?.includes(wallName)) {
+                const vol = o.assignedWalls.reduce((sum, w) => sum + (gymTargets[w]?.targetCount || 0), 0);
+                const updated = { ...o, totalClimbs: vol };
+                updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
+                updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
+                updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
+                updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
+                return updated;
+            }
+            return o;
+        });
+
         localStorage.setItem('wall_targets', JSON.stringify(newWallTargets));
-        set({ wallTargets: newWallTargets });
+        localStorage.setItem('orbit_targets', JSON.stringify({ ...get().orbitTargets, [gymCode]: updatedOrbits }));
+        set({ wallTargets: newWallTargets, orbitTargets: { ...get().orbitTargets, [gymCode]: updatedOrbits } });
     },
 
     deleteWallTarget: (gymCode, wallName) => {
@@ -410,7 +469,6 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
         // Automatically convert Gist UI URLs to Raw URLs if needed
         if (url.includes('gist.github.com') && !url.includes('/raw')) {
-            // Convert https://gist.github.com/user/id to https://gist.githubusercontent.com/user/id/raw/
             url = url.replace('gist.github.com', 'gist.githubusercontent.com') + (url.endsWith('/') ? '' : '/') + 'raw/';
         }
 
@@ -421,15 +479,28 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
             if (!data || typeof data !== 'object') throw new Error('Invalid data format received');
 
-            const current = get().wallTargets;
-            const newTargets = { ...current, ...data };
+            // Handle dual payload (both walls and orbits) or just walls
+            const incomingWalls = data.wallTargets || (data.DSN ? data : {}); // Fallback for old format
+            const incomingOrbits = data.orbitTargets || {};
 
-            set({ wallTargets: newTargets });
-            localStorage.setItem('wall_targets', JSON.stringify(newTargets));
-            console.log('Remote targets synced successfully');
+            const currentWalls = get().wallTargets;
+            const currentOrbits = get().orbitTargets;
+
+            const newWallTargets = { ...currentWalls, ...incomingWalls };
+            const newOrbitTargets = { ...currentOrbits, ...incomingOrbits };
+
+            set({
+                wallTargets: newWallTargets,
+                orbitTargets: newOrbitTargets
+            });
+
+            localStorage.setItem('wall_targets', JSON.stringify(newWallTargets));
+            localStorage.setItem('orbit_targets', JSON.stringify(newOrbitTargets));
+
+            console.log('Remote targets (Walls & Orbits) synced successfully');
         } catch (e) {
             console.error('Remote Target Sync Failed:', e);
-            throw e; // Re-throw so the UI can catch it if needed
+            throw e;
         }
     },
 
@@ -463,7 +534,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     resetAll: () => set({
         climbData: null,
         gymSchedules: null,
-        selectedGyms: [],
+        selectedGyms: ["Regional Overview"],
         isCompareMode: false,
         activeView: 'analytics',
         dateRange: getInitialDateRange(),
@@ -475,8 +546,9 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         showCommentModal: false,
         showDiscoveryModal: false,
         selectedBaselineGym: 'DEFAULT',
-        financialRecords: [],
-        orbitTargets: {}
+        financialRecords: []
+        // Note: wallTargets and orbitTargets are NOT cleared here as they are configuration.
+        // Use resetWallTargets or individual deletes if needed.
     }),
 
     // Executive Actions
@@ -484,6 +556,88 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         const newTargets = { ...get().orbitTargets, [gymCode]: targets };
         localStorage.setItem('orbit_targets', JSON.stringify(newTargets));
         set({ orbitTargets: newTargets });
+    },
+    assignWallToOrbit: (gymCode: string, orbitId: string, wallName: string) => {
+        const { orbitTargets, setOrbitTargets, setWallTarget, wallTargets } = get();
+
+        // 1. Update Orbit
+        const gymOrbits = [...(orbitTargets[gymCode] || [])];
+        const updatedOrbits = gymOrbits.map(o => {
+            let walls = [...(o.assignedWalls || [])];
+            if (o.id === orbitId) {
+                if (!walls.includes(wallName)) walls.push(wallName);
+            } else {
+                walls = walls.filter(w => w !== wallName);
+            }
+
+            // Recalculate metrics for any orbit that changed
+            if (o.id === orbitId || o.assignedWalls?.includes(wallName)) {
+                const gymWallTargets = wallTargets[gymCode] || {};
+                const vol = walls.reduce((sum, w) => sum + (gymWallTargets[w]?.targetCount || 0), 0);
+                const updated = { ...o, assignedWalls: walls, totalClimbs: vol };
+
+                updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
+                updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
+                updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
+                updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
+                return updated;
+            }
+            return o;
+        });
+        setOrbitTargets(gymCode, updatedOrbits);
+
+        // 2. Update Wall
+        setWallTarget(gymCode, wallName, { orbitId });
+    },
+    removeWallFromOrbit: (gymCode, orbitId, wallName) => {
+        const { orbitTargets, setOrbitTargets, setWallTarget } = get();
+        const gymOrbits = [...(orbitTargets[gymCode] || [])];
+        const updatedOrbits = gymOrbits.map(o => {
+            if (o.id === orbitId) {
+                return { ...o, assignedWalls: (o.assignedWalls || []).filter(w => w !== wallName) };
+            }
+            return o;
+        });
+        setOrbitTargets(gymCode, updatedOrbits);
+        setWallTarget(gymCode, wallName, { orbitId: undefined });
+    },
+    reorderOrbit: (gymCode: string, orbitId: string, direction: 'up' | 'down') => {
+        const { orbitTargets, setOrbitTargets } = get();
+        const orbits = [...(orbitTargets[gymCode] || [])];
+        const idx = orbits.findIndex(o => o.id === orbitId);
+        if (idx === -1) return;
+
+        if (direction === 'up' && idx > 0) {
+            [orbits[idx], orbits[idx - 1]] = [orbits[idx - 1], orbits[idx]];
+        } else if (direction === 'down' && idx < orbits.length - 1) {
+            [orbits[idx], orbits[idx + 1]] = [orbits[idx + 1], orbits[idx]];
+        }
+
+        setOrbitTargets(gymCode, orbits);
+    },
+    updateOrbit: (gymCode: string, orbitId: string, updates: Partial<OrbitTarget>) => {
+        const { orbitTargets, setOrbitTargets, wallTargets } = get();
+        const gymWallTargets = wallTargets[gymCode] || {};
+        const orbits = [...(orbitTargets[gymCode] || [])];
+
+        const updatedOrbits = orbits.map(o => {
+            if (o.id === orbitId) {
+                const updated = { ...o, ...updates };
+                const vol = (updated.assignedWalls || []).reduce((sum, w) => sum + (gymWallTargets[w]?.targetCount || 0), 0);
+                updated.totalClimbs = vol;
+                updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
+                updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
+                updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
+                updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
+                return updated;
+            }
+            return o;
+        });
+
+        setOrbitTargets(gymCode, updatedOrbits);
+    },
+    setWallCharacteristic: (gymCode, wallName, angle) => {
+        get().setWallTarget(gymCode, wallName, { angle });
     },
     addFinancialRecord: (record) => {
         const newRecords = [...get().financialRecords, record];
@@ -497,5 +651,34 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     clearFinancialData: () => {
         localStorage.removeItem('financial_records');
         set({ financialRecords: [] });
+    },
+    setActiveOrbitGym: (gymCode: string | null) => {
+        if (gymCode) localStorage.setItem('active_orbit_gym', gymCode);
+        else localStorage.removeItem('active_orbit_gym');
+        set({ activeOrbitGym: gymCode });
+    },
+
+    // Simulator Actions
+    setSimulatorSetter: (setter) => {
+        const current = get().simulatorSetters;
+        const newState = { ...current, [setter.name]: setter };
+        localStorage.setItem('simulator_setters', JSON.stringify(newState));
+        set({ simulatorSetters: newState });
+    },
+    setSimulatorOverride: (shift) => {
+        const key = `${shift.dateKey}-${shift.gymCode}-${shift.type}`;
+        const newState = { ...get().simulatorOverrides, [key]: shift };
+        localStorage.setItem('simulator_overrides', JSON.stringify(newState));
+        set({ simulatorOverrides: newState });
+    },
+    setSimulatorVarianceBuffer: (simulatorVarianceBuffer) => {
+        localStorage.setItem('simulator_variance_buffer', String(simulatorVarianceBuffer));
+        set({ simulatorVarianceBuffer });
+    },
+    setSimulatorGymDebt: (gymCode, debt) => {
+        const newState = { ...get().simulatorGymDebt, [gymCode]: debt };
+        localStorage.setItem('simulator_gym_debt', JSON.stringify(newState));
+        set({ simulatorGymDebt: newState });
     }
 }));
+

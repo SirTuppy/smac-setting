@@ -39,7 +39,8 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
         gymSettings,
         scheduleOverrides,
         setScheduleOverride,
-        clearScheduleOverrides
+        clearScheduleOverrides,
+        wallTargets
     } = useDashboardStore();
 
     const [clickRegions, setClickRegions] = useState<ClickRegion[]>([]);
@@ -179,8 +180,11 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
 
                     let climbTypeFallback = day.routes[0].climbType;
                     if (settings.climbTypeDisplay === 'steepness') {
-                        const wall = day.routes[0].walls[0]?.toLowerCase();
-                        climbTypeFallback = GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback;
+                        const wall = day.routes[0].walls[0]?.toLowerCase().trim();
+                        const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
+                        climbTypeFallback = userDefinedAngle && userDefinedAngle !== 'none'
+                            ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
+                            : (GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback);
                     }
                     const climbTypeText = getOverrideValue(dayIndex, 'routes', 'climbType', climbTypeFallback);
 
@@ -206,8 +210,11 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
 
                     let climbTypeFallback = day.boulders[0].climbType;
                     if (settings.climbTypeDisplay === 'steepness') {
-                        const wall = day.boulders[0].walls[0]?.toLowerCase();
-                        climbTypeFallback = GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback;
+                        const wall = day.boulders[0].walls[0]?.toLowerCase().trim();
+                        const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
+                        climbTypeFallback = userDefinedAngle && userDefinedAngle !== 'none'
+                            ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
+                            : (GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback);
                     }
                     const climbTypeText = getOverrideValue(dayIndex, 'boulders', 'climbType', climbTypeFallback);
 
@@ -234,8 +241,12 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
                 let climbTypeFallback = '---';
                 if (itemsForDay.length > 0) {
                     if (settings.climbTypeDisplay === 'steepness') {
-                        const wall = itemsForDay[0].walls[0]?.toLowerCase();
-                        climbTypeFallback = (hasRoutes && hasBoulders) ? 'Mixed' : (GYM_WALLS[gymCode]?.[wall]?.climb_type || itemsForDay[0].climbType);
+                        const wall = itemsForDay[0].walls[0]?.toLowerCase().trim();
+                        const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
+                        climbTypeFallback = (hasRoutes && hasBoulders) ? 'Mixed' :
+                            (userDefinedAngle && userDefinedAngle !== 'none'
+                                ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
+                                : (GYM_WALLS[gymCode]?.[wall]?.climb_type || itemsForDay[0].climbType));
                     } else {
                         if (hasRoutes && hasBoulders) climbTypeFallback = 'Both';
                         else if (hasRoutes) climbTypeFallback = 'Rope';
