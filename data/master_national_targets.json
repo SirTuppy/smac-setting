@@ -1,0 +1,4502 @@
+{
+  "orbitTargets": {
+    "HAM": [
+      {
+        "id": "29738abc-f87c-4bfc-8bc7-cc8e930111a2",
+        "gymCode": "HAM",
+        "region": "DMV",
+        "orbitName": "Orbit A",
+        "discipline": "Boulders",
+        "totalClimbs": 75,
+        "assignedWalls": [
+          "Orbit A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 10.714285714285714,
+        "weeklyShiftGoal": 2.6785714285714284,
+        "payPeriodHoursGoal": 21.428571428571427,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "26b2cda1-6407-417e-aaff-905b0744dd5e",
+        "gymCode": "HAM",
+        "region": "DMV",
+        "orbitName": "Orbit B",
+        "discipline": "Boulders",
+        "totalClimbs": 75,
+        "assignedWalls": [
+          "Orbit B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 10.714285714285714,
+        "weeklyShiftGoal": 2.6785714285714284,
+        "payPeriodHoursGoal": 21.428571428571427,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "COL": [
+      {
+        "id": "4319adb1-a868-44e3-9d8a-587bfa9738ec",
+        "gymCode": "COL",
+        "region": "DMV",
+        "orbitName": "Birthday/Instuction",
+        "discipline": "Routes",
+        "totalClimbs": 50,
+        "assignedWalls": [
+          "Birthday/Instuction"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 18,
+        "weeklyProductionGoal": 2.7777777777777777,
+        "weeklyShiftGoal": 0.9259259259259259,
+        "payPeriodHoursGoal": 7.407407407407407,
+        "hoursPerClimbGoal": 2.6666666666666665
+      },
+      {
+        "id": "179664ee-2c48-4572-8eec-cde4a832d2d9",
+        "gymCode": "COL",
+        "region": "DMV",
+        "orbitName": "Lead Wall",
+        "discipline": "Routes",
+        "totalClimbs": 52,
+        "assignedWalls": [
+          "Lead Wall"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 5.2,
+        "weeklyShiftGoal": 3.466666666666667,
+        "payPeriodHoursGoal": 27.733333333333334,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "6fd8f8eb-38ce-4abf-9d60-6f8846d4c5f8",
+        "gymCode": "COL",
+        "region": "DMV",
+        "orbitName": "Slab Wall",
+        "discipline": "Routes",
+        "totalClimbs": 36,
+        "assignedWalls": [
+          "Slab Wall"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.6,
+        "weeklyShiftGoal": 1.8,
+        "payPeriodHoursGoal": 14.4,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "a2a2f416-abd5-41da-9654-c8b66a930fbc",
+        "gymCode": "COL",
+        "region": "DMV",
+        "orbitName": "The Bays",
+        "discipline": "Routes",
+        "totalClimbs": 52,
+        "assignedWalls": [
+          "The Bays"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 5.2,
+        "weeklyShiftGoal": 2.6,
+        "payPeriodHoursGoal": 20.8,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "cc4717ff-96a0-4ad8-8dfd-96c89732f090",
+        "gymCode": "COL",
+        "region": "DMV",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 64,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 9.142857142857142,
+        "weeklyShiftGoal": 2.2857142857142856,
+        "payPeriodHoursGoal": 18.285714285714285,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "d112c3e6-e074-4194-bbe9-1f5b76880fba",
+        "gymCode": "COL",
+        "region": "DMV",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 64,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 9.142857142857142,
+        "weeklyShiftGoal": 2.2857142857142856,
+        "payPeriodHoursGoal": 18.285714285714285,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "TIM": [
+      {
+        "id": "a75b9ccc-0f0b-4c04-b476-264ada5f310c",
+        "gymCode": "TIM",
+        "region": "DMV",
+        "orbitName": "Birthday/Instuction",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "Birthday/Instuction"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 26,
+        "weeklyProductionGoal": 1.1538461538461537,
+        "weeklyShiftGoal": 0.5769230769230769,
+        "payPeriodHoursGoal": 4.615384615384615,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "01402a2f-8afc-4bd0-892d-ee6f7f7642d6",
+        "gymCode": "TIM",
+        "region": "DMV",
+        "orbitName": "Back Room",
+        "discipline": "Routes",
+        "totalClimbs": 44,
+        "assignedWalls": [
+          "Back Room"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 3.6666666666666665,
+        "weeklyShiftGoal": 1.8333333333333333,
+        "payPeriodHoursGoal": 14.666666666666666,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "d0443180-2076-4585-a102-9ef985c80d9a",
+        "gymCode": "TIM",
+        "region": "DMV",
+        "orbitName": "Front Slab",
+        "discipline": "Routes",
+        "totalClimbs": 33,
+        "assignedWalls": [
+          "Front Slab"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 2.75,
+        "weeklyShiftGoal": 1.375,
+        "payPeriodHoursGoal": 11,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "e2b4a362-c53a-467f-afe5-fd42649aac23",
+        "gymCode": "TIM",
+        "region": "DMV",
+        "orbitName": "Lead Wall",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "Lead Wall"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 2.5,
+        "weeklyShiftGoal": 1.6666666666666667,
+        "payPeriodHoursGoal": 13.333333333333334,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "a968f9c0-8c93-4386-a52a-05178b33056b",
+        "gymCode": "TIM",
+        "region": "DMV",
+        "orbitName": "ORBIT",
+        "discipline": "Boulders",
+        "totalClimbs": 80,
+        "assignedWalls": [
+          "ORBIT"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 9,
+        "weeklyProductionGoal": 8.88888888888889,
+        "weeklyShiftGoal": 2.2222222222222223,
+        "payPeriodHoursGoal": 17.77777777777778,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "CRY": [
+      {
+        "id": "c5ecdf3f-f81d-4fa1-9605-18381f03e736",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "Birthday/Instuction",
+        "discipline": "Routes",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "Birthday/Instuction"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 18,
+        "weeklyProductionGoal": 2.2222222222222223,
+        "weeklyShiftGoal": 0.7407407407407408,
+        "payPeriodHoursGoal": 5.9259259259259265,
+        "hoursPerClimbGoal": 2.6666666666666665
+      },
+      {
+        "id": "d394313a-9bc0-4b34-8d0e-1659cccab83d",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "Center Pillar",
+        "discipline": "Routes",
+        "totalClimbs": 56,
+        "assignedWalls": [
+          "Center Pillar"
+        ],
+        "rps": 1.9,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 5.6,
+        "weeklyShiftGoal": 2.9473684210526314,
+        "payPeriodHoursGoal": 23.57894736842105,
+        "hoursPerClimbGoal": 4.2105263157894735
+      },
+      {
+        "id": "a3880096-26d1-48bb-8b79-e32ed2e3d174",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "Heart Wall",
+        "discipline": "Routes",
+        "totalClimbs": 31,
+        "assignedWalls": [
+          "Heart Wall"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.875,
+        "weeklyShiftGoal": 1.9375,
+        "payPeriodHoursGoal": 15.5,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "77d9ddf2-de47-46ef-b83f-bc6e0b1e5fc7",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "Hex Area",
+        "discipline": "Routes",
+        "totalClimbs": 37,
+        "assignedWalls": [
+          "Hex Area"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.7,
+        "weeklyShiftGoal": 1.85,
+        "payPeriodHoursGoal": 14.8,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "7ca2f517-6779-416e-a35c-eb95fde55e35",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "Lead Wall",
+        "discipline": "Routes",
+        "totalClimbs": 46,
+        "assignedWalls": [
+          "Lead Wall"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 3.8333333333333335,
+        "weeklyShiftGoal": 2.555555555555556,
+        "payPeriodHoursGoal": 20.444444444444446,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "476e49e2-e9f5-49cc-8674-7c3513c20a56",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 72,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 12,
+        "weeklyShiftGoal": 3,
+        "payPeriodHoursGoal": 24,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "1b949501-6317-408f-bebc-dfb55e8d99c6",
+        "gymCode": "CRY",
+        "region": "DMV",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 72,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 12,
+        "weeklyShiftGoal": 3,
+        "payPeriodHoursGoal": 24,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "ROC": [
+      {
+        "id": "32617c27-d528-4769-afcc-7ac307a0216f",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "Instruction",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "Instruction"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 20,
+        "weeklyProductionGoal": 1.5,
+        "weeklyShiftGoal": 0.375,
+        "payPeriodHoursGoal": 3,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "bc8c365b-45bd-4f47-bb57-47aa82070a3a",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "Reactor Side",
+        "discipline": "Routes",
+        "totalClimbs": 35,
+        "assignedWalls": [
+          "Reactor Side"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.5,
+        "weeklyShiftGoal": 1.75,
+        "payPeriodHoursGoal": 14,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "e8000b78-e9ac-4c3e-818d-dd39f9a84043",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "Steep Lead",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "Steep Lead"
+        ],
+        "rps": 1.6,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 5
+      },
+      {
+        "id": "a395984c-9269-4d81-b430-c7bb6ec2051e",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "The Arches",
+        "discipline": "Routes",
+        "totalClimbs": 44,
+        "assignedWalls": [
+          "The Arches"
+        ],
+        "rps": 1.8,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 4.4,
+        "weeklyShiftGoal": 2.4444444444444446,
+        "payPeriodHoursGoal": 19.555555555555557,
+        "hoursPerClimbGoal": 4.444444444444445
+      },
+      {
+        "id": "3e050b54-5965-4a2b-9987-08445095c2a4",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "Back Slabs",
+        "discipline": "Routes",
+        "totalClimbs": 36,
+        "assignedWalls": [
+          "Back Slabs"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.6,
+        "weeklyShiftGoal": 1.8,
+        "payPeriodHoursGoal": 14.4,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "f40dc2f6-44eb-40a0-ae12-ceac004d83c0",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 7.5,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "0f92c7c7-9492-4259-88a1-30b95d6253ff",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 7.5,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "2105ac1a-0f4c-42b5-bc59-cfa65a354ba8",
+        "gymCode": "ROC",
+        "region": "DMV",
+        "orbitName": "Group Program",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "Group Program"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3,
+        "weeklyShiftGoal": 1,
+        "payPeriodHoursGoal": 8,
+        "hoursPerClimbGoal": 2.6666666666666665
+      }
+    ],
+    "LIN": [
+      {
+        "id": "3fb42b92-58c3-4196-86d6-ee851b2aa69c",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "THE ARCHES",
+        "discipline": "Routes",
+        "totalClimbs": 23,
+        "assignedWalls": [
+          "THE ARCHES"
+        ],
+        "rps": 1.3,
+        "shiftDuration": 8,
+        "rotationTarget": 11,
+        "weeklyProductionGoal": 2.090909090909091,
+        "weeklyShiftGoal": 1.6083916083916083,
+        "payPeriodHoursGoal": 12.867132867132867,
+        "hoursPerClimbGoal": 6.153846153846153
+      },
+      {
+        "id": "f09be188-43c9-4356-8fc7-aff05375e48b",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "THE BAYS",
+        "discipline": "Routes",
+        "totalClimbs": 37,
+        "assignedWalls": [
+          "THE BAYS"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 11,
+        "weeklyProductionGoal": 3.3636363636363638,
+        "weeklyShiftGoal": 1.6818181818181819,
+        "payPeriodHoursGoal": 13.454545454545455,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "946e33f9-d7c5-449c-abd7-4c1a35bee489",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "THE CIRQUE",
+        "discipline": "Routes",
+        "totalClimbs": 34,
+        "assignedWalls": [
+          "THE CIRQUE"
+        ],
+        "rps": 1.2,
+        "shiftDuration": 8,
+        "rotationTarget": 11,
+        "weeklyProductionGoal": 3.090909090909091,
+        "weeklyShiftGoal": 2.5757575757575757,
+        "payPeriodHoursGoal": 20.606060606060606,
+        "hoursPerClimbGoal": 6.666666666666667
+      },
+      {
+        "id": "28aa3caf-f7bb-4b8b-a41c-76a93814f95c",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "THE GREAT PLAINS",
+        "discipline": "Routes",
+        "totalClimbs": 18,
+        "assignedWalls": [
+          "THE GREAT PLAINS"
+        ],
+        "rps": 1.3,
+        "shiftDuration": 8,
+        "rotationTarget": 11,
+        "weeklyProductionGoal": 1.6363636363636365,
+        "weeklyShiftGoal": 1.2587412587412588,
+        "payPeriodHoursGoal": 10.06993006993007,
+        "hoursPerClimbGoal": 6.153846153846153
+      },
+      {
+        "id": "f1a1089f-28b4-4094-a146-39afe5b7f058",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "THE PROW",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "THE PROW"
+        ],
+        "rps": 1.6,
+        "shiftDuration": 8,
+        "rotationTarget": 11,
+        "weeklyProductionGoal": 2.727272727272727,
+        "weeklyShiftGoal": 1.7045454545454544,
+        "payPeriodHoursGoal": 13.636363636363635,
+        "hoursPerClimbGoal": 5
+      },
+      {
+        "id": "68848535-c95b-4fa1-9a38-1ea88c39d599",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 6.428571428571429,
+        "weeklyShiftGoal": 1.6071428571428572,
+        "payPeriodHoursGoal": 12.857142857142858,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "4c4c2fdd-0e60-4e05-8ded-d21cb815db12",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 5.714285714285714,
+        "weeklyShiftGoal": 1.4285714285714286,
+        "payPeriodHoursGoal": 11.428571428571429,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "2d33b476-668a-42ee-8d14-bfc59a39fff3",
+        "gymCode": "LIN",
+        "region": "REM",
+        "orbitName": "THE RAMP",
+        "discipline": "Boulders",
+        "totalClimbs": 10,
+        "assignedWalls": [
+          "THE RAMP"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 1.25,
+        "weeklyShiftGoal": 0.625,
+        "payPeriodHoursGoal": 5,
+        "hoursPerClimbGoal": 4
+      }
+    ],
+    "WRI": [
+      {
+        "id": "53feb12c-b550-4091-88c3-f207f0f1501c",
+        "gymCode": "WRI",
+        "region": "REM",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 42,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 5.25,
+        "weeklyShiftGoal": 1.3125,
+        "payPeriodHoursGoal": 10.5,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "a44e41e3-443e-42da-a09c-1279f980b07d",
+        "gymCode": "WRI",
+        "region": "REM",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 42,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 5.25,
+        "weeklyShiftGoal": 1.3125,
+        "payPeriodHoursGoal": 10.5,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "e95bb955-b4c7-4d64-8cd0-88fe0ac3d4e0",
+        "gymCode": "WRI",
+        "region": "REM",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 60,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 7.5,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "fca59cb4-01a1-4992-98bc-c2844164d01d",
+        "gymCode": "WRI",
+        "region": "REM",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 60,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 7.5,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "DSN": [
+      {
+        "id": "1bbf661a-3162-43e4-b655-7198f2c71530",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT A - INTERIOR",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "ORBIT A - INTERIOR"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 2.5,
+        "weeklyShiftGoal": 2.5,
+        "payPeriodHoursGoal": 20,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "660471b9-8fdf-44c8-903b-c42b6f0a2afd",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT B  - EXTERIOR",
+        "discipline": "Routes",
+        "totalClimbs": 50,
+        "assignedWalls": [
+          "ORBIT B  - EXTERIOR"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 4.166666666666667,
+        "weeklyShiftGoal": 4.166666666666667,
+        "payPeriodHoursGoal": 33.333333333333336,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "39d7e28b-c45a-45d1-ad72-44140b5e0e3c",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT C - LOW - TR",
+        "discipline": "Routes",
+        "totalClimbs": 42,
+        "assignedWalls": [
+          "ORBIT C - LOW - TR"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 3.5,
+        "weeklyShiftGoal": 1.75,
+        "payPeriodHoursGoal": 14,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "e06179ec-001b-4486-96e7-e9b2e1bd390f",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT C - LOW - SPORT",
+        "discipline": "Routes",
+        "totalClimbs": 14,
+        "assignedWalls": [
+          "ORBIT C - LOW - SPORT"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 1.1666666666666667,
+        "weeklyShiftGoal": 1.1666666666666667,
+        "payPeriodHoursGoal": 9.333333333333334,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "a1a8d546-d3b2-45e8-8a50-710b56195676",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 50,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 7.6923076923076925,
+        "weeklyShiftGoal": 1.9230769230769231,
+        "payPeriodHoursGoal": 15.384615384615385,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "9b739d03-20a4-4317-bdb2-752f2370c9e7",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 6.923076923076923,
+        "weeklyShiftGoal": 1.7307692307692308,
+        "payPeriodHoursGoal": 13.846153846153847,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "fbf63f6e-6865-4618-801b-659547dd7404",
+        "gymCode": "DSN",
+        "region": "DFW",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 6.923076923076923,
+        "weeklyShiftGoal": 1.7307692307692308,
+        "payPeriodHoursGoal": 13.846153846153847,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "HIL": [
+      {
+        "id": "a092b09a-48e9-4b81-a4e4-0df44eec89ce",
+        "gymCode": "HIL",
+        "region": "DFW",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 25,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 3.8461538461538463,
+        "weeklyShiftGoal": 0.9615384615384616,
+        "payPeriodHoursGoal": 7.6923076923076925,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "a9f30a24-788f-4f91-a0ea-1b57a9435eeb",
+        "gymCode": "HIL",
+        "region": "DFW",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 6.923076923076923,
+        "weeklyShiftGoal": 1.7307692307692308,
+        "payPeriodHoursGoal": 13.846153846153847,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "837bfad5-42df-424b-8c36-c1fb5ebaf30f",
+        "gymCode": "HIL",
+        "region": "DFW",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 12,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 1.8461538461538463,
+        "weeklyShiftGoal": 0.46153846153846156,
+        "payPeriodHoursGoal": 3.6923076923076925,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "2321b166-9723-4c7e-ad1a-664ac2403158",
+        "gymCode": "HIL",
+        "region": "DFW",
+        "orbitName": "ORBIT D",
+        "discipline": "Boulders",
+        "totalClimbs": 70,
+        "assignedWalls": [
+          "ORBIT D"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6.5,
+        "weeklyProductionGoal": 10.76923076923077,
+        "weeklyShiftGoal": 2.6923076923076925,
+        "payPeriodHoursGoal": 21.53846153846154,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "efc4ebd2-c9e2-4498-8d25-d3b7474d4efb",
+        "gymCode": "HIL",
+        "region": "DFW",
+        "orbitName": "KIDS WALL",
+        "discipline": "Boulders",
+        "totalClimbs": 1,
+        "assignedWalls": [
+          "KIDS WALL"
+        ],
+        "rps": 0.5,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 0.08333333333333333,
+        "weeklyShiftGoal": 0.16666666666666666,
+        "payPeriodHoursGoal": 1.3333333333333333,
+        "hoursPerClimbGoal": 16
+      }
+    ],
+    "BDR": [
+      {
+        "id": "f12914ec-3e23-4d78-a9ac-17987184866e",
+        "gymCode": "BDR",
+        "region": "CO",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 4,
+        "weeklyProductionGoal": 10,
+        "weeklyShiftGoal": 2.5,
+        "payPeriodHoursGoal": 20,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "f0ed0178-3083-4c33-9762-346e4b6c75e8",
+        "gymCode": "BDR",
+        "region": "CO",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 4,
+        "weeklyProductionGoal": 10,
+        "weeklyShiftGoal": 2.5,
+        "payPeriodHoursGoal": 20,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "9be1a01a-816a-45ae-8654-703f0078a9ea",
+        "gymCode": "BDR",
+        "region": "CO",
+        "orbitName": "NORTH HORSESHOE",
+        "discipline": "Routes",
+        "totalClimbs": 26,
+        "assignedWalls": [
+          "NORTH HORSESHOE"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.25,
+        "weeklyShiftGoal": 1.625,
+        "payPeriodHoursGoal": 13,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "2f6ba029-e10f-4f02-ab9c-305858c3e8b9",
+        "gymCode": "BDR",
+        "region": "CO",
+        "orbitName": "NORTH WALL",
+        "discipline": "Routes",
+        "totalClimbs": 20,
+        "assignedWalls": [
+          "NORTH WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 2.5,
+        "weeklyShiftGoal": 1.25,
+        "payPeriodHoursGoal": 10,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "d6b3f7fb-2d73-4a88-befe-10fd0a65af08",
+        "gymCode": "BDR",
+        "region": "CO",
+        "orbitName": "SOUTH HORSESHOE",
+        "discipline": "Routes",
+        "totalClimbs": 38,
+        "assignedWalls": [
+          "SOUTH HORSESHOE"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 4.75,
+        "weeklyShiftGoal": 2.375,
+        "payPeriodHoursGoal": 19,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "0b35a886-487b-400f-ae72-b8e158337154",
+        "gymCode": "BDR",
+        "region": "CO",
+        "orbitName": "GREY WALL",
+        "discipline": "Routes",
+        "totalClimbs": 36,
+        "assignedWalls": [
+          "GREY WALL"
+        ],
+        "rps": 1.2,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 6,
+        "weeklyShiftGoal": 5,
+        "payPeriodHoursGoal": 40,
+        "hoursPerClimbGoal": 6.666666666666667
+      }
+    ],
+    "DEN": [
+      {
+        "id": "7c329ba0-eef8-4c2d-b319-053540ef52d1",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 70,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 11.666666666666666,
+        "weeklyShiftGoal": 2.9166666666666665,
+        "payPeriodHoursGoal": 23.333333333333332,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "00ab407b-7463-4ec5-8152-cc6139ff9588",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 70,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 11.666666666666666,
+        "weeklyShiftGoal": 2.9166666666666665,
+        "payPeriodHoursGoal": 23.333333333333332,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "96bf8706-a329-4399-b596-2d9c8093a40e",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "INSTRUCTION AND PARTY",
+        "discipline": "Routes",
+        "totalClimbs": 70,
+        "assignedWalls": [
+          "INSTRUCTION AND PARTY"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 24,
+        "weeklyProductionGoal": 2.9166666666666665,
+        "weeklyShiftGoal": 0.7291666666666666,
+        "payPeriodHoursGoal": 5.833333333333333,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "3480fe15-0990-4014-954e-1cfa6ec9bd1c",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "SICKLE WALL",
+        "discipline": "Routes",
+        "totalClimbs": 32,
+        "assignedWalls": [
+          "SICKLE WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.2,
+        "weeklyShiftGoal": 1.6,
+        "payPeriodHoursGoal": 12.8,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "9037008f-a9b0-4f3a-9859-23ff3e4adcf2",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "THE ARCH (Vert)",
+        "discipline": "Routes",
+        "totalClimbs": 10,
+        "assignedWalls": [
+          "THE ARCH (Vert)"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 1,
+        "weeklyShiftGoal": 0.5,
+        "payPeriodHoursGoal": 4,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "95da9183-87cd-484f-b291-2e7a17c20a6f",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "BACK VERT WALLS",
+        "discipline": "Routes",
+        "totalClimbs": 25,
+        "assignedWalls": [
+          "BACK VERT WALLS"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.125,
+        "weeklyShiftGoal": 1.5625,
+        "payPeriodHoursGoal": 12.5,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "7559d17e-e973-4e56-b40f-526d05c3825f",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "CATWALK",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "CATWALK"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.75,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "59af30bf-0cf8-45f7-9afd-614d71e62c3c",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "FRONT VERT WALLS",
+        "discipline": "Routes",
+        "totalClimbs": 25,
+        "assignedWalls": [
+          "FRONT VERT WALLS"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.125,
+        "weeklyShiftGoal": 1.5625,
+        "payPeriodHoursGoal": 12.5,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "f160c0f2-2ca9-4308-80e1-79763d0077a2",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "LEAD CAVE (Steep)",
+        "discipline": "Routes",
+        "totalClimbs": 16,
+        "assignedWalls": [
+          "LEAD CAVE (Steep)"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 2,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "5ad477ea-70a3-4edf-b01d-40ba754f0f64",
+        "gymCode": "DEN",
+        "region": "CO",
+        "orbitName": "THE ARCH (Steep)",
+        "discipline": "Routes",
+        "totalClimbs": 14,
+        "assignedWalls": [
+          "THE ARCH (Steep)"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 1.4,
+        "weeklyShiftGoal": 1.4,
+        "payPeriodHoursGoal": 11.2,
+        "hoursPerClimbGoal": 8
+      }
+    ],
+    "RNO": [
+      {
+        "id": "c60bb798-cd7d-4190-9822-6f4ff9a5e3c8",
+        "gymCode": "RNO",
+        "region": "CO",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 100,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 14.285714285714286,
+        "weeklyShiftGoal": 3.5714285714285716,
+        "payPeriodHoursGoal": 28.571428571428573,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "bfb35f15-574d-47ce-b6b5-b0a9485f083a",
+        "gymCode": "RNO",
+        "region": "CO",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 100,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 14.285714285714286,
+        "weeklyShiftGoal": 3.5714285714285716,
+        "payPeriodHoursGoal": 28.571428571428573,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "ae2c6bd3-9ca7-4623-ae9b-4564c53be389",
+        "gymCode": "RNO",
+        "region": "CO",
+        "orbitName": "TRAVERSE WALL",
+        "discipline": "Routes",
+        "totalClimbs": 8,
+        "assignedWalls": [
+          "TRAVERSE WALL"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 1,
+        "weeklyShiftGoal": 1,
+        "payPeriodHoursGoal": 8,
+        "hoursPerClimbGoal": 8
+      }
+    ],
+    "BKR": [
+      {
+        "id": "ae39663b-c1a3-4221-b747-49a679230d20",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "Wave & Cave",
+        "discipline": "Boulders",
+        "totalClimbs": 60,
+        "assignedWalls": [
+          "Wave & Cave"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 10,
+        "weeklyShiftGoal": 2.5,
+        "payPeriodHoursGoal": 20,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "f10ebc82-a70b-4f8e-8531-4018a9666555",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "TEACHING AREA",
+        "discipline": "Boulders",
+        "totalClimbs": 6,
+        "assignedWalls": [
+          "TEACHING AREA"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 0.6,
+        "weeklyShiftGoal": 0.15,
+        "payPeriodHoursGoal": 1.2,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "ef311c8b-2216-45b1-9a2a-421cd9cc7739",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "World Cup Boulders",
+        "discipline": "Boulders",
+        "totalClimbs": 63,
+        "assignedWalls": [
+          "World Cup Boulders"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 10.5,
+        "weeklyShiftGoal": 2.625,
+        "payPeriodHoursGoal": 21,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "143122fd-0999-4bfb-bc1b-578f6ab6c208",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "SOUTH HORSESHOE",
+        "discipline": "Routes",
+        "totalClimbs": 38,
+        "assignedWalls": [
+          "SOUTH HORSESHOE"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.8,
+        "weeklyShiftGoal": 1.9,
+        "payPeriodHoursGoal": 15.2,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "27a0f293-cbac-415e-83c5-a30531b88dd1",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "SOUTH GREY AND CRACK",
+        "discipline": "Routes",
+        "totalClimbs": 25,
+        "assignedWalls": [
+          "SOUTH GREY AND CRACK"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.125,
+        "weeklyShiftGoal": 1.5625,
+        "payPeriodHoursGoal": 12.5,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "3642eda8-928f-46c7-8ef5-0e4ac2685684",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "GREY WALL",
+        "discipline": "Routes",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "GREY WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 6.666666666666667,
+        "weeklyShiftGoal": 3.3333333333333335,
+        "payPeriodHoursGoal": 26.666666666666668,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "b7f6ff93-7ebd-4cdc-a806-66b734f32a35",
+        "gymCode": "BKR",
+        "region": "CO",
+        "orbitName": "NORTH HORSESHOE",
+        "discipline": "Routes",
+        "totalClimbs": 38,
+        "assignedWalls": [
+          "NORTH HORSESHOE"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.8,
+        "weeklyShiftGoal": 1.9,
+        "payPeriodHoursGoal": 15.2,
+        "hoursPerClimbGoal": 4
+      }
+    ],
+    "ENG": [
+      {
+        "id": "35313c48-0c53-4801-8444-bbfb5f5746e9",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 87,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 10.875,
+        "weeklyShiftGoal": 2.71875,
+        "payPeriodHoursGoal": 21.75,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "fc4beece-bb6d-4448-baef-5ded9226e0df",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 87,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 10.875,
+        "weeklyShiftGoal": 2.71875,
+        "payPeriodHoursGoal": 21.75,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "2d91dfcc-50d9-4987-84ed-fd36491f0c1a",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 5.625,
+        "weeklyShiftGoal": 1.40625,
+        "payPeriodHoursGoal": 11.25,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "7cece933-66ff-4182-92d6-a6fb30221f64",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "INSTRUCTION + PARTY",
+        "discipline": "Routes",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "INSTRUCTION + PARTY"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 14,
+        "weeklyProductionGoal": 2.857142857142857,
+        "weeklyShiftGoal": 0.9523809523809524,
+        "payPeriodHoursGoal": 7.6190476190476195,
+        "hoursPerClimbGoal": 2.6666666666666665
+      },
+      {
+        "id": "fa214eb4-74e4-4177-ab09-04660c6bd180",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "BACK WALL",
+        "discipline": "Routes",
+        "totalClimbs": 38,
+        "assignedWalls": [
+          "BACK WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.8,
+        "weeklyShiftGoal": 1.9,
+        "payPeriodHoursGoal": 15.2,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "f26be3b9-39da-4b5e-a77c-cd914a3a3bd6",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "COLUMN",
+        "discipline": "Routes",
+        "totalClimbs": 38,
+        "assignedWalls": [
+          "COLUMN"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.8,
+        "weeklyShiftGoal": 1.9,
+        "payPeriodHoursGoal": 15.2,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "2f741210-bd66-498e-9927-ba5770f9af20",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "CUBE + CRYSTAL",
+        "discipline": "Routes",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "CUBE + CRYSTAL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 4,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "5d1b294f-479e-45ba-841f-a01e5d3c0acc",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "HEART + STAR WALL",
+        "discipline": "Routes",
+        "totalClimbs": 44,
+        "assignedWalls": [
+          "HEART + STAR WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 4.4,
+        "weeklyShiftGoal": 2.2,
+        "payPeriodHoursGoal": 17.6,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "7881e8a2-6f67-4b11-afe9-464b6049fdeb",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "MAIN LEAD WALL",
+        "discipline": "Routes",
+        "totalClimbs": 28,
+        "assignedWalls": [
+          "MAIN LEAD WALL"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.5,
+        "weeklyShiftGoal": 3.5,
+        "payPeriodHoursGoal": 28,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "459e2c24-9f23-437d-bfd0-47c43510650b",
+        "gymCode": "ENG",
+        "region": "CO",
+        "orbitName": "PUMP WALL",
+        "discipline": "Routes",
+        "totalClimbs": 21,
+        "assignedWalls": [
+          "PUMP WALL"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 2.625,
+        "weeklyShiftGoal": 2.625,
+        "payPeriodHoursGoal": 21,
+        "hoursPerClimbGoal": 8
+      }
+    ],
+    "SNY": [
+      {
+        "id": "3a06d29e-d90e-48bf-9846-1067b5ce9570",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "SHADOWLAND",
+        "discipline": "Routes",
+        "totalClimbs": 25,
+        "assignedWalls": [
+          "SHADOWLAND"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 2.5,
+        "weeklyShiftGoal": 1.25,
+        "payPeriodHoursGoal": 10,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "a3ba2429-786e-446e-900e-00bda541da3b",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "SLABTOWN",
+        "discipline": "Routes",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "SLABTOWN"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 4.5,
+        "weeklyShiftGoal": 2.25,
+        "payPeriodHoursGoal": 18,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "8bf3221f-258c-450a-a9e7-4e2f16f81a98",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "THE BEACH",
+        "discipline": "Routes",
+        "totalClimbs": 10,
+        "assignedWalls": [
+          "THE BEACH"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 1,
+        "weeklyShiftGoal": 1,
+        "payPeriodHoursGoal": 8,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "b8f6ec3f-a2e1-4323-8070-8ee6ffd8db66",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "THE BEACH",
+        "discipline": "Routes",
+        "totalClimbs": 9,
+        "assignedWalls": [
+          "THE BEACH"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 0.9,
+        "weeklyShiftGoal": 0.45,
+        "payPeriodHoursGoal": 3.6,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "b45d22a7-65ae-46d1-bf1e-0ff45092faf8",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "THE PUMP FACTORY",
+        "discipline": "Routes",
+        "totalClimbs": 18,
+        "assignedWalls": [
+          "THE PUMP FACTORY"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 1.8,
+        "weeklyShiftGoal": 0.9,
+        "payPeriodHoursGoal": 7.2,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "0601edf5-7df0-438f-a7d7-74acb3845c25",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "THE PUMP FACTORY",
+        "discipline": "Routes",
+        "totalClimbs": 18,
+        "assignedWalls": [
+          "THE PUMP FACTORY"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 1.8,
+        "weeklyShiftGoal": 1.2,
+        "payPeriodHoursGoal": 9.6,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "9af8bca7-58d0-47f1-96a0-53a8d94167b6",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "THE GROTTO",
+        "discipline": "Routes",
+        "totalClimbs": 24,
+        "assignedWalls": [
+          "THE GROTTO"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 2.4,
+        "weeklyShiftGoal": 1.2,
+        "payPeriodHoursGoal": 9.6,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "617c6737-26ae-4136-b09c-402c64735ee3",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 64,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 10.666666666666666,
+        "weeklyShiftGoal": 2.6666666666666665,
+        "payPeriodHoursGoal": 21.333333333333332,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "1b1fae47-08f8-4797-b3e4-f857183d84ad",
+        "gymCode": "SNY",
+        "region": "BAY",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 64,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 10.666666666666666,
+        "weeklyShiftGoal": 2.6666666666666665,
+        "payPeriodHoursGoal": 21.333333333333332,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "SCA": [
+      {
+        "id": "89d21f7e-add0-49a6-9a33-78976c5bd809",
+        "gymCode": "SCA",
+        "region": "BAY",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 72,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 12,
+        "weeklyShiftGoal": 3,
+        "payPeriodHoursGoal": 24,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "4c0c33ff-7476-41cd-ba4d-725183688180",
+        "gymCode": "SCA",
+        "region": "BAY",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 72,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 12,
+        "weeklyShiftGoal": 3,
+        "payPeriodHoursGoal": 24,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "f11ef227-b625-4080-be4b-292a55293047",
+        "gymCode": "SCA",
+        "region": "BAY",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 54,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 9,
+        "weeklyShiftGoal": 2.25,
+        "payPeriodHoursGoal": 18,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "BEL": [
+      {
+        "id": "2240f681-cae5-4741-a0f6-ffff5a28b6c3",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "FOAM WALL 1",
+        "discipline": "Routes",
+        "totalClimbs": 28,
+        "assignedWalls": [
+          "FOAM WALL 1"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 2.8,
+        "weeklyShiftGoal": 0.9333333333333332,
+        "payPeriodHoursGoal": 7.466666666666666,
+        "hoursPerClimbGoal": 2.6666666666666665
+      },
+      {
+        "id": "1d81f2fb-7cbe-4a21-b6a7-cc4854acd809",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "BACKSIDE",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "BACKSIDE"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3,
+        "weeklyShiftGoal": 1.5,
+        "payPeriodHoursGoal": 12,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "ed412630-f2c8-446d-8e76-c5ba7a8c7527",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "FOAM WALL 2",
+        "discipline": "Routes",
+        "totalClimbs": 24,
+        "assignedWalls": [
+          "FOAM WALL 2"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 2.4,
+        "weeklyShiftGoal": 0.7999999999999999,
+        "payPeriodHoursGoal": 6.3999999999999995,
+        "hoursPerClimbGoal": 2.6666666666666665
+      },
+      {
+        "id": "76fedd57-f36c-4d56-8619-bcb51ab0dccd",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "FRONTSIDE",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "FRONTSIDE"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "1012f2a7-ea77-44f2-91c3-ab56024abe9e",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "LEAD CAVE",
+        "discipline": "Routes",
+        "totalClimbs": 22,
+        "assignedWalls": [
+          "LEAD CAVE"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 2.75,
+        "weeklyShiftGoal": 1.8333333333333333,
+        "payPeriodHoursGoal": 14.666666666666666,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "6ea55584-ea3e-4271-9156-ad3b3850549e",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 6.666666666666667,
+        "weeklyShiftGoal": 1.6666666666666667,
+        "payPeriodHoursGoal": 13.333333333333334,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "70607a7e-2a23-4939-849d-59d8b2247867",
+        "gymCode": "BEL",
+        "region": "BAY",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 46,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 7.666666666666667,
+        "weeklyShiftGoal": 1.9166666666666667,
+        "payPeriodHoursGoal": 15.333333333333334,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "PDX": [
+      {
+        "id": "0b045152-a0e6-4591-9104-8c7ee9ab4d29",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "LEARNING CENTER",
+        "discipline": "Routes",
+        "totalClimbs": 20,
+        "assignedWalls": [
+          "LEARNING CENTER"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 1.6666666666666667,
+        "weeklyShiftGoal": 0.8333333333333334,
+        "payPeriodHoursGoal": 6.666666666666667,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "06a263c7-d42a-4288-83d6-2e28b693299c",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "ADJ. CRACKS & SHARK FIN",
+        "discipline": "Routes",
+        "totalClimbs": 36,
+        "assignedWalls": [
+          "ADJ. CRACKS & SHARK FIN"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.6,
+        "weeklyShiftGoal": 2.4,
+        "payPeriodHoursGoal": 19.2,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "5cae7ab3-5ff0-47bc-a115-42681188cc95",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "CRYSTAL",
+        "discipline": "Routes",
+        "totalClimbs": 16,
+        "assignedWalls": [
+          "CRYSTAL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 2,
+        "weeklyShiftGoal": 1,
+        "payPeriodHoursGoal": 8,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "0cd0dea4-1374-4973-b056-e97ede4564d5",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "CURBSIDE CHAMBER",
+        "discipline": "Routes",
+        "totalClimbs": 32,
+        "assignedWalls": [
+          "CURBSIDE CHAMBER"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.2,
+        "weeklyShiftGoal": 3.2,
+        "payPeriodHoursGoal": 25.6,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "383c42c0-ddb8-483c-85ea-0a5b91586c2e",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "GREEN CHAMBER",
+        "discipline": "Routes",
+        "totalClimbs": 35,
+        "assignedWalls": [
+          "GREEN CHAMBER"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 4.375,
+        "weeklyShiftGoal": 2.1875,
+        "payPeriodHoursGoal": 17.5,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "077472fc-f742-4e26-92bc-804d69a1b6b5",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "ICEBERG",
+        "discipline": "Routes",
+        "totalClimbs": 22,
+        "assignedWalls": [
+          "ICEBERG"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 2.2,
+        "weeklyShiftGoal": 2.2,
+        "payPeriodHoursGoal": 17.6,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "6bd9037f-c0b4-46a8-bfcb-1f77ba69ccb4",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 72,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 9,
+        "weeklyShiftGoal": 2.25,
+        "payPeriodHoursGoal": 18,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "ff6f2248-3ee3-4520-a30e-ad56f05b0127",
+        "gymCode": "PDX",
+        "region": "REM",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 64,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 9.142857142857142,
+        "weeklyShiftGoal": 2.2857142857142856,
+        "payPeriodHoursGoal": 18.285714285714285,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "SFO": [
+      {
+        "id": "b7de6142-67b7-4079-a21f-a3b1f06cd498",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "SOUTH SIDE",
+        "discipline": "Routes",
+        "totalClimbs": 39,
+        "assignedWalls": [
+          "SOUTH SIDE"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.9,
+        "weeklyShiftGoal": 1.95,
+        "payPeriodHoursGoal": 15.6,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "5baeb0ca-ab36-42b1-926b-28f708fbc8dc",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "THE ISLAND",
+        "discipline": "Routes",
+        "totalClimbs": 38,
+        "assignedWalls": [
+          "THE ISLAND"
+        ],
+        "rps": 1.5,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 3.8,
+        "weeklyShiftGoal": 2.533333333333333,
+        "payPeriodHoursGoal": 20.266666666666666,
+        "hoursPerClimbGoal": 5.333333333333333
+      },
+      {
+        "id": "75c4d42c-d67a-401e-8eac-7fd9c3915df2",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "CENTER CHAMBER",
+        "discipline": "Routes",
+        "totalClimbs": 30,
+        "assignedWalls": [
+          "CENTER CHAMBER"
+        ],
+        "rps": 1,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.75,
+        "weeklyShiftGoal": 3.75,
+        "payPeriodHoursGoal": 30,
+        "hoursPerClimbGoal": 8
+      },
+      {
+        "id": "8096ea86-2a2d-42c0-8229-15e1608c2978",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "CRISSY FIELD WALL",
+        "discipline": "Routes",
+        "totalClimbs": 27,
+        "assignedWalls": [
+          "CRISSY FIELD WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 3.375,
+        "weeklyShiftGoal": 1.6875,
+        "payPeriodHoursGoal": 13.5,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "46350133-77f6-420b-baec-96ba1d54b979",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "WELCOME WALL",
+        "discipline": "Routes",
+        "totalClimbs": 34,
+        "assignedWalls": [
+          "WELCOME WALL"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 4.25,
+        "weeklyShiftGoal": 2.125,
+        "payPeriodHoursGoal": 17,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "cbed5810-9930-4b14-aab8-7bb1d0db62d9",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 56,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 8,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "6f0a944b-bed2-4c3f-ad70-696b19a443e5",
+        "gymCode": "SFO",
+        "region": "BAY",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 56,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 8,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "FTV": [
+      {
+        "id": "169088cb-4f77-4606-907d-420847eb768d",
+        "gymCode": "FTV",
+        "region": "REM",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 48,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 8,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "eb30f4c5-9be7-434a-bdd8-fbc9c6c2d325",
+        "gymCode": "FTV",
+        "region": "REM",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 48,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 8,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "313858f6-6717-495d-958b-08cba4558bb8",
+        "gymCode": "FTV",
+        "region": "REM",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 48,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 8,
+        "weeklyShiftGoal": 2,
+        "payPeriodHoursGoal": 16,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "PLN": [
+      {
+        "id": "baf59978-2c58-48b1-bd15-c4614659c96a",
+        "gymCode": "PLN",
+        "region": "DFW",
+        "orbitName": "ORBIT T",
+        "discipline": "Routes",
+        "totalClimbs": 35,
+        "assignedWalls": [
+          "ORBIT T"
+        ],
+        "rps": 2,
+        "shiftDuration": 10,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 2.9166666666666665,
+        "weeklyShiftGoal": 1.4583333333333333,
+        "payPeriodHoursGoal": 14.583333333333332,
+        "hoursPerClimbGoal": 5
+      },
+      {
+        "id": "8f067156-b4fb-4e99-b0c7-9cc803e4a530",
+        "gymCode": "PLN",
+        "region": "DFW",
+        "orbitName": "ORBIT M",
+        "discipline": "Routes",
+        "totalClimbs": 40,
+        "assignedWalls": [
+          "ORBIT M"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 18,
+        "weeklyProductionGoal": 2.2222222222222223,
+        "weeklyShiftGoal": 1.1111111111111112,
+        "payPeriodHoursGoal": 8.88888888888889,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "ed2b2f33-12a5-4051-b9fb-f8f29c3f6714",
+        "gymCode": "PLN",
+        "region": "DFW",
+        "orbitName": "ORBIT C",
+        "discipline": "Routes",
+        "totalClimbs": 70,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 7,
+        "weeklyShiftGoal": 3.5,
+        "payPeriodHoursGoal": 28,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "8093d451-92ea-45c0-a1fd-5f167f514e88",
+        "gymCode": "PLN",
+        "region": "DFW",
+        "orbitName": "ORBIT BB",
+        "discipline": "Boulders",
+        "totalClimbs": 55,
+        "assignedWalls": [
+          "ORBIT BB"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 4,
+        "weeklyProductionGoal": 13.75,
+        "weeklyShiftGoal": 3.4375,
+        "payPeriodHoursGoal": 27.5,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "f2e4ca8a-e071-434a-843e-3c31f82920f1",
+        "gymCode": "PLN",
+        "region": "DFW",
+        "orbitName": "ORBIT SB",
+        "discipline": "Boulders",
+        "totalClimbs": 45,
+        "assignedWalls": [
+          "ORBIT SB"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 4,
+        "weeklyProductionGoal": 11.25,
+        "weeklyShiftGoal": 2.8125,
+        "payPeriodHoursGoal": 22.5,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "ad7624b6-1723-4e74-a520-99003d8fffa5",
+        "gymCode": "PLN",
+        "region": "DFW",
+        "orbitName": "ORBIT K",
+        "discipline": "Routes",
+        "totalClimbs": 20,
+        "assignedWalls": [
+          "ORBIT K"
+        ],
+        "rps": 2.5,
+        "shiftDuration": 8,
+        "rotationTarget": 20,
+        "weeklyProductionGoal": 1,
+        "weeklyShiftGoal": 0.4,
+        "payPeriodHoursGoal": 3.2,
+        "hoursPerClimbGoal": 3.2
+      }
+    ],
+    "CEN": [
+      {
+        "id": "51f729c9-9bc1-4863-9b10-2c8c5a15a524",
+        "gymCode": "CEN",
+        "region": "CO",
+        "orbitName": "ORBIT A",
+        "discipline": "Boulders",
+        "totalClimbs": 61,
+        "assignedWalls": [
+          "ORBIT A"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 10.166666666666666,
+        "weeklyShiftGoal": 2.5416666666666665,
+        "payPeriodHoursGoal": 20.333333333333332,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "90caaf32-2c27-4949-9712-434b3f520c42",
+        "gymCode": "CEN",
+        "region": "CO",
+        "orbitName": "ORBIT B",
+        "discipline": "Boulders",
+        "totalClimbs": 51,
+        "assignedWalls": [
+          "ORBIT B"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 8.5,
+        "weeklyShiftGoal": 2.125,
+        "payPeriodHoursGoal": 17,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "35b9e9a3-5f4d-414b-baf2-80251b6605c9",
+        "gymCode": "CEN",
+        "region": "CO",
+        "orbitName": "ORBIT C",
+        "discipline": "Boulders",
+        "totalClimbs": 25,
+        "assignedWalls": [
+          "ORBIT C"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 4.166666666666667,
+        "weeklyShiftGoal": 1.0416666666666667,
+        "payPeriodHoursGoal": 8.333333333333334,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "3d552f22-d8d5-403f-8028-0e62daef636c",
+        "gymCode": "CEN",
+        "region": "CO",
+        "orbitName": "All Ropes",
+        "discipline": "Routes",
+        "totalClimbs": 109,
+        "assignedWalls": [
+          "All Ropes"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 9.083333333333334,
+        "weeklyShiftGoal": 4.541666666666667,
+        "payPeriodHoursGoal": 36.333333333333336,
+        "hoursPerClimbGoal": 4
+      }
+    ],
+    "HLM": [
+      {
+        "id": "b8cf9239-794d-409c-99a1-ee7b523ab4c7",
+        "gymCode": "HLM",
+        "region": "NYPA",
+        "orbitName": "Front Room",
+        "discipline": "Boulders",
+        "totalClimbs": 60,
+        "assignedWalls": [
+          "Front Room"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 7.5,
+        "weeklyShiftGoal": 1.875,
+        "payPeriodHoursGoal": 15,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "f26c7b59-1c51-47e2-bfed-2c2a1574f82b",
+        "gymCode": "HLM",
+        "region": "NYPA",
+        "orbitName": "Back Room",
+        "discipline": "Boulders",
+        "totalClimbs": 80,
+        "assignedWalls": [
+          "Back Room"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 10,
+        "weeklyShiftGoal": 2.5,
+        "payPeriodHoursGoal": 20,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "LIC": [
+      {
+        "id": "1c28cfc5-2256-41f0-a825-35b1eac10388",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Mezzanine",
+        "discipline": "Boulders",
+        "totalClimbs": 14,
+        "assignedWalls": [
+          "Mezzanine"
+        ],
+        "rps": 2.33,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 1.1666666666666667,
+        "weeklyShiftGoal": 0.5007153075822603,
+        "payPeriodHoursGoal": 4.005722460658083,
+        "hoursPerClimbGoal": 3.4334763948497855
+      },
+      {
+        "id": "e6585161-c424-42e2-8f10-7fc270e1c85b",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Alcove & 45",
+        "discipline": "Boulders",
+        "totalClimbs": 28,
+        "assignedWalls": [
+          "Alcove & 45"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 4.666666666666667,
+        "weeklyShiftGoal": 1.1666666666666667,
+        "payPeriodHoursGoal": 9.333333333333334,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "4d0260c3-b5b3-424e-87bb-f2da6504cab2",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Buddah",
+        "discipline": "Boulders",
+        "totalClimbs": 22,
+        "assignedWalls": [
+          "Buddah"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 3.6666666666666665,
+        "weeklyShiftGoal": 1.222222222222222,
+        "payPeriodHoursGoal": 9.777777777777777,
+        "hoursPerClimbGoal": 2.6666666666666665
+      },
+      {
+        "id": "93e8ff00-7fb9-4963-b5b3-3ea03d075b54",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "3D",
+        "discipline": "Boulders",
+        "totalClimbs": 18,
+        "assignedWalls": [
+          "3D"
+        ],
+        "rps": 3.5,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 3,
+        "weeklyShiftGoal": 0.8571428571428571,
+        "payPeriodHoursGoal": 6.857142857142857,
+        "hoursPerClimbGoal": 2.2857142857142856
+      },
+      {
+        "id": "ba241f56-9b1f-4d6f-a3e5-bc743d20c460",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Bulge & Prow",
+        "discipline": "Boulders",
+        "totalClimbs": 27,
+        "assignedWalls": [
+          "Bulge & Prow"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 4.5,
+        "weeklyShiftGoal": 1.125,
+        "payPeriodHoursGoal": 9,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "792bd5ee-f869-4f37-aaa3-ea16be98d603",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Slab",
+        "discipline": "Boulders",
+        "totalClimbs": 21,
+        "assignedWalls": [
+          "Slab"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 3.5,
+        "weeklyShiftGoal": 0.875,
+        "payPeriodHoursGoal": 7,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "adb5e9a6-2054-4919-90c9-9415a5393a77",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Fox Room",
+        "discipline": "Routes",
+        "totalClimbs": 54,
+        "assignedWalls": [
+          "Fox Room"
+        ],
+        "rps": 2.5,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 4.5,
+        "weeklyShiftGoal": 1.8,
+        "payPeriodHoursGoal": 14.4,
+        "hoursPerClimbGoal": 3.2
+      },
+      {
+        "id": "7c28ede7-20a1-4a26-ad8f-0b46fe0e8dc7",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "High Bay",
+        "discipline": "Routes",
+        "totalClimbs": 58,
+        "assignedWalls": [
+          "High Bay"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 5.8,
+        "weeklyShiftGoal": 2.9,
+        "payPeriodHoursGoal": 23.2,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "a8827d60-7016-478c-86d4-9b4a8fcfb8f0",
+        "gymCode": "LIC",
+        "region": "NYPA",
+        "orbitName": "Low Bay",
+        "discipline": "Routes",
+        "totalClimbs": 118,
+        "assignedWalls": [
+          "Low Bay"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 11.8,
+        "weeklyShiftGoal": 5.9,
+        "payPeriodHoursGoal": 47.2,
+        "hoursPerClimbGoal": 4
+      }
+    ],
+    "GOW": [
+      {
+        "id": "23dc8121-400f-4f79-849b-3f3c301484d4",
+        "gymCode": "GOW",
+        "region": "NYPA",
+        "orbitName": "First Floor",
+        "discipline": "Boulders",
+        "totalClimbs": 61,
+        "assignedWalls": [
+          "First Floor"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 10.166666666666666,
+        "weeklyShiftGoal": 2.5416666666666665,
+        "payPeriodHoursGoal": 20.333333333333332,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "c1e1b141-f291-4c28-95fb-2ce2d2eefe1d",
+        "gymCode": "GOW",
+        "region": "NYPA",
+        "orbitName": "Second Floor",
+        "discipline": "Boulders",
+        "totalClimbs": 108,
+        "assignedWalls": [
+          "Second Floor"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 18,
+        "weeklyShiftGoal": 4.5,
+        "payPeriodHoursGoal": 36,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "8173c295-bc6a-485d-bb1c-25636c641881",
+        "gymCode": "GOW",
+        "region": "NYPA",
+        "orbitName": "Main TR",
+        "discipline": "Routes",
+        "totalClimbs": 100,
+        "assignedWalls": [
+          "Main TR"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 10,
+        "weeklyShiftGoal": 5,
+        "payPeriodHoursGoal": 40,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "162a144b-bfb8-4373-8183-b6203ef48ce8",
+        "gymCode": "GOW",
+        "region": "NYPA",
+        "orbitName": "Lead Cave",
+        "discipline": "Routes",
+        "totalClimbs": 16,
+        "assignedWalls": [
+          "Lead Cave"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 1.6,
+        "weeklyShiftGoal": 0.8,
+        "payPeriodHoursGoal": 6.4,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "64f989c9-5039-4d20-82fb-b2988bef21f5",
+        "gymCode": "GOW",
+        "region": "NYPA",
+        "orbitName": "Autobealys",
+        "discipline": "Routes",
+        "totalClimbs": 16,
+        "assignedWalls": [
+          "Autobealys"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 1.3333333333333333,
+        "weeklyShiftGoal": 0.6666666666666666,
+        "payPeriodHoursGoal": 5.333333333333333,
+        "hoursPerClimbGoal": 4
+      }
+    ],
+    "VAL": [
+      {
+        "id": "6877fb2d-b7df-4f1d-87a3-dfd6c88b93cf",
+        "gymCode": "VAL",
+        "region": "NYPA",
+        "orbitName": "All Boulders",
+        "discipline": "Boulders",
+        "totalClimbs": 75,
+        "assignedWalls": [
+          "All Boulders"
+        ],
+        "rps": 5,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 10.714285714285714,
+        "weeklyShiftGoal": 2.142857142857143,
+        "payPeriodHoursGoal": 17.142857142857142,
+        "hoursPerClimbGoal": 1.6
+      },
+      {
+        "id": "18b00c6a-c8bd-4b29-994c-b2a426c3c72b",
+        "gymCode": "VAL",
+        "region": "NYPA",
+        "orbitName": "Lead Wall",
+        "discipline": "Routes",
+        "totalClimbs": 31,
+        "assignedWalls": [
+          "Lead Wall"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 4.428571428571429,
+        "weeklyShiftGoal": 2.2142857142857144,
+        "payPeriodHoursGoal": 17.714285714285715,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "73fbe921-aee1-492a-8e3b-d2f5649aa5f4",
+        "gymCode": "VAL",
+        "region": "NYPA",
+        "orbitName": "Autobelay & Back Walls",
+        "discipline": "Routes",
+        "totalClimbs": 62,
+        "assignedWalls": [
+          "Autobelay & Back Walls"
+        ],
+        "rps": 2.5,
+        "shiftDuration": 8,
+        "rotationTarget": 7,
+        "weeklyProductionGoal": 8.857142857142858,
+        "weeklyShiftGoal": 3.542857142857143,
+        "payPeriodHoursGoal": 28.342857142857145,
+        "hoursPerClimbGoal": 3.2
+      }
+    ],
+    "CAL": [
+      {
+        "id": "17da93da-9aa8-431c-bead-7875c13fc03d",
+        "gymCode": "CAL",
+        "region": "NYPA",
+        "orbitName": "Front Room",
+        "discipline": "Boulders",
+        "totalClimbs": 48,
+        "assignedWalls": [
+          "Front Room"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 6,
+        "weeklyShiftGoal": 1.5,
+        "payPeriodHoursGoal": 12,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "cf024270-6fbe-4eab-96fb-5293e1e9dd1b",
+        "gymCode": "CAL",
+        "region": "NYPA",
+        "orbitName": "Back Room",
+        "discipline": "Boulders",
+        "totalClimbs": 112,
+        "assignedWalls": [
+          "Back Room"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 14,
+        "weeklyShiftGoal": 3.5,
+        "payPeriodHoursGoal": 28,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "58de6f50-885f-4fea-b515-e6ca35355752",
+        "gymCode": "CAL",
+        "region": "NYPA",
+        "orbitName": "Main Rope Chamber",
+        "discipline": "Routes",
+        "totalClimbs": 101,
+        "assignedWalls": [
+          "Main Rope Chamber"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 8.416666666666666,
+        "weeklyShiftGoal": 4.208333333333333,
+        "payPeriodHoursGoal": 33.666666666666664,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "e29c9c38-a232-4253-a099-c76a4d81c9f2",
+        "gymCode": "CAL",
+        "region": "NYPA",
+        "orbitName": "Autobelays",
+        "discipline": "Routes",
+        "totalClimbs": 16,
+        "assignedWalls": [
+          "Autobelays"
+        ],
+        "rps": 3,
+        "shiftDuration": 8,
+        "rotationTarget": 12,
+        "weeklyProductionGoal": 1.3333333333333333,
+        "weeklyShiftGoal": 0.4444444444444444,
+        "payPeriodHoursGoal": 3.5555555555555554,
+        "hoursPerClimbGoal": 2.6666666666666665
+      }
+    ],
+    "FSH": [
+      {
+        "id": "1403ee99-efaa-462f-a29e-bee32c05cc80",
+        "gymCode": "FSH",
+        "region": "NYPA",
+        "orbitName": "A Orbit",
+        "discipline": "Boulders",
+        "totalClimbs": 41,
+        "assignedWalls": [
+          "A Orbit"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 5.125,
+        "weeklyShiftGoal": 1.28125,
+        "payPeriodHoursGoal": 10.25,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "39950819-a593-46e0-a4b4-3a6ca3aa914c",
+        "gymCode": "FSH",
+        "region": "NYPA",
+        "orbitName": "B Orbit",
+        "discipline": "Boulders",
+        "totalClimbs": 65,
+        "assignedWalls": [
+          "B Orbit"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 8.125,
+        "weeklyShiftGoal": 2.03125,
+        "payPeriodHoursGoal": 16.25,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "03aceaca-d65c-423f-b4ff-f7d76aeaf727",
+        "gymCode": "FSH",
+        "region": "NYPA",
+        "orbitName": "Autobealys",
+        "discipline": "Routes",
+        "totalClimbs": 8,
+        "assignedWalls": [
+          "Autobealys"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 0.8,
+        "weeklyShiftGoal": 0.4,
+        "payPeriodHoursGoal": 3.2,
+        "hoursPerClimbGoal": 4
+      },
+      {
+        "id": "5b778714-b326-4f96-9329-5bbc7af225aa",
+        "gymCode": "FSH",
+        "region": "NYPA",
+        "orbitName": "All Rope Terrain",
+        "discipline": "Routes",
+        "totalClimbs": 84,
+        "assignedWalls": [
+          "All Rope Terrain"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 10,
+        "weeklyProductionGoal": 8.4,
+        "weeklyShiftGoal": 4.2,
+        "payPeriodHoursGoal": 33.6,
+        "hoursPerClimbGoal": 4
+      }
+    ],
+    "MTV": [
+      {
+        "id": "ca90a93b-62b9-487d-b6ec-8a712baad4b7",
+        "gymCode": "MTV",
+        "region": "BAY",
+        "orbitName": "A Orbit",
+        "discipline": "Boulders",
+        "totalClimbs": 56,
+        "assignedWalls": [
+          "A Orbit"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 7,
+        "weeklyShiftGoal": 1.75,
+        "payPeriodHoursGoal": 14,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "1569d00c-0469-4420-b73f-c762cefa7937",
+        "gymCode": "MTV",
+        "region": "BAY",
+        "orbitName": "B Orbit",
+        "discipline": "Boulders",
+        "totalClimbs": 92,
+        "assignedWalls": [
+          "B Orbit"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 8,
+        "weeklyProductionGoal": 11.5,
+        "weeklyShiftGoal": 2.875,
+        "payPeriodHoursGoal": 23,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "DTN": [
+      {
+        "id": "487a7bb1-27dc-43de-83b3-b459ec90a5a4",
+        "gymCode": "DTN",
+        "region": "DFW",
+        "orbitName": "All Boulders",
+        "discipline": "Boulders",
+        "totalClimbs": 108,
+        "assignedWalls": [
+          "All Boulders"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 18,
+        "weeklyShiftGoal": 4.5,
+        "payPeriodHoursGoal": 36,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "FTW": [
+      {
+        "id": "47fda4e7-fe60-4ad3-a55a-46e5be6d2801",
+        "gymCode": "FTW",
+        "region": "DFW",
+        "orbitName": "All Boulders",
+        "discipline": "Boulders",
+        "totalClimbs": 105,
+        "assignedWalls": [
+          "All Boulders"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 17.5,
+        "weeklyShiftGoal": 4.375,
+        "payPeriodHoursGoal": 35,
+        "hoursPerClimbGoal": 2
+      }
+    ],
+    "GVN": [
+      {
+        "id": "19debed3-562e-49dc-ab67-1a182397e639",
+        "gymCode": "GVN",
+        "region": "DFW",
+        "orbitName": "All Boulders",
+        "discipline": "Boulders",
+        "totalClimbs": 105,
+        "assignedWalls": [
+          "All Boulders"
+        ],
+        "rps": 4,
+        "shiftDuration": 8,
+        "rotationTarget": 6,
+        "weeklyProductionGoal": 17.5,
+        "weeklyShiftGoal": 4.375,
+        "payPeriodHoursGoal": 35,
+        "hoursPerClimbGoal": 2
+      },
+      {
+        "id": "ba91ca20-a3d0-4375-a9fe-45b41a5f7aa8",
+        "gymCode": "GVN",
+        "region": "DFW",
+        "orbitName": "All Routes",
+        "discipline": "Routes",
+        "totalClimbs": 105,
+        "assignedWalls": [
+          "All Routes"
+        ],
+        "rps": 2,
+        "shiftDuration": 8,
+        "rotationTarget": 14,
+        "weeklyProductionGoal": 7.5,
+        "weeklyShiftGoal": 3.75,
+        "payPeriodHoursGoal": 30,
+        "hoursPerClimbGoal": 4
+      }
+    ]
+  },
+  "wallTargets": {
+    "HAM": [
+      {
+        "gymCode": "HAM",
+        "wallName": "Orbit A",
+        "targetCount": 75,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "29738abc-f87c-4bfc-8bc7-cc8e930111a2"
+      },
+      {
+        "gymCode": "HAM",
+        "wallName": "Orbit B",
+        "targetCount": 75,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "26b2cda1-6407-417e-aaff-905b0744dd5e"
+      }
+    ],
+    "COL": [
+      {
+        "gymCode": "COL",
+        "wallName": "Birthday/Instuction",
+        "targetCount": 50,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "4319adb1-a868-44e3-9d8a-587bfa9738ec"
+      },
+      {
+        "gymCode": "COL",
+        "wallName": "Lead Wall",
+        "targetCount": 52,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "179664ee-2c48-4572-8eec-cde4a832d2d9"
+      },
+      {
+        "gymCode": "COL",
+        "wallName": "Slab Wall",
+        "targetCount": 36,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "6fd8f8eb-38ce-4abf-9d60-6f8846d4c5f8"
+      },
+      {
+        "gymCode": "COL",
+        "wallName": "The Bays",
+        "targetCount": 52,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "a2a2f416-abd5-41da-9654-c8b66a930fbc"
+      },
+      {
+        "gymCode": "COL",
+        "wallName": "ORBIT A",
+        "targetCount": 64,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "cc4717ff-96a0-4ad8-8dfd-96c89732f090"
+      },
+      {
+        "gymCode": "COL",
+        "wallName": "ORBIT B",
+        "targetCount": 64,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "d112c3e6-e074-4194-bbe9-1f5b76880fba"
+      }
+    ],
+    "TIM": [
+      {
+        "gymCode": "TIM",
+        "wallName": "Birthday/Instuction",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "a75b9ccc-0f0b-4c04-b476-264ada5f310c"
+      },
+      {
+        "gymCode": "TIM",
+        "wallName": "Back Room",
+        "targetCount": 44,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "01402a2f-8afc-4bd0-892d-ee6f7f7642d6"
+      },
+      {
+        "gymCode": "TIM",
+        "wallName": "Front Slab",
+        "targetCount": 33,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "d0443180-2076-4585-a102-9ef985c80d9a"
+      },
+      {
+        "gymCode": "TIM",
+        "wallName": "Lead Wall",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "e2b4a362-c53a-467f-afe5-fd42649aac23"
+      },
+      {
+        "gymCode": "TIM",
+        "wallName": "ORBIT",
+        "targetCount": 80,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "a968f9c0-8c93-4386-a52a-05178b33056b"
+      }
+    ],
+    "CRY": [
+      {
+        "gymCode": "CRY",
+        "wallName": "Birthday/Instuction",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "c5ecdf3f-f81d-4fa1-9605-18381f03e736"
+      },
+      {
+        "gymCode": "CRY",
+        "wallName": "Center Pillar",
+        "targetCount": 56,
+        "targetClimbsPerSetter": 1.9,
+        "type": "rope",
+        "orbitId": "d394313a-9bc0-4b34-8d0e-1659cccab83d"
+      },
+      {
+        "gymCode": "CRY",
+        "wallName": "Heart Wall",
+        "targetCount": 31,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "a3880096-26d1-48bb-8b79-e32ed2e3d174"
+      },
+      {
+        "gymCode": "CRY",
+        "wallName": "Hex Area",
+        "targetCount": 37,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "77d9ddf2-de47-46ef-b83f-bc6e0b1e5fc7"
+      },
+      {
+        "gymCode": "CRY",
+        "wallName": "Lead Wall",
+        "targetCount": 46,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "7ca2f517-6779-416e-a35c-eb95fde55e35"
+      },
+      {
+        "gymCode": "CRY",
+        "wallName": "ORBIT A",
+        "targetCount": 72,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "476e49e2-e9f5-49cc-8674-7c3513c20a56"
+      },
+      {
+        "gymCode": "CRY",
+        "wallName": "ORBIT B",
+        "targetCount": 72,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "1b949501-6317-408f-bebc-dfb55e8d99c6"
+      }
+    ],
+    "ROC": [
+      {
+        "gymCode": "ROC",
+        "wallName": "Instruction",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 4,
+        "type": "rope",
+        "orbitId": "32617c27-d528-4769-afcc-7ac307a0216f"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "Reactor Side",
+        "targetCount": 35,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "bc8c365b-45bd-4f47-bb57-47aa82070a3a"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "Steep Lead",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 1.6,
+        "type": "rope",
+        "orbitId": "e8000b78-e9ac-4c3e-818d-dd39f9a84043"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "The Arches",
+        "targetCount": 44,
+        "targetClimbsPerSetter": 1.8,
+        "type": "rope",
+        "orbitId": "a395984c-9269-4d81-b430-c7bb6ec2051e"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "Back Slabs",
+        "targetCount": 36,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "3e050b54-5965-4a2b-9987-08445095c2a4"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "ORBIT A",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f40dc2f6-44eb-40a0-ae12-ceac004d83c0"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "ORBIT B",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "0f92c7c7-9492-4259-88a1-30b95d6253ff"
+      },
+      {
+        "gymCode": "ROC",
+        "wallName": "Group Program",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "2105ac1a-0f4c-42b5-bc59-cfa65a354ba8"
+      }
+    ],
+    "LIN": [
+      {
+        "gymCode": "LIN",
+        "wallName": "THE ARCHES",
+        "targetCount": 23,
+        "targetClimbsPerSetter": 1.3,
+        "type": "rope",
+        "orbitId": "3fb42b92-58c3-4196-86d6-ee851b2aa69c"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "THE BAYS",
+        "targetCount": 37,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "f09be188-43c9-4356-8fc7-aff05375e48b"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "THE CIRQUE",
+        "targetCount": 34,
+        "targetClimbsPerSetter": 1.2,
+        "type": "rope",
+        "orbitId": "946e33f9-d7c5-449c-abd7-4c1a35bee489"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "THE GREAT PLAINS",
+        "targetCount": 18,
+        "targetClimbsPerSetter": 1.3,
+        "type": "rope",
+        "orbitId": "28aa3caf-f7bb-4b8b-a41c-76a93814f95c"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "THE PROW",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 1.6,
+        "type": "rope",
+        "orbitId": "f1a1089f-28b4-4094-a146-39afe5b7f058"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "ORBIT A",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "68848535-c95b-4fa1-9a38-1ea88c39d599"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "ORBIT B",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "4c4c2fdd-0e60-4e05-8ded-d21cb815db12"
+      },
+      {
+        "gymCode": "LIN",
+        "wallName": "THE RAMP",
+        "targetCount": 10,
+        "targetClimbsPerSetter": 2,
+        "type": "boulder",
+        "orbitId": "2d33b476-668a-42ee-8d14-bfc59a39fff3"
+      }
+    ],
+    "WRI": [
+      {
+        "gymCode": "WRI",
+        "wallName": "ORBIT A",
+        "targetCount": 42,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "53feb12c-b550-4091-88c3-f207f0f1501c"
+      },
+      {
+        "gymCode": "WRI",
+        "wallName": "ORBIT B",
+        "targetCount": 42,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "a44e41e3-443e-42da-a09c-1279f980b07d"
+      },
+      {
+        "gymCode": "WRI",
+        "wallName": "ORBIT C",
+        "targetCount": 60,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "e95bb955-b4c7-4d64-8cd0-88fe0ac3d4e0"
+      },
+      {
+        "gymCode": "WRI",
+        "wallName": "ORBIT C",
+        "targetCount": 60,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "fca59cb4-01a1-4992-98bc-c2844164d01d"
+      }
+    ],
+    "DSN": [
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT A - INTERIOR",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "1bbf661a-3162-43e4-b655-7198f2c71530"
+      },
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT B  - EXTERIOR",
+        "targetCount": 50,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "660471b9-8fdf-44c8-903b-c42b6f0a2afd"
+      },
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT C - LOW - TR",
+        "targetCount": 42,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "39d7e28b-c45a-45d1-ad72-44140b5e0e3c"
+      },
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT C - LOW - SPORT",
+        "targetCount": 14,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "e06179ec-001b-4486-96e7-e9b2e1bd390f"
+      },
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT A",
+        "targetCount": 50,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "a1a8d546-d3b2-45e8-8a50-710b56195676"
+      },
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT B",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "9b739d03-20a4-4317-bdb2-752f2370c9e7"
+      },
+      {
+        "gymCode": "DSN",
+        "wallName": "ORBIT C",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "fbf63f6e-6865-4618-801b-659547dd7404"
+      }
+    ],
+    "HIL": [
+      {
+        "gymCode": "HIL",
+        "wallName": "ORBIT A",
+        "targetCount": 25,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "a092b09a-48e9-4b81-a4e4-0df44eec89ce"
+      },
+      {
+        "gymCode": "HIL",
+        "wallName": "ORBIT B",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "a9f30a24-788f-4f91-a0ea-1b57a9435eeb"
+      },
+      {
+        "gymCode": "HIL",
+        "wallName": "ORBIT C",
+        "targetCount": 12,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "837bfad5-42df-424b-8c36-c1fb5ebaf30f"
+      },
+      {
+        "gymCode": "HIL",
+        "wallName": "ORBIT D",
+        "targetCount": 70,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "2321b166-9723-4c7e-ad1a-664ac2403158"
+      },
+      {
+        "gymCode": "HIL",
+        "wallName": "KIDS WALL",
+        "targetCount": 1,
+        "targetClimbsPerSetter": 0.5,
+        "type": "boulder",
+        "orbitId": "efc4ebd2-c9e2-4498-8d25-d3b7474d4efb"
+      }
+    ],
+    "BDR": [
+      {
+        "gymCode": "BDR",
+        "wallName": "ORBIT A",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f12914ec-3e23-4d78-a9ac-17987184866e"
+      },
+      {
+        "gymCode": "BDR",
+        "wallName": "ORBIT B",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f0ed0178-3083-4c33-9762-346e4b6c75e8"
+      },
+      {
+        "gymCode": "BDR",
+        "wallName": "NORTH HORSESHOE",
+        "targetCount": 26,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "9be1a01a-816a-45ae-8654-703f0078a9ea"
+      },
+      {
+        "gymCode": "BDR",
+        "wallName": "NORTH WALL",
+        "targetCount": 20,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "2f6ba029-e10f-4f02-ab9c-305858c3e8b9"
+      },
+      {
+        "gymCode": "BDR",
+        "wallName": "SOUTH HORSESHOE",
+        "targetCount": 38,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "d6b3f7fb-2d73-4a88-befe-10fd0a65af08"
+      },
+      {
+        "gymCode": "BDR",
+        "wallName": "GREY WALL",
+        "targetCount": 36,
+        "targetClimbsPerSetter": 1.2,
+        "type": "rope",
+        "orbitId": "0b35a886-487b-400f-ae72-b8e158337154"
+      }
+    ],
+    "DEN": [
+      {
+        "gymCode": "DEN",
+        "wallName": "ORBIT A",
+        "targetCount": 70,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "7c329ba0-eef8-4c2d-b319-053540ef52d1"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "ORBIT B",
+        "targetCount": 70,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "00ab407b-7463-4ec5-8152-cc6139ff9588"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "INSTRUCTION AND PARTY",
+        "targetCount": 70,
+        "targetClimbsPerSetter": 4,
+        "type": "rope",
+        "orbitId": "96bf8706-a329-4399-b596-2d9c8093a40e"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "SICKLE WALL",
+        "targetCount": 32,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "3480fe15-0990-4014-954e-1cfa6ec9bd1c"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "THE ARCH (Vert)",
+        "targetCount": 10,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "9037008f-a9b0-4f3a-9859-23ff3e4adcf2"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "BACK VERT WALLS",
+        "targetCount": 25,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "95da9183-87cd-484f-b291-2e7a17c20a6f"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "CATWALK",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "7559d17e-e973-4e56-b40f-526d05c3825f"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "FRONT VERT WALLS",
+        "targetCount": 25,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "59af30bf-0cf8-45f7-9afd-614d71e62c3c"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "LEAD CAVE (Steep)",
+        "targetCount": 16,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "f160c0f2-2ca9-4308-80e1-79763d0077a2"
+      },
+      {
+        "gymCode": "DEN",
+        "wallName": "THE ARCH (Steep)",
+        "targetCount": 14,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "5ad477ea-70a3-4edf-b01d-40ba754f0f64"
+      }
+    ],
+    "RNO": [
+      {
+        "gymCode": "RNO",
+        "wallName": "ORBIT A",
+        "targetCount": 100,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "c60bb798-cd7d-4190-9822-6f4ff9a5e3c8"
+      },
+      {
+        "gymCode": "RNO",
+        "wallName": "ORBIT B",
+        "targetCount": 100,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "bfb35f15-574d-47ce-b6b5-b0a9485f083a"
+      },
+      {
+        "gymCode": "RNO",
+        "wallName": "TRAVERSE WALL",
+        "targetCount": 8,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "ae2c6bd3-9ca7-4623-ae9b-4564c53be389"
+      }
+    ],
+    "BKR": [
+      {
+        "gymCode": "BKR",
+        "wallName": "Wave & Cave",
+        "targetCount": 60,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "ae39663b-c1a3-4221-b747-49a679230d20"
+      },
+      {
+        "gymCode": "BKR",
+        "wallName": "TEACHING AREA",
+        "targetCount": 6,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f10ebc82-a70b-4f8e-8531-4018a9666555"
+      },
+      {
+        "gymCode": "BKR",
+        "wallName": "World Cup Boulders",
+        "targetCount": 63,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "ef311c8b-2216-45b1-9a2a-421cd9cc7739"
+      },
+      {
+        "gymCode": "BKR",
+        "wallName": "SOUTH HORSESHOE",
+        "targetCount": 38,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "143122fd-0999-4bfb-bc1b-578f6ab6c208"
+      },
+      {
+        "gymCode": "BKR",
+        "wallName": "SOUTH GREY AND CRACK",
+        "targetCount": 25,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "27a0f293-cbac-415e-83c5-a30531b88dd1"
+      },
+      {
+        "gymCode": "BKR",
+        "wallName": "GREY WALL",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "3642eda8-928f-46c7-8ef5-0e4ac2685684"
+      },
+      {
+        "gymCode": "BKR",
+        "wallName": "NORTH HORSESHOE",
+        "targetCount": 38,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "b7f6ff93-7ebd-4cdc-a806-66b734f32a35"
+      }
+    ],
+    "ENG": [
+      {
+        "gymCode": "ENG",
+        "wallName": "ORBIT A",
+        "targetCount": 87,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "35313c48-0c53-4801-8444-bbfb5f5746e9"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "ORBIT B",
+        "targetCount": 87,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "fc4beece-bb6d-4448-baef-5ded9226e0df"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "ORBIT C",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "2d91dfcc-50d9-4987-84ed-fd36491f0c1a"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "INSTRUCTION + PARTY",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "7cece933-66ff-4182-92d6-a6fb30221f64"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "BACK WALL",
+        "targetCount": 38,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "fa214eb4-74e4-4177-ab09-04660c6bd180"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "COLUMN",
+        "targetCount": 38,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "f26be3b9-39da-4b5e-a77c-cd914a3a3bd6"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "CUBE + CRYSTAL",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "2f741210-bd66-498e-9927-ba5770f9af20"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "HEART + STAR WALL",
+        "targetCount": 44,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "5d1b294f-479e-45ba-841f-a01e5d3c0acc"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "MAIN LEAD WALL",
+        "targetCount": 28,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "7881e8a2-6f67-4b11-afe9-464b6049fdeb"
+      },
+      {
+        "gymCode": "ENG",
+        "wallName": "PUMP WALL",
+        "targetCount": 21,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "459e2c24-9f23-437d-bfd0-47c43510650b"
+      }
+    ],
+    "SNY": [
+      {
+        "gymCode": "SNY",
+        "wallName": "SHADOWLAND",
+        "targetCount": 25,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "3a06d29e-d90e-48bf-9846-1067b5ce9570"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "SLABTOWN",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "a3ba2429-786e-446e-900e-00bda541da3b"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "THE BEACH",
+        "targetCount": 10,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "8bf3221f-258c-450a-a9e7-4e2f16f81a98"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "THE BEACH",
+        "targetCount": 9,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "b8f6ec3f-a2e1-4323-8070-8ee6ffd8db66"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "THE PUMP FACTORY",
+        "targetCount": 18,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "b45d22a7-65ae-46d1-bf1e-0ff45092faf8"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "THE PUMP FACTORY",
+        "targetCount": 18,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "0601edf5-7df0-438f-a7d7-74acb3845c25"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "THE GROTTO",
+        "targetCount": 24,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "9af8bca7-58d0-47f1-96a0-53a8d94167b6"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "ORBIT A",
+        "targetCount": 64,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "617c6737-26ae-4136-b09c-402c64735ee3"
+      },
+      {
+        "gymCode": "SNY",
+        "wallName": "ORBIT B",
+        "targetCount": 64,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "1b1fae47-08f8-4797-b3e4-f857183d84ad"
+      }
+    ],
+    "SCA": [
+      {
+        "gymCode": "SCA",
+        "wallName": "ORBIT A",
+        "targetCount": 72,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "89d21f7e-add0-49a6-9a33-78976c5bd809"
+      },
+      {
+        "gymCode": "SCA",
+        "wallName": "ORBIT C",
+        "targetCount": 72,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "4c0c33ff-7476-41cd-ba4d-725183688180"
+      },
+      {
+        "gymCode": "SCA",
+        "wallName": "ORBIT B",
+        "targetCount": 54,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f11ef227-b625-4080-be4b-292a55293047"
+      }
+    ],
+    "BEL": [
+      {
+        "gymCode": "BEL",
+        "wallName": "FOAM WALL 1",
+        "targetCount": 28,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "2240f681-cae5-4741-a0f6-ffff5a28b6c3"
+      },
+      {
+        "gymCode": "BEL",
+        "wallName": "BACKSIDE",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "1d81f2fb-7cbe-4a21-b6a7-cc4854acd809"
+      },
+      {
+        "gymCode": "BEL",
+        "wallName": "FOAM WALL 2",
+        "targetCount": 24,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "ed412630-f2c8-446d-8e76-c5ba7a8c7527"
+      },
+      {
+        "gymCode": "BEL",
+        "wallName": "FRONTSIDE",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "76fedd57-f36c-4d56-8619-bcb51ab0dccd"
+      },
+      {
+        "gymCode": "BEL",
+        "wallName": "LEAD CAVE",
+        "targetCount": 22,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "1012f2a7-ea77-44f2-91c3-ab56024abe9e"
+      },
+      {
+        "gymCode": "BEL",
+        "wallName": "ORBIT A",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "6ea55584-ea3e-4271-9156-ad3b3850549e"
+      },
+      {
+        "gymCode": "BEL",
+        "wallName": "ORBIT B",
+        "targetCount": 46,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "70607a7e-2a23-4939-849d-59d8b2247867"
+      }
+    ],
+    "PDX": [
+      {
+        "gymCode": "PDX",
+        "wallName": "LEARNING CENTER",
+        "targetCount": 20,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "0b045152-a0e6-4591-9104-8c7ee9ab4d29"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "ADJ. CRACKS & SHARK FIN",
+        "targetCount": 36,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "06a263c7-d42a-4288-83d6-2e28b693299c"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "CRYSTAL",
+        "targetCount": 16,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "5cae7ab3-5ff0-47bc-a115-42681188cc95"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "CURBSIDE CHAMBER",
+        "targetCount": 32,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "0cd0dea4-1374-4973-b056-e97ede4564d5"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "GREEN CHAMBER",
+        "targetCount": 35,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "383c42c0-ddb8-483c-85ea-0a5b91586c2e"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "ICEBERG",
+        "targetCount": 22,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "077472fc-f742-4e26-92bc-804d69a1b6b5"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "ORBIT A",
+        "targetCount": 72,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "6bd9037f-c0b4-46a8-bfcb-1f77ba69ccb4"
+      },
+      {
+        "gymCode": "PDX",
+        "wallName": "ORBIT B",
+        "targetCount": 64,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "ff6f2248-3ee3-4520-a30e-ad56f05b0127"
+      }
+    ],
+    "SFO": [
+      {
+        "gymCode": "SFO",
+        "wallName": "SOUTH SIDE",
+        "targetCount": 39,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "b7de6142-67b7-4079-a21f-a3b1f06cd498"
+      },
+      {
+        "gymCode": "SFO",
+        "wallName": "THE ISLAND",
+        "targetCount": 38,
+        "targetClimbsPerSetter": 1.5,
+        "type": "rope",
+        "orbitId": "5baeb0ca-ab36-42b1-926b-28f708fbc8dc"
+      },
+      {
+        "gymCode": "SFO",
+        "wallName": "CENTER CHAMBER",
+        "targetCount": 30,
+        "targetClimbsPerSetter": 1,
+        "type": "rope",
+        "orbitId": "75c4d42c-d67a-401e-8eac-7fd9c3915df2"
+      },
+      {
+        "gymCode": "SFO",
+        "wallName": "CRISSY FIELD WALL",
+        "targetCount": 27,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "8096ea86-2a2d-42c0-8229-15e1608c2978"
+      },
+      {
+        "gymCode": "SFO",
+        "wallName": "WELCOME WALL",
+        "targetCount": 34,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "46350133-77f6-420b-baec-96ba1d54b979"
+      },
+      {
+        "gymCode": "SFO",
+        "wallName": "ORBIT A",
+        "targetCount": 56,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "cbed5810-9930-4b14-aab8-7bb1d0db62d9"
+      },
+      {
+        "gymCode": "SFO",
+        "wallName": "ORBIT B",
+        "targetCount": 56,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "6f0a944b-bed2-4c3f-ad70-696b19a443e5"
+      }
+    ],
+    "FTV": [
+      {
+        "gymCode": "FTV",
+        "wallName": "ORBIT A",
+        "targetCount": 48,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "169088cb-4f77-4606-907d-420847eb768d"
+      },
+      {
+        "gymCode": "FTV",
+        "wallName": "ORBIT B",
+        "targetCount": 48,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "eb30f4c5-9be7-434a-bdd8-fbc9c6c2d325"
+      },
+      {
+        "gymCode": "FTV",
+        "wallName": "ORBIT C",
+        "targetCount": 48,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "313858f6-6717-495d-958b-08cba4558bb8"
+      }
+    ],
+    "PLN": [
+      {
+        "gymCode": "PLN",
+        "wallName": "ORBIT T",
+        "targetCount": 35,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "baf59978-2c58-48b1-bd15-c4614659c96a"
+      },
+      {
+        "gymCode": "PLN",
+        "wallName": "ORBIT M",
+        "targetCount": 40,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "8f067156-b4fb-4e99-b0c7-9cc803e4a530"
+      },
+      {
+        "gymCode": "PLN",
+        "wallName": "ORBIT C",
+        "targetCount": 70,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "ed2b2f33-12a5-4051-b9fb-f8f29c3f6714"
+      },
+      {
+        "gymCode": "PLN",
+        "wallName": "ORBIT BB",
+        "targetCount": 55,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "8093d451-92ea-45c0-a1fd-5f167f514e88"
+      },
+      {
+        "gymCode": "PLN",
+        "wallName": "ORBIT SB",
+        "targetCount": 45,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f2e4ca8a-e071-434a-843e-3c31f82920f1"
+      },
+      {
+        "gymCode": "PLN",
+        "wallName": "ORBIT K",
+        "targetCount": 20,
+        "targetClimbsPerSetter": 2.5,
+        "type": "rope",
+        "orbitId": "ad7624b6-1723-4e74-a520-99003d8fffa5"
+      }
+    ],
+    "CEN": [
+      {
+        "gymCode": "CEN",
+        "wallName": "ORBIT A",
+        "targetCount": 61,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "51f729c9-9bc1-4863-9b10-2c8c5a15a524"
+      },
+      {
+        "gymCode": "CEN",
+        "wallName": "ORBIT B",
+        "targetCount": 51,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "90caaf32-2c27-4949-9712-434b3f520c42"
+      },
+      {
+        "gymCode": "CEN",
+        "wallName": "ORBIT C",
+        "targetCount": 25,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "35b9e9a3-5f4d-414b-baf2-80251b6605c9"
+      },
+      {
+        "gymCode": "CEN",
+        "wallName": "All Ropes",
+        "targetCount": 109,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "3d552f22-d8d5-403f-8028-0e62daef636c"
+      }
+    ],
+    "HLM": [
+      {
+        "gymCode": "HLM",
+        "wallName": "Front Room",
+        "targetCount": 60,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "b8cf9239-794d-409c-99a1-ee7b523ab4c7"
+      },
+      {
+        "gymCode": "HLM",
+        "wallName": "Back Room",
+        "targetCount": 80,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "f26c7b59-1c51-47e2-bfed-2c2a1574f82b"
+      }
+    ],
+    "LIC": [
+      {
+        "gymCode": "LIC",
+        "wallName": "Mezzanine",
+        "targetCount": 14,
+        "targetClimbsPerSetter": 2.33,
+        "type": "boulder",
+        "orbitId": "1c28cfc5-2256-41f0-a825-35b1eac10388"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "Alcove & 45",
+        "targetCount": 28,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "e6585161-c424-42e2-8f10-7fc270e1c85b"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "Buddah",
+        "targetCount": 22,
+        "targetClimbsPerSetter": 3,
+        "type": "boulder",
+        "orbitId": "4d0260c3-b5b3-424e-87bb-f2da6504cab2"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "3D",
+        "targetCount": 18,
+        "targetClimbsPerSetter": 3.5,
+        "type": "boulder",
+        "orbitId": "93e8ff00-7fb9-4963-b5b3-3ea03d075b54"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "Bulge & Prow",
+        "targetCount": 27,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "ba241f56-9b1f-4d6f-a3e5-bc743d20c460"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "Slab",
+        "targetCount": 21,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "792bd5ee-f869-4f37-aaa3-ea16be98d603"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "Fox Room",
+        "targetCount": 54,
+        "targetClimbsPerSetter": 2.5,
+        "type": "rope",
+        "orbitId": "adb5e9a6-2054-4919-90c9-9415a5393a77"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "High Bay",
+        "targetCount": 58,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "7c28ede7-20a1-4a26-ad8f-0b46fe0e8dc7"
+      },
+      {
+        "gymCode": "LIC",
+        "wallName": "Low Bay",
+        "targetCount": 118,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "a8827d60-7016-478c-86d4-9b4a8fcfb8f0"
+      }
+    ],
+    "GOW": [
+      {
+        "gymCode": "GOW",
+        "wallName": "First Floor",
+        "targetCount": 61,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "23dc8121-400f-4f79-849b-3f3c301484d4"
+      },
+      {
+        "gymCode": "GOW",
+        "wallName": "Second Floor",
+        "targetCount": 108,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "c1e1b141-f291-4c28-95fb-2ce2d2eefe1d"
+      },
+      {
+        "gymCode": "GOW",
+        "wallName": "Main TR",
+        "targetCount": 100,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "8173c295-bc6a-485d-bb1c-25636c641881"
+      },
+      {
+        "gymCode": "GOW",
+        "wallName": "Lead Cave",
+        "targetCount": 16,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "162a144b-bfb8-4373-8183-b6203ef48ce8"
+      },
+      {
+        "gymCode": "GOW",
+        "wallName": "Autobealys",
+        "targetCount": 16,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "64f989c9-5039-4d20-82fb-b2988bef21f5"
+      }
+    ],
+    "VAL": [
+      {
+        "gymCode": "VAL",
+        "wallName": "All Boulders",
+        "targetCount": 75,
+        "targetClimbsPerSetter": 5,
+        "type": "boulder",
+        "orbitId": "6877fb2d-b7df-4f1d-87a3-dfd6c88b93cf"
+      },
+      {
+        "gymCode": "VAL",
+        "wallName": "Lead Wall",
+        "targetCount": 31,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "18b00c6a-c8bd-4b29-994c-b2a426c3c72b"
+      },
+      {
+        "gymCode": "VAL",
+        "wallName": "Autobelay & Back Walls",
+        "targetCount": 62,
+        "targetClimbsPerSetter": 2.5,
+        "type": "rope",
+        "orbitId": "73fbe921-aee1-492a-8e3b-d2f5649aa5f4"
+      }
+    ],
+    "CAL": [
+      {
+        "gymCode": "CAL",
+        "wallName": "Front Room",
+        "targetCount": 48,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "17da93da-9aa8-431c-bead-7875c13fc03d"
+      },
+      {
+        "gymCode": "CAL",
+        "wallName": "Back Room",
+        "targetCount": 112,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "cf024270-6fbe-4eab-96fb-5293e1e9dd1b"
+      },
+      {
+        "gymCode": "CAL",
+        "wallName": "Main Rope Chamber",
+        "targetCount": 101,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "58de6f50-885f-4fea-b515-e6ca35355752"
+      },
+      {
+        "gymCode": "CAL",
+        "wallName": "Autobelays",
+        "targetCount": 16,
+        "targetClimbsPerSetter": 3,
+        "type": "rope",
+        "orbitId": "e29c9c38-a232-4253-a099-c76a4d81c9f2"
+      }
+    ],
+    "FSH": [
+      {
+        "gymCode": "FSH",
+        "wallName": "A Orbit",
+        "targetCount": 41,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "1403ee99-efaa-462f-a29e-bee32c05cc80"
+      },
+      {
+        "gymCode": "FSH",
+        "wallName": "B Orbit",
+        "targetCount": 65,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "39950819-a593-46e0-a4b4-3a6ca3aa914c"
+      },
+      {
+        "gymCode": "FSH",
+        "wallName": "Autobealys",
+        "targetCount": 8,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "03aceaca-d65c-423f-b4ff-f7d76aeaf727"
+      },
+      {
+        "gymCode": "FSH",
+        "wallName": "All Rope Terrain",
+        "targetCount": 84,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "5b778714-b326-4f96-9329-5bbc7af225aa"
+      }
+    ],
+    "MTV": [
+      {
+        "gymCode": "MTV",
+        "wallName": "A Orbit",
+        "targetCount": 56,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "ca90a93b-62b9-487d-b6ec-8a712baad4b7"
+      },
+      {
+        "gymCode": "MTV",
+        "wallName": "B Orbit",
+        "targetCount": 92,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "1569d00c-0469-4420-b73f-c762cefa7937"
+      }
+    ],
+    "DTN": [
+      {
+        "gymCode": "DTN",
+        "wallName": "All Boulders",
+        "targetCount": 108,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "487a7bb1-27dc-43de-83b3-b459ec90a5a4"
+      }
+    ],
+    "FTW": [
+      {
+        "gymCode": "FTW",
+        "wallName": "All Boulders",
+        "targetCount": 105,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "47fda4e7-fe60-4ad3-a55a-46e5be6d2801"
+      }
+    ],
+    "GVN": [
+      {
+        "gymCode": "GVN",
+        "wallName": "All Boulders",
+        "targetCount": 105,
+        "targetClimbsPerSetter": 4,
+        "type": "boulder",
+        "orbitId": "19debed3-562e-49dc-ab67-1a182397e639"
+      },
+      {
+        "gymCode": "GVN",
+        "wallName": "All Routes",
+        "targetCount": 105,
+        "targetClimbsPerSetter": 2,
+        "type": "rope",
+        "orbitId": "ba91ca20-a3d0-4375-a9fe-45b41a5f7aa8"
+      }
+    ]
+  }
+}
