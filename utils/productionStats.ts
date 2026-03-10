@@ -153,3 +153,33 @@ export const aggregateProductionData = (climbs: Climb[]) => {
         boulders
     };
 };
+
+export const calculateStandardDeviation = (array: number[]) => {
+    if (array.length <= 1) return 0;
+    const n = array.length;
+    const mean = array.reduce((a, b) => a + b) / n;
+    // Using sample variance (n-1)
+    const variance = array.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (n - 1);
+    return Math.sqrt(variance);
+};
+
+export const getWeeklyCounts = (climbs: Climb[], rangeStart: Date, rangeEnd: Date): number[] => {
+    if (climbs.length === 0) return [];
+
+    // Create an array to hold counts for each 7-day bucket
+    const durationDays = (rangeEnd.getTime() - rangeStart.getTime()) / (1000 * 60 * 60 * 24);
+    const numWeeks = Math.max(1, Math.ceil(durationDays / 7));
+    const weeklyCounts = new Array(numWeeks).fill(0);
+
+    climbs.forEach(c => {
+        const d = new Date(c.dateSet);
+        const dayDiff = Math.floor((d.getTime() - rangeStart.getTime()) / (1000 * 60 * 60 * 24));
+        const weekIndex = Math.floor(Math.max(0, dayDiff) / 7);
+        if (weekIndex < numWeeks) {
+            weeklyCounts[weekIndex]++;
+        }
+    });
+
+    return weeklyCounts;
+};
+

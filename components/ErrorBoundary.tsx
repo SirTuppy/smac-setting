@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     render() {
-        const { fallback, children } = this.props;
+        const { fallback, children } = (this as any).props as Props;
 
         if (this.state.hasError) {
             return fallback || (

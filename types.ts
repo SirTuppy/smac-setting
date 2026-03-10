@@ -36,6 +36,7 @@ export interface ScheduleOverride {
   dataType: 'routes' | 'boulders';
   field: 'location' | 'climbType' | 'setterCount';
   value: string;
+  shiftId?: string;
 }
 
 export interface SetterStats {
@@ -170,7 +171,9 @@ export interface OrbitTarget {
   payPeriodHoursGoal: number;
   hoursPerClimbGoal: number;
   gymHoursRatioTotal?: number; // % of total gym labor
+  gymHoursRatioPerDiscipline?: number; // % of discipline labor
   rpsWeighted?: number; // RPS * ratio
+  hoursPerClimbWeighted?: number;
 }
 
 /**
@@ -228,6 +231,8 @@ export interface GymMeta {
   code: string;
   name: string;
   region: string;
+  tier?: string;
+  facilityCode?: string;
   searchKeywords: string[];
   displayMode: 'separate' | 'merged';
   weekStartDay: 'Monday' | 'Sunday';

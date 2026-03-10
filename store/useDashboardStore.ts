@@ -16,6 +16,8 @@ import {
 import { GYMS } from '../constants/gyms';
 import { RangeOption } from '../components/UnifiedHeader';
 import { getGymCode } from '../constants/mapTemplates';
+// @ts-ignore
+import defaultNationalTargets from '../public/data/master_national_targets.json';
 
 export const DEFAULT_EMAIL_SETTINGS: EmailSettings = {
     to: '',
@@ -84,6 +86,9 @@ interface DashboardState {
     orbitTargets: Record<string, OrbitTarget[]>; // gymCode -> Targets
     financialRecords: FinancialRecord[];
     activeOrbitGym: string | null;
+    execRegionFilter: string; // 'All' or specific region
+    execTierFilter: string; // 'All' or specific tier
+    execPayPeriodFilter: string; // 'All' or specific pay period end date
 
     // Simulator State
     simulatorSetters: Record<string, SimulatorSetter>; // Key: setterName
@@ -142,6 +147,9 @@ interface DashboardState {
     setFinancialRecords: (records: FinancialRecord[]) => void;
     clearFinancialData: () => void;
     setActiveOrbitGym: (gymCode: string | null) => void;
+    setExecRegionFilter: (region: string) => void;
+    setExecTierFilter: (tier: string) => void;
+    setExecPayPeriodFilter: (period: string) => void;
 
     // Simulator Actions
     setSimulatorSetter: (setter: SimulatorSetter) => void;
@@ -157,6 +165,43 @@ const getInitialDateRange = () => {
     const start = new Date();
     start.setDate(start.getDate() - 14);
     return { start, end };
+};
+
+const recalcGymOrbits = (orbits: OrbitTarget[], gymWallTargets: Record<string, WallTarget>): OrbitTarget[] => {
+    // Pass 1: Base calculations
+    const updatedOrbits = orbits.map(o => {
+        const walls = o.assignedWalls || [];
+        const vol = walls.reduce((sum, w) => sum + (gymWallTargets[w]?.targetCount || 0), 0);
+
+        const updated = { ...o, totalClimbs: vol };
+        updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
+        updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
+        updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
+        updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
+        return updated;
+    });
+
+    // Pass 2: Aggregations for Ratios
+    const totalHours = updatedOrbits.reduce((sum, o) => sum + o.payPeriodHoursGoal, 0);
+    const hoursByDiscipline: Record<string, number> = {};
+    updatedOrbits.forEach(o => {
+        hoursByDiscipline[o.discipline] = (hoursByDiscipline[o.discipline] || 0) + o.payPeriodHoursGoal;
+    });
+
+    // Pass 3: Ratios
+    return updatedOrbits.map(o => {
+        const ratioTotal = totalHours > 0 ? (o.payPeriodHoursGoal / totalHours) : 0;
+        const disciplineHours = hoursByDiscipline[o.discipline] || 0;
+        const ratioDiscipline = disciplineHours > 0 ? (o.payPeriodHoursGoal / disciplineHours) : 0;
+
+        return {
+            ...o,
+            gymHoursRatioTotal: Number(ratioTotal.toFixed(2)),
+            gymHoursRatioPerDiscipline: Number(ratioDiscipline.toFixed(2)),
+            rpsWeighted: Number((o.rps * ratioTotal).toFixed(2)),
+            hoursPerClimbWeighted: Number((o.hoursPerClimbGoal * ratioTotal).toFixed(2))
+        };
+    });
 };
 
 export const useDashboardStore = create<DashboardState>((set, get) => ({
@@ -216,20 +261,33 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     comparisonMode: 'none',
     wallTargets: (() => {
         const saved = localStorage.getItem('wall_targets');
-        return saved ? JSON.parse(saved) : {};
+        if (saved) return JSON.parse(saved);
+
+        // Transform the master payload's flat array into the expected nested Record structure
+        const defaultWalls: Record<string, Record<string, WallTarget>> = {};
+        for (const [gym, targets] of Object.entries(defaultNationalTargets.wallTargets)) {
+            defaultWalls[gym] = {};
+            (targets as any[]).forEach(t => {
+                defaultWalls[gym][t.wallName] = t;
+            });
+        }
+        return defaultWalls;
     })(),
     remoteTargetUrl: localStorage.getItem('remote_target_url'),
 
     // Executive / Financial Initial State
     orbitTargets: (() => {
         const saved = localStorage.getItem('orbit_targets');
-        return saved ? JSON.parse(saved) : {};
+        return saved ? JSON.parse(saved) : defaultNationalTargets.orbitTargets;
     })(),
     financialRecords: (() => {
         const saved = localStorage.getItem('financial_records');
         return saved ? JSON.parse(saved) : [];
     })(),
     activeOrbitGym: localStorage.getItem('active_orbit_gym'),
+    execRegionFilter: 'All',
+    execTierFilter: 'All',
+    execPayPeriodFilter: 'All',
 
     // Simulator Initial State
     simulatorSetters: (() => {
@@ -387,7 +445,8 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     setUnrecognizedWalls: (unrecognizedWalls) => set({ unrecognizedWalls }),
 
     setScheduleOverride: (override) => {
-        const key = `${override.gymCode}-${override.dateKey}-${override.dataType}-${override.field}`;
+        const shiftPart = override.shiftId ? `-${override.shiftId}` : '';
+        const key = `${override.gymCode}-${override.dateKey}-${override.dataType}-${override.field}${shiftPart}`;
         const newOverrides = { ...get().scheduleOverrides, [key]: override };
         localStorage.setItem('schedule_overrides', JSON.stringify(newOverrides));
         set({ scheduleOverrides: newOverrides });
@@ -427,18 +486,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
         // Atomic recalculation of any orbits that contain this wall
         const currentOrbits = get().orbitTargets[gymCode] || [];
-        const updatedOrbits = currentOrbits.map(o => {
-            if (o.assignedWalls?.includes(wallName)) {
-                const vol = o.assignedWalls.reduce((sum, w) => sum + (gymTargets[w]?.targetCount || 0), 0);
-                const updated = { ...o, totalClimbs: vol };
-                updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
-                updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
-                updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
-                updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
-                return updated;
-            }
-            return o;
-        });
+        const updatedOrbits = recalcGymOrbits(currentOrbits, gymTargets);
 
         localStorage.setItem('wall_targets', JSON.stringify(newWallTargets));
         localStorage.setItem('orbit_targets', JSON.stringify({ ...get().orbitTargets, [gymCode]: updatedOrbits }));
@@ -569,22 +617,11 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
             } else {
                 walls = walls.filter(w => w !== wallName);
             }
-
-            // Recalculate metrics for any orbit that changed
-            if (o.id === orbitId || o.assignedWalls?.includes(wallName)) {
-                const gymWallTargets = wallTargets[gymCode] || {};
-                const vol = walls.reduce((sum, w) => sum + (gymWallTargets[w]?.targetCount || 0), 0);
-                const updated = { ...o, assignedWalls: walls, totalClimbs: vol };
-
-                updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
-                updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
-                updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
-                updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
-                return updated;
-            }
-            return o;
+            return { ...o, assignedWalls: walls };
         });
-        setOrbitTargets(gymCode, updatedOrbits);
+
+        const finalOrbits = recalcGymOrbits(updatedOrbits, wallTargets[gymCode] || {});
+        setOrbitTargets(gymCode, finalOrbits);
 
         // 2. Update Wall
         setWallTarget(gymCode, wallName, { orbitId });
@@ -622,19 +659,13 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
 
         const updatedOrbits = orbits.map(o => {
             if (o.id === orbitId) {
-                const updated = { ...o, ...updates };
-                const vol = (updated.assignedWalls || []).reduce((sum, w) => sum + (gymWallTargets[w]?.targetCount || 0), 0);
-                updated.totalClimbs = vol;
-                updated.weeklyProductionGoal = Number((updated.totalClimbs / updated.rotationTarget).toFixed(1));
-                updated.weeklyShiftGoal = Number((updated.weeklyProductionGoal / updated.rps).toFixed(1));
-                updated.payPeriodHoursGoal = Number((updated.weeklyShiftGoal * updated.shiftDuration * 2).toFixed(1));
-                updated.hoursPerClimbGoal = Number((updated.shiftDuration / updated.rps).toFixed(1));
-                return updated;
+                return { ...o, ...updates };
             }
             return o;
         });
 
-        setOrbitTargets(gymCode, updatedOrbits);
+        const finalOrbits = recalcGymOrbits(updatedOrbits, gymWallTargets);
+        setOrbitTargets(gymCode, finalOrbits);
     },
     setWallCharacteristic: (gymCode, wallName, angle) => {
         get().setWallTarget(gymCode, wallName, { angle });
@@ -657,6 +688,9 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         else localStorage.removeItem('active_orbit_gym');
         set({ activeOrbitGym: gymCode });
     },
+    setExecRegionFilter: (execRegionFilter: string) => set({ execRegionFilter }),
+    setExecTierFilter: (execTierFilter: string) => set({ execTierFilter }),
+    setExecPayPeriodFilter: (execPayPeriodFilter: string) => set({ execPayPeriodFilter }),
 
     // Simulator Actions
     setSimulatorSetter: (setter) => {

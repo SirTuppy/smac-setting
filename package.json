@@ -14,15 +14,18 @@
     "html-to-image": "^1.11.13",
     "jspdf": "^4.0.0",
     "lucide-react": "^0.562.0",
+    "papaparse": "^5.5.3",
     "pdf-to-png-converter": "^3.11.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "recharts": "^3.7.0",
     "sharp": "^0.34.5",
+    "xlsx": "^0.18.5",
     "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/papaparse": "^5.5.2",
     "@vitejs/plugin-react": "^5.0.0",
     "gh-pages": "^6.3.0",
     "typescript": "~5.8.2",

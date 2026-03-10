@@ -2,6 +2,7 @@ import { Climb, GymSchedule, ScheduleEntry } from '../types';
 import { normalizeGrade, getGradeScore } from './gradeUtils';
 import { GYM_WALLS, TEMPLATE_COORDS, getGymCode } from '../constants/mapTemplates';
 import { SKIP_TITLES } from '../constants/gyms';
+import Papa from 'papaparse';
 
 /**
  * Strips the 'GMT' and timezone suffix from KAYA date strings to ensure
@@ -19,49 +20,61 @@ const cleanKayaDate = (dateStr: string): Date => {
 };
 
 export const parseKayaCSV = (csvText: string, gymName?: string): Climb[] => {
-  const lines = csvText.trim().split('\n');
-  if (lines.length < 2) return [];
+  const parsed = Papa.parse<any>(csvText.trim(), {
+    header: true,
+    skipEmptyLines: true,
+    transformHeader: (h) => h.trim().toLowerCase().replace(/_/g, '').replace(/ /g, '')
+  });
 
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/_/g, '').replace(/ /g, ''));
-  const getIndex = (possibleKeys: string[]) => headers.findIndex(h => possibleKeys.some(k => h === k.toLowerCase()));
+  if (parsed.errors.length > 0) {
+    console.warn("CSV Parsing Issues:", parsed.errors);
+  }
 
-  const nameIdx = getIndex(['name', 'climbname']);
-  const gradeIdx = getIndex(['grade', 'difficulty']);
-  const setterIdx = getIndex(['setter', 'setby']);
-  const wallIdx = getIndex(['wall', 'location']);
-  const dateIdx = getIndex(['dateset', 'date', 'createdat']);
-  const colorIdx = getIndex(['color', 'holdcolor']);
-  const typeIdx = getIndex(['climbtype', 'type']);
-  const gymIdx = getIndex(['gym', 'location', 'gymname']);
+  const data = parsed.data;
+  if (data.length === 0) return [];
 
-  if (nameIdx === -1 || gradeIdx === -1 || setterIdx === -1) {
+  // Find the actual keys used in the objects based on our transformed headers
+  const getIndex = (possibleKeys: string[]) => Object.keys(data[0]).find(h => possibleKeys.some(k => h === k.toLowerCase()));
+
+  const nameKey = getIndex(['name', 'climbname']);
+  const gradeKey = getIndex(['grade', 'difficulty', 'gradename']);
+  const setterKey = getIndex(['setter', 'setby', 'setters']);
+  const wallKey = getIndex(['wall', 'location', 'wallname']);
+  const dateKey = getIndex(['dateset', 'date', 'createdat']);
+  const colorKey = getIndex(['color', 'holdcolor']);
+  const typeKey = getIndex(['climbtype', 'type']);
+  const gymKey = getIndex(['gym', 'location', 'gymname']);
+
+  if (!nameKey || !gradeKey || !setterKey) {
     throw new Error("Invalid CSV format. Missing required columns (Name, Grade, Setter).");
   }
 
   const climbs: Climb[] = [];
-  for (let i = 1; i < lines.length; i++) {
-    const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.trim().replace(/^"|"$/g, ''));
-    if (row.length < 3) continue;
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
 
-    const rawGrade = row[gradeIdx] || 'Unrated';
+    const rawGrade = row[gradeKey] || 'Unrated';
     const normalizedGrade = normalizeGrade(rawGrade);
 
     // Resolve gym: check CSV column first, then fallback to argument
-    const rawGymName = gymIdx !== -1 ? (row[gymIdx] || gymName) : gymName;
+    const rawGymName = gymKey ? (row[gymKey] || gymName) : gymName;
     const resolvedGymCode = getGymCode(rawGymName || '') || rawGymName;
+
+    const rawType = row[typeKey] || '';
+    const isRoute = rawType.toLowerCase().includes('route') || rawGrade.startsWith('5.');
 
     climbs.push({
       id: `climb-${resolvedGymCode}-${i}-${Math.random().toString(36).substr(2, 5)}`,
-      name: row[nameIdx] || 'Untitled',
+      name: row[nameKey] || 'Untitled',
       grade: rawGrade,
-      setter: (row[setterIdx] || 'N/A').trim(),
-      wall: row[wallIdx] || 'General',
-      dateSet: cleanKayaDate(row[dateIdx]),
-      color: colorIdx !== -1 ? row[colorIdx] : undefined,
-      climbType: row[typeIdx],
+      setter: (row[setterKey] || 'N/A').trim(),
+      wall: row[wallKey] || 'General',
+      dateSet: cleanKayaDate(row[dateKey]),
+      color: colorKey ? row[colorKey] : undefined,
+      climbType: rawType,
       gym: rawGymName,
       gymCode: resolvedGymCode,
-      isRoute: (row[typeIdx] || '').toLowerCase().includes('route') || rawGrade.startsWith('5.'),
+      isRoute,
       normalizedGrade,
       gradeScore: getGradeScore(normalizedGrade)
     });
@@ -167,47 +180,44 @@ export const parseHumanityCSV = (
   csvText: string,
   userWallMappings: Record<string, Record<string, { type: 'rope' | 'boulder' | 'ignored' }>> = {}
 ): ParseHumanityResult => {
-  const lines = csvText.trim().split('\n');
-  if (lines.length < 2) return { schedules: {}, unrecognized: {}, newGyms: {} };
-
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-  const rows = lines.slice(1).map(line => {
-    const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
-    const entry: any = {};
-    headers.forEach((h, i) => entry[h] = values[i]);
-    return entry;
+  const parsed = Papa.parse<any>(csvText.trim(), {
+    header: true,
+    skipEmptyLines: true
   });
 
+  if (parsed.errors.length > 0) {
+    console.error("CSV Parsing Errors:", parsed.errors);
+  }
+
+  const rows = parsed.data;
   const allSchedules: Record<string, GymSchedule> = {};
   const unrecognized: Record<string, string[]> = {};
   const newGyms: Record<string, string> = {};
 
-  // Find all unique locations in the CSV
   const locations = [...new Set(rows.map(r => r['Location']).filter(Boolean))];
 
   locations.forEach(location => {
-    let gymCode = getGymCode(location);
+    let gymCode = getGymCode(location as string);
     const isNewGym = !gymCode;
 
     if (isNewGym) {
-      // Generate a simple code: first 3 alphanumeric chars of the name, uppercase
-      gymCode = location.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
-      // Ensure it doesn't collide with existing ones (rare but possible)
+      gymCode = (location as string).replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
       if (allSchedules[gymCode]) gymCode += '2';
-      newGyms[gymCode] = location;
+      newGyms[gymCode] = location as string;
     }
 
     const gymRows = rows.filter(row => row['Location'] === location);
     if (gymRows.length === 0) return;
 
     const scheduleByDate: Record<string, { date: Date, entries: any[] }> = {};
+
     gymRows.forEach(row => {
       const dateStr = row['Start Date'];
       const title = (row['Title'] || '').toLowerCase();
-      // Skip common non-setting keywords
-      if (SKIP_TITLES.some(skip => title.includes(skip)) || !dateStr) return;
 
-      // Robust setter detection (Slash, Comma, or Ampersand)
+      // Only drop rows missing a date or matching your global SKIP_TITLES array
+      if (!dateStr || SKIP_TITLES.some(skip => title.includes(skip))) return;
+
       const setterCount = (row['Employee Names'] || '')
         .split(/[/\,&]+/)
         .filter((n: string) => n.trim().length > 1)
@@ -215,39 +225,53 @@ export const parseHumanityCSV = (
 
       if (setterCount === 0) return;
 
-      // Use the code to identify the gym for wall parsing
       let walls = parseWalls(title, gymCode!, userWallMappings);
+
+      // FORGIVING FALLBACK: If no exact walls match, format the string nicely or default to "Setting"
       if (walls.length === 0) {
-        if (title.includes('rope')) walls = ['ropes'];
-        else if (title.includes('boulder')) walls = ['boulders'];
-        else {
-          // Flag as unrecognized but include it as a generic wall
+        if (title.includes('rope')) {
+          walls = ['ropes'];
+        } else if (title.includes('boulder')) {
+          walls = ['boulders'];
+        } else {
           if (!unrecognized[gymCode!]) unrecognized[gymCode!] = [];
           const cleanTitle = title.replace('jcca - ', '').replace('setting - ', '').trim();
           if (cleanTitle && !unrecognized[gymCode!].includes(cleanTitle)) {
             unrecognized[gymCode!].push(cleanTitle);
           }
-          // We'll use the clean title as the "wall" if unrecognized
-          walls = [cleanTitle || 'Setting'];
+
+          const fallbackStr = cleanTitle
+            ? cleanTitle.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+            : 'Setting';
+          walls = [fallbackStr];
         }
       }
 
-      if (!scheduleByDate[dateStr]) scheduleByDate[dateStr] = { date: new Date(dateStr), entries: [] };
-      scheduleByDate[dateStr].entries.push({ walls, setterCount });
+      // Anchor date to noon to prevent UTC timezone drift
+      const safeDateStr = `${dateStr} 12:00:00`;
+      const parsedDate = new Date(safeDateStr);
+
+      const dateKey = `${parsedDate.getFullYear()}-${String(parsedDate.getMonth() + 1).padStart(2, '0')}-${String(parsedDate.getDate()).padStart(2, '0')}`;
+
+      if (!scheduleByDate[dateKey]) {
+        scheduleByDate[dateKey] = { date: parsedDate, entries: [] };
+      }
+
+      scheduleByDate[dateKey].entries.push({
+        walls,
+        setterCount,
+        rawId: Math.random().toString(36).substr(2, 9)
+      });
     });
 
     const dates = Object.values(scheduleByDate)
       .map(d => d.date)
-      .filter(d => !isNaN(d.getTime())) // MUST have valid dates
+      .filter(d => !isNaN(d.getTime()))
       .sort((a, b) => a.getTime() - b.getTime());
 
-    if (dates.length === 0) return; // Skip "gyms" with no valid dates (likely junk rows)
+    if (dates.length === 0) return;
 
-    const gymConfig = TEMPLATE_COORDS[gymCode!] || {
-      weekStartDay: 'Monday',
-      displayMode: 'separate',
-      ropeTypeName: 'Rope'
-    };
+    const gymConfig = TEMPLATE_COORDS[gymCode!] || { weekStartDay: 'Monday', displayMode: 'separate', ropeTypeName: 'Rope' };
 
     const firstDate = dates[0];
     const startDay = new Date(firstDate);
@@ -262,19 +286,31 @@ export const parseHumanityCSV = (
     endDay.setDate(endDay.getDate() + (gymConfig.weekStartDay === 'Monday' ? 11 : 13));
 
     const scheduleByDay = Array(14).fill(null).map(() => ({ routes: [] as ScheduleEntry[], boulders: [] as ScheduleEntry[] }));
+
     Object.values(scheduleByDate).forEach(day => {
-      const dayIdx = Math.floor((day.date.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24));
+      // Math.round protects against daylight saving time shifts
+      const dayIdx = Math.round((day.date.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24));
+
       if (dayIdx >= 0 && dayIdx < 14) {
         day.entries.forEach(entry => {
           const type = getWallType(entry.walls, gymCode!, userWallMappings);
           if (!type || type === 'ignored') return;
+
+          const climbTypeLabel = type.charAt(0).toUpperCase() + type.slice(1);
           const target = (type === 'rope') ? scheduleByDay[dayIdx].routes : scheduleByDay[dayIdx].boulders;
-          target.push({
-            id: Math.random().toString(36).substr(2, 9),
-            walls: entry.walls,
-            setterCount: entry.setterCount,
-            climbType: type.charAt(0).toUpperCase() + type.slice(1)
-          });
+
+          // MERGE LOGIC: Smash all same-day shifts together to prevent vertical UI overflow
+          if (target.length > 0) {
+            target[0].walls = [...new Set([...target[0].walls, ...entry.walls])];
+            target[0].setterCount += entry.setterCount;
+          } else {
+            target.push({
+              id: entry.rawId,
+              walls: entry.walls,
+              setterCount: entry.setterCount,
+              climbType: climbTypeLabel
+            });
+          }
         });
       }
     });

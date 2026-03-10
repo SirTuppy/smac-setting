@@ -64,7 +64,15 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
               const data = parseKayaCSV(text, gymName);
               // Clean up gym name if it has .csv
               const cleanName = gymName.replace('.csv', '');
-              combinedKayaData[cleanName] = data;
+
+              // Group climbs by their actual gymCode so multi-gym imports are split
+              data.forEach(c => {
+                const targetGym = c.gymCode || cleanName;
+                if (!combinedKayaData[targetGym]) {
+                  combinedKayaData[targetGym] = [];
+                }
+                combinedKayaData[targetGym].push(c);
+              });
             }
             resolve();
           } catch (err) {

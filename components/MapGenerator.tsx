@@ -109,17 +109,23 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
         };
         let currentY = tableTop;
 
-        const getOverrideValue = (dayIdx: number, dataType: 'routes' | 'boulders', field: 'location' | 'climbType' | 'setterCount', fallback: string) => {
-            const dStr = new Date(startDay);
+        const getSafeDateObj = (val: any) => {
+            if (typeof val === 'string' && val.length === 10) return new Date(val + 'T00:00:00');
+            return new Date(val);
+        };
+
+        const getOverrideValue = (dayIdx: number, dataType: 'routes' | 'boulders', field: 'location' | 'climbType' | 'setterCount', fallback: string, shiftId?: string) => {
+            const dStr = getSafeDateObj(startDay);
             dStr.setDate(dStr.getDate() + dayIdx);
             const dateKey = dStr.toISOString().split('T')[0];
-            const key = `${gymCode}-${dateKey}-${dataType}-${field}`;
+            const shiftPart = shiftId ? `-${shiftId}` : '';
+            const key = `${gymCode}-${dateKey}-${dataType}-${field}${shiftPart}`;
             return scheduleOverrides[key]?.value ?? fallback;
         };
 
         weekData.forEach((day, rowIndex) => {
             const dayIndex = weekOffset + rowIndex;
-            const currentDate = new Date(startDay);
+            const currentDate = getSafeDateObj(startDay);
             currentDate.setDate(currentDate.getDate() + dayIndex);
             const dateStr = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
             const dayOfWeek = currentDate.getDay();
@@ -138,8 +144,6 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
                 else itemsForDay = [...day.routes, ...day.boulders];
             }
 
-            const textY = currentY - (rowHeight / 2);
-
             // DRAW ZEBRA STRIPE (Behind text) - Start on row 0
             if (rowIndex % 2 === 0) {
                 ctx.fillStyle = '#efeff2';
@@ -150,7 +154,12 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
 
                 // Adjust Y calculation to be centred on the row
                 const stripeY = currentY - (rowHeight * 0.55);
-                ctx.fillRect(stripeX, stripeY, stripeWidth, rowHeight);
+
+                // Calculate the total height this day will consume so zebra stripe covers it all
+                const itemsCount = settings.displayMode === 'separate' ? (Math.max(day.routes.length, 0) + Math.max(day.boulders.length, 0)) : Math.max(itemsForDay.length, 1);
+                const totalStripeHeight = rowHeight * (itemsCount === 0 ? 1 : itemsCount);
+
+                ctx.fillRect(stripeX, stripeY, stripeWidth, totalStripeHeight);
                 ctx.fillStyle = '#1e3a5f'; // Restore text color
             }
 
@@ -165,6 +174,7 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
                     ctx.fillText(typeVal, tableCoords.climbType.x, currentY);
                     ctx.fillText(settersVal, tableCoords.setters.x, currentY);
 
+                    const textY = currentY - (rowHeight / 2);
                     regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: locationVal, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: 'combined', id: null });
                     regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'climbType', value: typeVal, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: 'combined', id: null });
                     regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'setterCount', value: settersVal, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: 'combined', id: null });
@@ -174,105 +184,121 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
 
                 let dateDrawn = false;
                 if (hasRoutes) {
-                    const allRouteWalls = [...new Set(day.routes.flatMap((i: any) => i.walls))];
-                    const fallbackLocation = capitalizeWallNames(allRouteWalls.join(', '));
-                    const locationText = getOverrideValue(dayIndex, 'routes', 'location', fallbackLocation);
+                    day.routes.forEach((route: any) => {
+                        const fallbackLocation = route.walls?.length > 0 ? capitalizeWallNames(route.walls.join(', ')) : '---';
+                        const locationText = getOverrideValue(dayIndex, 'routes', 'location', fallbackLocation, route.id);
 
-                    let climbTypeFallback = day.routes[0].climbType;
-                    if (settings.climbTypeDisplay === 'steepness') {
-                        const wall = day.routes[0].walls[0]?.toLowerCase().trim();
-                        const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
-                        climbTypeFallback = userDefinedAngle && userDefinedAngle !== 'none'
-                            ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
-                            : (GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback);
-                    }
-                    const climbTypeText = getOverrideValue(dayIndex, 'routes', 'climbType', climbTypeFallback);
+                        let climbTypeFallback = route.climbType;
+                        if (settings.climbTypeDisplay === 'steepness') {
+                            const wall = route.walls?.[0]?.toLowerCase().trim();
+                            const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
+                            climbTypeFallback = userDefinedAngle && userDefinedAngle !== 'none'
+                                ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
+                                : (GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback);
+                        }
+                        const climbTypeText = getOverrideValue(dayIndex, 'routes', 'climbType', climbTypeFallback, route.id);
 
-                    const currentSetterCount = String(day.routes.reduce((t: number, i: any) => t + i.setterCount, 0));
-                    const setterText = getOverrideValue(dayIndex, 'routes', 'setterCount', currentSetterCount);
+                        const setterText = getOverrideValue(dayIndex, 'routes', 'setterCount', String(route.setterCount), route.id);
+
+                        if (!dateDrawn) ctx.fillText(dateStr, tableCoords.date.x, currentY);
+                        ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
+                        ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
+                        ctx.fillText(setterText, tableCoords.setters.x, currentY);
+
+                        const textY = currentY - (rowHeight / 2);
+                        regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: route.id });
+                        regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: route.id });
+                        regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'setterCount', value: setterText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: route.id });
+
+                        currentY += rowHeight;
+                        dateDrawn = true;
+                    });
+                }
+                if (hasBoulders) {
+                    day.boulders.forEach((boulder: any) => {
+                        const fallbackLocation = boulder.walls?.length > 0 ? capitalizeWallNames(boulder.walls.join(', ')) : '---';
+                        const locationText = getOverrideValue(dayIndex, 'boulders', 'location', fallbackLocation, boulder.id);
+
+                        let climbTypeFallback = boulder.climbType;
+                        if (settings.climbTypeDisplay === 'steepness') {
+                            const wall = boulder.walls?.[0]?.toLowerCase().trim();
+                            const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
+                            climbTypeFallback = userDefinedAngle && userDefinedAngle !== 'none'
+                                ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
+                                : (GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback);
+                        }
+                        const climbTypeText = getOverrideValue(dayIndex, 'boulders', 'climbType', climbTypeFallback, boulder.id);
+
+                        const setterText = getOverrideValue(dayIndex, 'boulders', 'setterCount', String(boulder.setterCount), boulder.id);
+
+                        if (!dateDrawn) ctx.fillText(dateStr, tableCoords.date.x, currentY);
+                        ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
+                        ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
+                        ctx.fillText(setterText, tableCoords.setters.x, currentY);
+
+                        const textY = currentY - (rowHeight / 2);
+                        regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: boulder.id });
+                        regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: boulder.id });
+                        regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'setterCount', value: setterText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: boulder.id });
+
+                        currentY += rowHeight;
+                        dateDrawn = true;
+                    });
+                }
+            } else {
+                const combinedType: 'routes' | 'boulders' = type === 'boulders' ? 'boulders' : 'routes';
+
+                if (itemsForDay.length === 0) {
+                    const fallbackLocation = '---';
+                    const locationText = getOverrideValue(dayIndex, combinedType, 'location', fallbackLocation);
+                    const climbTypeText = getOverrideValue(dayIndex, combinedType, 'climbType', '---');
+                    const setterCountText = getOverrideValue(dayIndex, combinedType, 'setterCount', '0');
 
                     ctx.fillText(dateStr, tableCoords.date.x, currentY);
                     ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
                     ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
-                    ctx.fillText(setterText, tableCoords.setters.x, currentY);
+                    ctx.fillText(setterCountText, tableCoords.setters.x, currentY);
 
-                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: day.routes[0].id });
-                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: day.routes[0].id });
-                    regions.push({ gymCode, dayIndex, dataType: 'routes', field: 'setterCount', value: setterText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: day.routes[0].id });
-
+                    const textY = currentY - (rowHeight / 2);
+                    regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: null });
+                    regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: null });
+                    regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'setterCount', value: setterCountText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: null });
                     currentY += rowHeight;
-                    dateDrawn = true;
+                } else {
+                    let dateDrawn = false;
+                    itemsForDay.forEach((item: any) => {
+                        const fallbackLocation = item.walls?.length > 0 ? capitalizeWallNames(item.walls.join(', ')) : '---';
+                        const locationText = getOverrideValue(dayIndex, combinedType, 'location', fallbackLocation, item.id);
+
+                        let climbTypeFallback = item.climbType;
+                        if (settings.climbTypeDisplay === 'steepness') {
+                            const wall = item.walls?.[0]?.toLowerCase().trim();
+                            const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
+                            climbTypeFallback = Boolean(userDefinedAngle) && userDefinedAngle !== 'none'
+                                ? userDefinedAngle!.charAt(0).toUpperCase() + userDefinedAngle!.slice(1)
+                                : (GYM_WALLS[gymCode]?.[wall]?.climb_type || item.climbType);
+                        }
+                        const climbTypeText = getOverrideValue(dayIndex, combinedType, 'climbType', climbTypeFallback, item.id);
+
+                        const setterCountText = getOverrideValue(dayIndex, combinedType, 'setterCount', String(item.setterCount), item.id);
+
+                        if (!dateDrawn) ctx.fillText(dateStr, tableCoords.date.x, currentY);
+                        ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
+                        ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
+                        ctx.fillText(setterCountText, tableCoords.setters.x, currentY);
+
+                        const textY = currentY - (rowHeight / 2);
+                        regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: item.id });
+                        regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: item.id });
+                        regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'setterCount', value: setterCountText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: item.id });
+
+                        currentY += rowHeight;
+                        dateDrawn = true;
+                    });
                 }
-                if (hasBoulders) {
-                    const allBoulderWalls = [...new Set(day.boulders.flatMap((i: any) => i.walls))];
-                    const fallbackLocation = capitalizeWallNames(allBoulderWalls.join(', '));
-                    const locationText = getOverrideValue(dayIndex, 'boulders', 'location', fallbackLocation);
-
-                    let climbTypeFallback = day.boulders[0].climbType;
-                    if (settings.climbTypeDisplay === 'steepness') {
-                        const wall = day.boulders[0].walls[0]?.toLowerCase().trim();
-                        const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
-                        climbTypeFallback = userDefinedAngle && userDefinedAngle !== 'none'
-                            ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
-                            : (GYM_WALLS[gymCode]?.[wall]?.climb_type || climbTypeFallback);
-                    }
-                    const climbTypeText = getOverrideValue(dayIndex, 'boulders', 'climbType', climbTypeFallback);
-
-                    const currentSetterCount = String(day.boulders.reduce((t: number, i: any) => t + i.setterCount, 0));
-                    const setterText = getOverrideValue(dayIndex, 'boulders', 'setterCount', currentSetterCount);
-
-                    if (!dateDrawn) ctx.fillText(dateStr, tableCoords.date.x, currentY);
-                    ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
-                    ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
-                    ctx.fillText(setterText, tableCoords.setters.x, currentY);
-
-                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: day.boulders[0].id });
-                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: day.boulders[0].id });
-                    regions.push({ gymCode, dayIndex, dataType: 'boulders', field: 'setterCount', value: setterText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: day.boulders[0].id });
-
-                    currentY += rowHeight;
-                }
-            } else {
-                const combinedType: 'routes' | 'boulders' = type === 'boulders' ? 'boulders' : 'routes';
-                const allCombinedWalls = [...new Set(itemsForDay.flatMap(i => i.walls))];
-                const fallbackLocation = itemsForDay.length > 0 ? capitalizeWallNames(allCombinedWalls.join(', ')) : '---';
-                const locationText = getOverrideValue(dayIndex, combinedType, 'location', fallbackLocation);
-
-                let climbTypeFallback = '---';
-                if (itemsForDay.length > 0) {
-                    if (settings.climbTypeDisplay === 'steepness') {
-                        const wall = itemsForDay[0].walls[0]?.toLowerCase().trim();
-                        const userDefinedAngle = wallTargets[gymCode]?.[wall]?.angle;
-                        climbTypeFallback = (hasRoutes && hasBoulders) ? 'Mixed' :
-                            (userDefinedAngle && userDefinedAngle !== 'none'
-                                ? userDefinedAngle.charAt(0).toUpperCase() + userDefinedAngle.slice(1)
-                                : (GYM_WALLS[gymCode]?.[wall]?.climb_type || itemsForDay[0].climbType));
-                    } else {
-                        if (hasRoutes && hasBoulders) climbTypeFallback = 'Both';
-                        else if (hasRoutes) climbTypeFallback = 'Rope';
-                        else if (hasBoulders) climbTypeFallback = 'Boulder';
-                        else climbTypeFallback = itemsForDay[0].climbType;
-                    }
-                }
-                const climbTypeText = getOverrideValue(dayIndex, combinedType, 'climbType', climbTypeFallback);
-
-                const currentSetters = itemsForDay.length > 0 ? String(itemsForDay.reduce((t, i) => t + i.setterCount, 0)) : '0';
-                const setterCountText = getOverrideValue(dayIndex, combinedType, 'setterCount', currentSetters);
-
-                ctx.fillText(dateStr, tableCoords.date.x, currentY);
-                ctx.fillText(truncateText(ctx, locationText, tableCoords.location.width), tableCoords.location.x, currentY);
-                ctx.fillText(climbTypeText, tableCoords.climbType.x, currentY);
-                ctx.fillText(setterCountText, tableCoords.setters.x, currentY);
-
-                const firstItem = itemsForDay.length > 0 ? itemsForDay[0] : null;
-
-                regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'location', value: locationText, x: tableCoords.location.x, y: textY, width: tableCoords.location.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
-                regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'climbType', value: climbTypeText, x: tableCoords.climbType.x, y: textY, width: tableCoords.climbType.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
-                regions.push({ gymCode, dayIndex, dataType: combinedType, field: 'setterCount', value: setterCountText, x: tableCoords.setters.x, y: textY, width: tableCoords.setters.width, height: rowHeight, canvasType: type, id: firstItem?.id || null });
-                currentY += rowHeight;
             }
         });
-    }, [schedules, gymSettings, scheduleOverrides]);
+    }, [schedules, gymSettings, scheduleOverrides, wallTargets]);
 
     const renderPage = useCallback(async (gymCode: string, type: string, canvas: HTMLCanvasElement, regions: ClickRegion[]) => {
         const ctx = canvas.getContext('2d');
@@ -445,7 +471,12 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
         const gymData = schedules[region.gymCode];
         if (!gymData) return;
 
-        const dateObj = new Date(gymData.startDay);
+        const getSafeDateObj = (val: any) => {
+            if (typeof val === 'string' && val.length === 10) return new Date(val + 'T00:00:00');
+            return new Date(val);
+        };
+
+        const dateObj = getSafeDateObj(gymData.startDay);
         dateObj.setDate(dateObj.getDate() + region.dayIndex);
         const dateKey = dateObj.toISOString().split('T')[0];
 
@@ -454,7 +485,8 @@ const MapGenerator = forwardRef<MapGeneratorHandle>((_, ref) => {
             dateKey,
             dataType: region.dataType,
             field: region.field,
-            value: editValue
+            value: editValue,
+            shiftId: region.id || undefined
         });
 
         setEditingRegion(null);
