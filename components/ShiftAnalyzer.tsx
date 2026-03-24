@@ -7,7 +7,6 @@ import AnalyzerKPIs from './analyzer/AnalyzerKPIs';
 import { BreakingPointChart, EfficiencyEvolutionChart, RhythmAnalyticsChart } from './analyzer/EfficiencyCharts';
 import { CrewSizeDistribution, LaborProductionOverlay, ShiftTypeDistribution } from './analyzer/DistributionCharts';
 import SynergyTable from './analyzer/SynergyTable';
-import LaborSimulator from './analyzer/LaborSimulator';
 import WallPerformance from './analyzer/WallPerformance';
 import { getGymDisplayName } from '../constants/gyms';
 
@@ -117,7 +116,6 @@ const ShiftAnalyzer: React.FC = () => {
                     <EfficiencyEvolutionChart analysisData={analysisData} />
                     <ShiftTypeDistribution analysisData={analysisData} />
                     <RhythmAnalyticsChart analysisData={analysisData} />
-                    <LaborSimulator analysisData={analysisData} />
                 </div>
             </main>
         </div>
