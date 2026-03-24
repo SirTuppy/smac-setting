@@ -92,19 +92,6 @@ export interface FilterState {
   selectedWall: string | null;
 }
 
-export interface ScheduleEntry {
-  id: string;
-  walls: string[];
-  setterCount: number;
-  climbType: string;
-}
-
-export interface GymSchedule {
-  scheduleByDay: { routes: ScheduleEntry[], boulders: ScheduleEntry[] }[];
-  dateRange: string;
-  fileDateRange: string;
-  startDay: Date;
-}
 
 export interface SetterProduction {
   name: string;
@@ -145,82 +132,6 @@ export interface BaselineSettings {
   reportComments: string;
 }
 
-// --- Executive & Financial Data Models ---
-
-/**
- * Tracks the "All Orbits" targets for a specific gym/discipline.
- * Source: "All Orbits Log" Excel Sheet
- */
-export interface OrbitTarget {
-  id: string;
-  gymCode: string;
-  region: string;
-  orbitName: string;
-  discipline: 'Routes' | 'Boulders';
-  totalClimbs: number; // Aggregated from assigned walls
-  assignedWalls: string[]; // List of wallNames
-  rps: number; // Routes Per Setter (Baseline)
-  shiftDuration: number;
-  rotationTarget: number; // in weeks
-  rationale?: string; // Ryan's "Turnaround Decisions"
-  lastAdjusted?: string; // ISO Date
-
-  // Derived metrics from Excel
-  weeklyProductionGoal: number;
-  weeklyShiftGoal: number;
-  payPeriodHoursGoal: number;
-  hoursPerClimbGoal: number;
-  gymHoursRatioTotal?: number; // % of total gym labor
-  gymHoursRatioPerDiscipline?: number; // % of discipline labor
-  rpsWeighted?: number; // RPS * ratio
-  hoursPerClimbWeighted?: number;
-}
-
-/**
- * Raw data from Ryan's Payroll/P&L CSVs.
- * Source: "Production X Wage Ledger" & "Monthly P&L"
- */
-export interface FinancialRecord {
-  gymCode: string;
-  payPeriodStart: string;
-  payPeriodEnd: string;
-  totalHours: number; // XYZ data
-  totalWages: number; // XYZ data
-  budgetWages?: number;
-  variance?: number;
-  glAccount?: string;
-}
-
-/**
- * The Master Record: Merged data from Kaya (Production) and Payroll (Financial).
- * This powers the "Production Wage Dashboard" rows.
- */
-export interface GymPeriodPerformance {
-  gymCode: string;
-  payPeriodEnd: string;
-  dateRange: { start: string; end: string };
-
-  // Financials
-  actualHours: number;
-  actualWages: number;
-  budgetWages: number;
-
-  // Production (Actuals from Kaya)
-  bouldersSet: number;
-  routesSet: number;
-  uniqueSetters: number;
-
-  // Efficiency Metrics (The "Ryan Metrics")
-  costPerClimb: number;
-  hoursPerClimbActual: number;
-  productionContributionRatio: number; // Percentage
-
-  // Variance & Context
-  boulderDensity: number;
-  boulderRotation: number; // calculated weeks
-  wageVariancePercent: number;
-  notes?: string;
-}
 
 export interface GymSettings {
   displayMode: 'merged' | 'separate';
@@ -241,22 +152,3 @@ export interface GymMeta {
 }
 
 
-// --- Simulator Models ---
-
-export interface SimulatorSetter {
-  name: string;
-  avgWeeklyOutput: number; // Historical Climbs per Shift
-  attendanceVariance: number; // % variance vs scheduled
-  active: boolean;
-  baseSchedule: number[]; // days of week [0-6]
-  specialDateModifiers?: Record<string, 'pto' | 'guest' | 'standard'>; // ISO Date -> Mod
-}
-
-export interface SimulatorShift {
-  dateKey: string;
-  gymCode: string;
-  setterNames: string[];
-  type: 'rope' | 'boulder';
-  isOverride: boolean;
-  modifier?: 'pto' | 'guest' | 'heavy-forerunning';
-}

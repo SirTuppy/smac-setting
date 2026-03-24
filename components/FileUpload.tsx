@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Database, LayoutDashboard, Sparkles, ChevronRight, Activity, Map, TrendingUp } from 'lucide-react';
-import { parseKayaCSV, parseHumanityCSV } from '../utils/csvParser';
-import { parsePayrollCSV } from '../utils/payrollParser';
-import { Climb, GymSchedule, FinancialRecord } from '../types';
-import { MOCK_CSV_DATA, MOCK_HUMANITY_DATA, MOCK_FINANCIAL_DATA } from '../constants/mockData';
+import { parseKayaCSV } from '../utils/csvParser';
+import { Climb } from '../types';
+import { MOCK_CSV_DATA } from '../constants/mockData';
 import { useDashboardStore } from '../store/useDashboardStore';
 import { FUN_MESSAGES, FunMessage } from '../constants/messages';
 
 interface FileUploadProps {
   onDataLoaded: (data: {
-    analytics?: Record<string, Climb[]>,
-    generator?: Record<string, GymSchedule>,
-    financials?: FinancialRecord[],
-    unrecognized?: Record<string, string[]>
+    analytics?: Record<string, Climb[]>
   }) => void;
 }
 
@@ -32,9 +28,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
     if (!files || files.length === 0) return;
 
     let combinedKayaData: Record<string, Climb[]> = {};
-    let combinedHumanityData: Record<string, GymSchedule> = {};
-    let combinedFinancialData: FinancialRecord[] = [];
-    let allUnrecognized: Record<string, string[]> = {};
 
     const loadFile = (file: File): Promise<void> => {
       return new Promise((resolve) => {
@@ -44,36 +37,19 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
           const firstLine = text.trim().split('\n')[0].toLowerCase();
 
           try {
-            if (firstLine.includes('start date') && firstLine.includes('location')) {
-              // Priority: Humanity Schedule
-              const { schedules, unrecognized } = parseHumanityCSV(text, userWallMappings);
-              combinedHumanityData = { ...combinedHumanityData, ...schedules };
+            // Kaya Performance
+            const gymName = file.name.split('-climbs')[0].trim() || "General";
+            const data = parseKayaCSV(text, gymName);
+            const cleanName = gymName.replace('.csv', '');
 
-              // Merge unrecognized walls
-              Object.entries(unrecognized).forEach(([gym, walls]) => {
-                if (!allUnrecognized[gym]) allUnrecognized[gym] = [];
-                allUnrecognized[gym] = [...new Set([...allUnrecognized[gym], ...walls])];
-              });
-            } else if (firstLine.includes('hours') && (firstLine.includes('wages') || firstLine.includes('payroll'))) {
-              // Priority: Payroll / P&L
-              const records = parsePayrollCSV(text);
-              combinedFinancialData = [...combinedFinancialData, ...records];
-            } else {
-              // Default: Kaya Performance
-              const gymName = file.name.split('-climbs')[0].trim() || "General";
-              const data = parseKayaCSV(text, gymName);
-              // Clean up gym name if it has .csv
-              const cleanName = gymName.replace('.csv', '');
-
-              // Group climbs by their actual gymCode so multi-gym imports are split
-              data.forEach(c => {
-                const targetGym = c.gymCode || cleanName;
-                if (!combinedKayaData[targetGym]) {
-                  combinedKayaData[targetGym] = [];
-                }
-                combinedKayaData[targetGym].push(c);
-              });
-            }
+            // Group climbs by their actual gymCode so multi-gym imports are split
+            data.forEach(c => {
+              const targetGym = c.gymCode || cleanName;
+              if (!combinedKayaData[targetGym]) {
+                combinedKayaData[targetGym] = [];
+              }
+              combinedKayaData[targetGym].push(c);
+            });
             resolve();
           } catch (err) {
             console.error("Failed to parse", file.name, err);
@@ -87,16 +63,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
     await Promise.all(Array.from(files).map(loadFile));
 
     const result: {
-      analytics?: Record<string, Climb[]>,
-      generator?: Record<string, GymSchedule>,
-      financials?: FinancialRecord[],
-      unrecognized?: Record<string, string[]>
+      analytics?: Record<string, Climb[]>
     } = {};
 
     if (Object.keys(combinedKayaData).length > 0) result.analytics = combinedKayaData;
-    if (Object.keys(combinedHumanityData).length > 0) result.generator = combinedHumanityData;
-    if (combinedFinancialData.length > 0) result.financials = combinedFinancialData;
-    if (Object.keys(allUnrecognized).length > 0) result.unrecognized = allUnrecognized;
 
     onDataLoaded(result);
   };
@@ -106,20 +76,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
     onDataLoaded({ analytics: { "Movement Design District": data } });
   };
 
-  const loadMockHumanity = () => {
-    const { schedules, unrecognized } = parseHumanityCSV(MOCK_HUMANITY_DATA, userWallMappings);
-    onDataLoaded({ generator: schedules, unrecognized });
-  };
-
-  const loadMockFinancials = () => {
-    // We need both production (Kaya) and financials for the executive view to be meaningful
-    const kayaData = parseKayaCSV(MOCK_CSV_DATA, "Movement Design District");
-    const financials = parsePayrollCSV(MOCK_FINANCIAL_DATA);
-    onDataLoaded({
-      analytics: { "Movement Design District": kayaData },
-      financials: financials
-    });
-  };
 
   return (
     <div className="relative min-h-screen w-full bg-slate-50 flex flex-col items-center justify-center p-6 overflow-hidden">
@@ -196,25 +152,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
                   </p>
                 </div>
 
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:bg-white transition-colors duration-500">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Map size={18} className="text-[#009CA6]" />
-                    <span className="font-black text-xs uppercase tracking-widest">Humanity Schedule (Yellow Maps)</span>
-                  </div>
-                  <p className="text-slate-500 text-xs font-medium leading-relaxed">
-                    Upload your <strong>biweekly schedule .csv</strong> to automatically generate and edit gym map templates.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:bg-white transition-colors duration-500">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Database size={18} className="text-amber-500" />
-                    <span className="font-black text-xs uppercase tracking-widest text-left">Payroll / P&L (Financials)</span>
-                  </div>
-                  <p className="text-slate-500 text-xs font-medium leading-relaxed">
-                    Upload your <strong>payroll .csv</strong> to compare actual labor costs against production output.
-                  </p>
-                </div>
               </div>
 
               <div className="flex items-center justify-center gap-2 text-[#009CA6] font-black text-xs uppercase tracking-[0.2em] pt-4 group-hover:scale-105 transition-transform duration-300">
@@ -285,35 +222,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
               </div>
             </button>
 
-            <button
-              onClick={loadMockHumanity}
-              onMouseEnter={() => setIsHovering('demo-humanity')}
-              onMouseLeave={() => setIsHovering(null)}
-              className="group relative bg-[#009CA6] rounded-3xl p-8 shadow-2xl shadow-[#009CA6]/20 overflow-hidden border-2 border-transparent hover:border-[#00205B]/50 hover:scale-[1.02] active:scale-[0.96] transition-all duration-500 text-left"
-            >
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Map size={80} className="text-white" />
-              </div>
-              <div className="relative z-20">
-                <h3 className="text-lg font-black text-white uppercase tracking-tight">Yellow Map Generator Demo</h3>
-                <p className="text-white/60 text-xs font-medium mt-1">Generate gym maps from Humanity schedule.</p>
-              </div>
-            </button>
-
-            <button
-              onClick={loadMockFinancials}
-              onMouseEnter={() => setIsHovering('demo-executive')}
-              onMouseLeave={() => setIsHovering(null)}
-              className="group relative bg-[#EDE04B] rounded-3xl p-8 shadow-2xl shadow-[#EDE04B]/20 overflow-hidden border-2 border-transparent hover:border-[#00205B]/50 hover:scale-[1.02] active:scale-[0.96] transition-all duration-500 text-left"
-            >
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <TrendingUp size={80} className="text-[#00205B]" />
-              </div>
-              <div className="relative z-20">
-                <h3 className="text-lg font-black text-[#00205B] uppercase tracking-tight">Director View Demo</h3>
-                <p className="text-[#00205B]/60 text-xs font-medium mt-1">Merge labor costs with production outputs.</p>
-              </div>
-            </button>
           </div>
 
         </div>

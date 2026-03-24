@@ -2,18 +2,14 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Calendar, FileText, BarChart2, Map, X } from 'lucide-react';
 import FileUpload from './components/FileUpload';
 import Dashboard from './components/Dashboard';
-import MapGenerator, { MapGeneratorHandle } from './components/MapGenerator';
 import RouteMapper from './components/RouteMapper';
 import ProductionReport from './components/ProductionReport';
 import ShiftAnalyzer from './components/ShiftAnalyzer';
-import ExecutiveDashboard from './components/ExecutiveDashboard';
-import OrbitTargetManager from './components/OrbitTargetManager';
-import SimulatorView from './components/SimulatorView';
 import Sidebar from './components/Sidebar';
 import BaselineModal from './components/BaselineModal';
 import DiscoveryModal from './components/DiscoveryModal';
 import CommentModal from './components/CommentModal';
-import { Climb, GymSchedule, EmailSettings, AppView, BaselineSettings } from './types';
+import { Climb, EmailSettings, AppView, BaselineSettings } from './types';
 import { MOCK_CSV_DATA, MOCK_HUMANITY_DATA } from './constants/mockData';
 
 import { useDashboardStore } from './store/useDashboardStore';
@@ -40,24 +36,14 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   { targetId: 'tour-comparison-pill', title: 'Live Benchmarking', description: 'See exactly how current production stacks up against your defined baselines. Green pills mean you’re ahead; red means you’re behind.', position: 'bottom' },
   { targetId: 'tour-report-summary-label', title: 'Executive Context', description: 'Add your custom summary here. It will appear at the top of the report to give leadership necessary context (like upcoming comps or staffing changes).', position: 'right' },
   { targetId: 'tour-baseline-reference', title: 'Transparency Page', description: 'Every report can include a Baseline Reference page. This shows leadership exactly what our "perfect world" looks like and how we measure success.', position: 'top' },
-  { targetId: 'tour-generator-card', title: 'Phase 4: Map Engine', description: 'The Yellow Map tedium removed. Use this tool to turn Humanity schedules into physical maps automatically. We\'ve loaded an example for you above.', position: 'top' },
-  { targetId: 'tour-generator-sidebar', title: 'Global Config', description: 'Adjust your email templates and global settings here. These stick with you every time you use the Dashboard.', position: 'right' },
-  { targetId: 'tour-generator-card', title: 'Live Map Editing', description: 'Click directly on any gym map to edit locations, setter counts, or climb types. It’s a live canvas.', position: 'right' },
-  { targetId: 'tour-generator-instructions', title: 'Technical Guide', description: 'Need help with the Map Generator workflow? This guide covers saving, loading, and email integration in detail.', position: 'right' },
-  { targetId: 'nav-mapper', title: 'Phase 5: Route Mapper', description: 'For precise competition scoring. Use this to overlay scoring markers on high-res wall photos.', position: 'right' },
+  { targetId: 'nav-mapper', title: 'Phase 4: Route Mapper', description: 'For precise competition scoring. Use this to overlay scoring markers on high-res wall photos.', position: 'right' },
   { targetId: 'tour-mapper-upload', title: 'Drop & Map', description: 'Simply drop a photo of a wall, click to add hold markers, and drag labels to clear paths for judges to read.', position: 'bottom' },
-  { targetId: 'nav-orbit-targets', title: 'Phase 6: National Aggregation', description: 'This is the "Command Center" for national directors to gather data from across all gyms.', position: 'right' },
-  { targetId: 'tour-share-setup', title: 'Gathering Gym Data', description: 'Each head setter creates their orbits here and clicks the "Share Gym Setup Code" button to send you their configuration.', position: 'bottom' },
-  { targetId: 'tour-merge-gym', title: 'The Merge Process', description: 'Click "Import/Merge Gym Setup" and paste the codes from your head setters. This builds a master session containing every gym side-by-side.', position: 'bottom' },
-  { targetId: 'nav-executive', title: 'Executive Oversight', description: 'Once all gyms are imported, switch to the Executive view for a high-level national performance breakdown.', position: 'right' },
-  { targetId: 'tour-national-exports', title: 'National Reporting', description: 'One click to export the entire nation’s configuration as a JSON Master, or performance data as a Master CSV for your master spreadsheet.', position: 'bottom' },
   { targetId: 'center', title: 'Mission Complete!', description: 'You’re all set to lead! If you ever need another tour, just click "Tutorial Tour" at the bottom of the sidebar. Happy setting!', position: 'center' },
 ];
 
 function App() {
   const {
     climbData, setClimbData,
-    gymSchedules, setGymSchedules,
     selectedGyms, setSelectedGyms,
     toggleGymSelection,
     isCompareMode, setIsCompareMode,
@@ -75,11 +61,9 @@ function App() {
     unrecognizedWalls, setUnrecognizedWalls, clearUnrecognizedWalls,
     setGymDisplayName, gymDisplayNames,
     userWallMappings,
-    setFinancialRecords,
     resetAll
   } = useDashboardStore();
 
-  const generatorRef = useRef<MapGeneratorHandle>(null);
 
   const [showTutorial, setShowTutorial] = useState(false);
 
@@ -105,41 +89,23 @@ function App() {
         });
       }
     }
-    else if (index >= 17 && index <= 20) setActiveView('generator');
-    else if (index >= 21 && index <= 22) setActiveView('mapper');
-    else if (index >= 23 && index <= 25) setActiveView('orbit-targets');
-    else if (index >= 26 && index <= 27) setActiveView('executive');
-    else if (index === 28) setActiveView('analytics'); // Final step, can go back to analytics or stay on current view
+    else if (index >= 17 && index <= 18) setActiveView('mapper');
+    else if (index >= 19) setActiveView('analytics'); // Final step, can go back to analytics or stay on current view
 
     const needsAnalyticsData = index >= 4 && index <= 16;
-    const needsGeneratorData = index >= 17 && index <= 22;
 
     if (needsAnalyticsData && !climbData) {
       const data = parseKayaCSV(MOCK_CSV_DATA, "Movement Design District");
       setClimbData({ "Movement Design District": data });
     }
-
-    if (needsGeneratorData && !gymSchedules) {
-      const { schedules } = parseHumanityCSV(MOCK_HUMANITY_DATA, userWallMappings);
-      setGymSchedules(schedules);
-    }
-  }, [setActiveView, getBaseline, setBaselineSettings, climbData, setClimbData, gymSchedules, setGymSchedules]);
+  }, [setActiveView, getBaseline, setBaselineSettings, climbData, setClimbData]);
 
   const gymNames = useMemo(() => {
     let codes: string[] = [];
-    if (activeView === 'generator') {
-      codes = Object.keys(gymSchedules || {});
-    } else if (activeView === 'analytics' || activeView === 'report' || activeView === 'shift-analyzer') {
-      codes = Object.keys(climbData || {});
-    } else {
-      codes = Array.from(new Set([
-        ...(climbData ? Object.keys(climbData) : []),
-        ...(gymSchedules ? Object.keys(gymSchedules) : [])
-      ]));
-    }
+    codes = Object.keys(climbData || {});
     if (codes.length === 0) return [];
     return ["Regional Overview", ...codes.sort()];
-  }, [climbData, gymSchedules, activeView]);
+  }, [climbData, activeView]);
 
   // Sync selection when data first loads
   useEffect(() => {
@@ -151,8 +117,6 @@ function App() {
 
   const handleDataLoaded = (result: {
     analytics?: Record<string, Climb[]>,
-    generator?: Record<string, GymSchedule>,
-    financials?: import('./types').FinancialRecord[],
     unrecognized?: Record<string, string[]>,
     newGyms?: Record<string, string>
   }) => {
@@ -173,11 +137,6 @@ function App() {
       if (!climbData) setActiveView('analytics');
     }
 
-    if (result.generator) {
-      setGymSchedules({ ...(gymSchedules || {}), ...result.generator });
-      if (!gymSchedules) setActiveView('generator');
-    }
-
     if (result.unrecognized) {
       setUnrecognizedWalls(result.unrecognized);
     }
@@ -188,33 +147,7 @@ function App() {
       });
     }
 
-    if (result.financials) {
-      setFinancialRecords(result.financials);
-      if (!climbData && !gymSchedules) setActiveView('executive');
-    }
-
     setShowUploadOverlay(false);
-  };
-
-  const handleEmailSchedule = () => {
-    if (!gymSchedules) return;
-    const activeGyms = Object.keys(gymSchedules);
-    if (!activeGyms.length) return;
-
-    const gymCode = activeGyms[0];
-    const gymName = gymCode;
-    const range = gymSchedules[gymCode].dateRange;
-
-    const subject = emailSettings.subject
-      .replace(/\[GYM_NAME\]/g, gymName)
-      .replace(/\[DATE_RANGE\]/g, range);
-
-    const body = emailSettings.body
-      .replace(/\[GYM_NAME\]/g, gymName)
-      .replace(/\[DATE_RANGE\]/g, range);
-
-    const mailto = `mailto:${emailSettings.to}?cc=${emailSettings.cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(mailto);
   };
 
   const handleEmail = () => {
@@ -223,8 +156,6 @@ function App() {
       const subject = encodeURIComponent(`Production Report: ${selectedGyms.join(', ')}`);
       const body = encodeURIComponent(`Hi Team,\n\nThe production report for ${selectedGyms.join(', ')} is ready. You can view the full dashboard and benchmarks here: ${window.location.href}\n\nSummary Context: ${activeBaseline.reportComments || 'No additional comments.'}`);
       window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    } else {
-      handleEmailSchedule();
     }
   };
 
@@ -239,32 +170,9 @@ function App() {
       <Sidebar
         gymNames={gymNames}
         gymDisplayNames={gymDisplayNames}
-        hasGeneratorData={!!gymSchedules}
         hasAnalyticsData={!!climbData}
-        onSaveGenerator={() => {
-          if (gymSchedules) {
-            localStorage.setItem('saved_schedules', JSON.stringify(gymSchedules));
-            alert('Schedules saved to local storage!');
-          }
-        }}
-        onLoadGenerator={() => {
-          const saved = localStorage.getItem('saved_schedules');
-          if (saved) {
-            setGymSchedules(JSON.parse(saved));
-            setActiveView('generator');
-            alert('Schedules loaded!');
-          } else {
-            alert('No saved schedules found.');
-          }
-        }}
+        hasGeneratorData={false}
         onEmailGenerator={handleEmail}
-        onResetAllEdits={() => {
-          if (confirm('Are you sure you want to clear ALL manual text edits for ALL gyms? This cannot be undone.')) {
-            resetAll();
-          }
-        }}
-        onDownloadGenerator={() => generatorRef.current?.downloadAll()}
-        onPrintGenerator={() => window.print()}
         onStartTutorial={() => setShowTutorial(true)}
       />
 
@@ -285,15 +193,7 @@ function App() {
           )
         )}
 
-        {activeView === 'generator' && (
-          gymSchedules ? (
-            <MapGenerator
-              ref={generatorRef}
-            />
-          ) : (
-            <FileUpload onDataLoaded={handleDataLoaded} />
-          )
-        )}
+
 
         {activeView === 'mapper' && (
           <div className="h-full animate-in fade-in duration-700">
@@ -309,17 +209,7 @@ function App() {
           )
         )}
 
-        {activeView === 'orbit-targets' && (
-          <OrbitTargetManager />
-        )}
 
-        {activeView === 'executive' && (
-          <ExecutiveDashboard />
-        )}
-
-        {activeView === 'simulator' && (
-          <SimulatorView />
-        )}
       </main>
 
       {/* Upload Overlay Modal */}

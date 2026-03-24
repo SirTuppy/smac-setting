@@ -49,7 +49,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         emailSettings,
         setEmailSettings,
         gymSettings,
-        gymSchedules,
         climbData,
     } = useDashboardStore();
 
@@ -140,17 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <div>
                     <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Logistics & Prep</p>
                     <div className="grid grid-cols-1 gap-1">
-                        <button
-                            id="nav-generator"
-                            onClick={() => setActiveView('generator')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'generator'
-                                ? 'bg-[#EDE04B] text-[#00205B] shadow-lg shadow-[#EDE04B]/20'
-                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
-                                }`}
-                        >
-                            <Map size={18} />
-                            <span className="text-xs font-black uppercase tracking-widest">Map Generator</span>
-                        </button>
+
 
                         <button
                             id="nav-mapper"
@@ -163,18 +152,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <Edit3 size={18} style={{ color: activeView === 'mapper' ? TYPE_COLORS.routes : undefined }} />
                             <span className="text-xs font-black uppercase tracking-widest">Route Mapper</span>
                         </button>
-
-                        <button
-                            id="nav-simulator"
-                            onClick={() => setActiveView('simulator')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'simulator'
-                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
-                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
-                                }`}
-                        >
-                            <Gauge size={18} style={{ color: activeView === 'simulator' ? '#EDE04B' : undefined }} />
-                            <span className="text-xs font-black uppercase tracking-widest text-left">Rotation Simulator</span>
-                        </button>
                     </div>
                 </div>
 
@@ -182,35 +159,12 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <div>
                     <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-2">Executive Oversight</p>
                     <div className="grid grid-cols-1 gap-1">
-                        <button
-                            id="nav-executive"
-                            onClick={() => setActiveView('executive')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'executive'
-                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
-                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
-                                }`}
-                        >
-                            <TrendingUp size={18} style={{ color: activeView === 'executive' ? '#EDE04B' : undefined }} />
-                            <span className="text-xs font-black uppercase tracking-widest text-left">Director View</span>
-                        </button>
-
-
-                        <button
-                            id="nav-orbit-targets"
-                            onClick={() => setActiveView('orbit-targets')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'orbit-targets'
-                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
-                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
-                                }`}
-                        >
-                            <Compass size={18} style={{ color: activeView === 'orbit-targets' ? '#FFD700' : undefined }} />
-                            <span className="text-xs font-black uppercase tracking-widest text-left">All Orbits Log</span>
-                        </button>
+                        {/* Hidden simulator, director view, orbit log */}
                     </div>
                 </div>
 
                 {/* Dynamic Contextual Tools */}
-                {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'orbit-targets' || activeView === 'executive') && (
+                {(activeView === 'analytics' || activeView === 'report') && (
                     <div className="mx-auto w-[94%] p-4 bg-black/20 border border-white/5 rounded-2xl space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 shadow-xl">
                         <div className="flex items-center gap-2 mb-2 px-1">
                             <img
@@ -221,8 +175,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">{activeView.replace('-', ' ')} Controls</p>
                         </div>
 
-                        {/* Selection Navigation - Analytics, Report, Generator, Wall Targets, Orbit Targets, Executive */}
-                        {(activeView === 'analytics' || activeView === 'report' || activeView === 'generator' || activeView === 'orbit-targets' || activeView === 'executive') && (
+                        {/* Selection Navigation - Analytics, Report */}
+                        {(activeView === 'analytics' || activeView === 'report') && (
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex items-center justify-between px-1 mb-4">
@@ -232,7 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                             return (
                                                 <label className={`flex items-center gap-2 transition-all ${canCompare ? 'cursor-pointer group' : 'cursor-not-allowed opacity-40 grayscale-[0.5]'}`}>
                                                     <span className={`text-[9px] font-black uppercase transition-colors ${canCompare && isCompareMode ? 'text-[#009CA6]' : 'text-white/20'}`}>
-                                                        {activeView === 'generator' ? 'Batch Mode' : 'Compare'}
+                                                        Compare
                                                     </span>
                                                     <div className={`w-7 h-4 rounded-full relative transition-colors ${canCompare && isCompareMode ? '' : 'bg-white/10'}`} style={{ backgroundColor: canCompare && isCompareMode ? TYPE_COLORS.routes : undefined }}>
                                                         <input
@@ -299,88 +253,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                             </div>
                         )}
 
-                        {/* Generator Navigation - Shared Actions */}
-                        {activeView === 'generator' && (
-                            <div className="space-y-6">
-                                <div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-1">Actions</p>
-                                    <div className="space-y-1">
-                                        <button
-                                            onClick={onDownloadGenerator}
-                                            disabled={!hasGeneratorData}
-                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${!hasGeneratorData ? 'opacity-30 cursor-not-allowed text-white/20' : 'text-white/50 hover:bg-white/5 hover:text-white/70'}`}>
-                                            <Download size={16} className={`transition-colors ${!hasGeneratorData ? '' : 'text-white/20 group-hover:text-[#009CA6]'}`} />
-                                            <span className="text-xs font-bold">Download PNGs</span>
-                                        </button>
-                                        <button
-                                            onClick={onPrintGenerator}
-                                            disabled={!hasGeneratorData}
-                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${!hasGeneratorData ? 'opacity-30 cursor-not-allowed text-white/20' : 'text-white/50 hover:bg-white/5 hover:text-white/70'}`}>
-                                            <Printer size={16} className={`transition-colors ${!hasGeneratorData ? '' : 'text-white/20 group-hover:text-[#009CA6]'}`} />
-                                            <span className="text-xs font-bold">Print PDF</span>
-                                        </button>
-                                        <button
-                                            onClick={onEmailGenerator}
-                                            disabled={!hasGeneratorData}
-                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${!hasGeneratorData ? 'opacity-30 cursor-not-allowed text-white/20' : 'text-white/50 hover:bg-white/5 hover:text-white/70'}`}>
-                                            <Mail size={16} className={`transition-colors ${!hasGeneratorData ? '' : 'text-white/20 group-hover:text-[#009CA6]'}`} />
-                                            <span className="text-xs font-bold">Email Schedule</span>
-                                        </button>
-                                    </div>
-                                </div>
 
-                                <div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-1">Memory</p>
-                                    <div className="space-y-1">
-                                        <button
-                                            onClick={onSaveGenerator}
-                                            disabled={!hasGeneratorData}
-                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${!hasGeneratorData ? 'opacity-30 cursor-not-allowed text-white/20' : 'text-white/50 hover:bg-white/5 hover:text-white/70'}`}>
-                                            <Save size={16} className={`transition-colors ${!hasGeneratorData ? '' : 'text-white/20 group-hover:text-[#009CA6]'}`} />
-                                            <span className="text-xs font-bold">Save Session</span>
-                                        </button>
-                                        <button
-                                            onClick={onLoadGenerator}
-                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:bg-white/5 hover:text-white/70 transition-all group">
-                                            <RotateCcw size={16} className="text-white/20 group-hover:text-[#009CA6]" />
-                                            <span className="text-xs font-bold">Restore Saved</span>
-                                        </button>
-                                        <button
-                                            onClick={onResetAllEdits}
-                                            disabled={!hasGeneratorData}
-                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${!hasGeneratorData ? 'opacity-30 cursor-not-allowed text-white/20' : 'text-white/50 hover:bg-white/5 hover:text-rose-400'}`}>
-                                            <RotateCcw size={16} className={`transition-colors ${!hasGeneratorData ? '' : 'text-white/20 group-hover:text-rose-400'}`} />
-                                            <span className="text-xs font-bold">Reset Manual Edits</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div id="tour-generator-sidebar">
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-4 px-1">Config</p>
-                                    <div className="space-y-1">
-                                        <button
-                                            onClick={() => setShowSettings(true)}
-                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:bg-white/5 hover:text-white/70 transition-all group">
-                                            <Mail size={16} className="text-white/20 group-hover:text-[#009CA6]" />
-                                            <span className="text-xs font-bold">Email Settings</span>
-                                        </button>
-                                        <button
-                                            onClick={() => setShowDiscoveryModal(true)}
-                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:bg-white/5 hover:text-white/70 transition-all group">
-                                            <Compass size={16} className="text-white/20 group-hover:text-[#009CA6]" />
-                                            <span className="text-xs font-bold">Gym Customization</span>
-                                        </button>
-                                        <button
-                                            id="tour-generator-instructions"
-                                            onClick={() => setShowInstructions(true)}
-                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:bg-white/5 hover:text-white/70 transition-all group">
-                                            <HelpCircle size={16} className="text-white/20 group-hover:text-[#009CA6]" />
-                                            <span className="text-xs font-bold">Guide</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
 
                         {/* Production Report Actions */}
                         {activeView === 'report' && (

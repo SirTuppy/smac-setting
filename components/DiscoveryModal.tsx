@@ -63,7 +63,6 @@ const DiscoveryModal: React.FC<DiscoveryModalProps> = ({ isOpen, onClose }) => {
         clearUnrecognizedWalls,
         gymSettings,
         updateGymSettings,
-        gymSchedules,
         gymDisplayNames,
         setGymDisplayName
     } = useDashboardStore();
@@ -71,20 +70,14 @@ const DiscoveryModal: React.FC<DiscoveryModalProps> = ({ isOpen, onClose }) => {
     const [activeTab, setActiveTab] = useState<'walls' | 'settings'>('walls');
     const [localMappings, setLocalMappings] = useState<Record<string, Record<string, 'rope' | 'boulder' | 'ignored' | null>>>({});
 
-    const activeGymsFromSchedule = useMemo(() =>
-        gymSchedules ? Object.keys(gymSchedules) : [],
-        [gymSchedules]
-    );
-
-    const hasUnrecognized = Object.keys(unrecognizedWalls).length > 0;
-
-    // Use unrecognized gyms or all active gyms from schedules
+    // Use unrecognized gyms
     const targetGyms = useMemo(() => {
         const gyms = new Set<string>();
         Object.keys(unrecognizedWalls).forEach(g => gyms.add(g));
-        activeGymsFromSchedule.forEach(g => gyms.add(g));
         return Array.from(gyms);
-    }, [unrecognizedWalls, activeGymsFromSchedule]);
+    }, [unrecognizedWalls]);
+
+    const hasUnrecognized = Object.keys(unrecognizedWalls).length > 0;
 
     if (!isOpen) return null;
 

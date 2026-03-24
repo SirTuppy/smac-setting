@@ -15,17 +15,15 @@ const BaselineModal: React.FC<BaselineModalProps> = ({ isOpen, onClose }) => {
         setSelectedBaselineGym,
         getBaseline,
         setBaselineSettings,
-        climbData,
-        gymSchedules
+        climbData
     } = useDashboardStore();
 
     // Derive available gyms for the selector - MUST BE ABOVE EARLY RETURN
     const availableGyms = useMemo(() => {
         const codes = new Set<string>();
         if (climbData) Object.keys(climbData).forEach(k => codes.add(k));
-        if (gymSchedules) Object.keys(gymSchedules).forEach(k => codes.add(k));
         return ['DEFAULT', ...Array.from(codes).sort()];
-    }, [climbData, gymSchedules]);
+    }, [climbData]);
 
     if (!isOpen) return null;
 
