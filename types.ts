@@ -76,7 +76,7 @@ export interface MapperStyle {
   showCircle: boolean;
 }
 
-export type AppView = 'analytics' | 'generator' | 'mapper' | 'report' | 'shift-analyzer' | 'orbit-targets' | 'executive' | 'simulator';
+export type AppView = 'analytics' | 'mapper' | 'report' | 'shift-analyzer' | 'wsp-generator' | 'budget-tracker';
 
 export interface WallStats {
   name: string;
@@ -151,4 +151,52 @@ export interface GymMeta {
   ropeTypeName?: string;
 }
 
+// --- WSP Generator Models ---
+export interface WSPSettings {
+  nameFormat: 'first' | 'full';
+  marketingEmail: string;
+  includeDefaultText: boolean;
+  gymEmails: Record<string, { gd: string; agd: string }>;
+}
 
+export interface WSPScheduleRow {
+  id: string;
+  day: string;
+  setters: string;
+  type: string;
+  zones: string;
+  notes: string;
+}
+
+export interface WSPGymData {
+  rows: WSPScheduleRow[];
+  generalNotes: string[];
+  settersChoice: string[];
+}
+
+// --- Budget Tracker Models ---
+export interface BudgetCategory {
+  id: string; // usually lower-cased name
+  name: string;
+  annualLimit: number;
+}
+
+export interface BudgetExpense {
+  id: string;
+  date: string; // YYYY-MM-DD
+  location?: string;
+  categoryId: string;
+  vendor?: string;
+  amount: number;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface BudgetState {
+  config: {
+    annualBudget: number;
+    categories: BudgetCategory[];
+    yearlyLimits?: Record<number, { annualBudget: number; categories: Record<string, number> }>;
+  };
+  expenses: BudgetExpense[];
+}

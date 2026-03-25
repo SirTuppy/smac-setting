@@ -7,8 +7,10 @@ import {
     GymSettings,
     ScheduleOverride,
     WallTarget,
-    SimulatorSetter,
-    SimulatorShift
+    WSPSettings,
+    BudgetState,
+    BudgetCategory,
+    BudgetExpense
 } from '../types';
 import { GYMS } from '../constants/gyms';
 import { RangeOption } from '../components/UnifiedHeader';
@@ -77,13 +79,16 @@ interface DashboardState {
     comparisonMode: 'none' | 'pop' | 'yoy';
     wallTargets: Record<string, Record<string, WallTarget>>; // gymCode -> wallName -> Target
 
-    // Simulator State
-    simulatorSetters: Record<string, SimulatorSetter>; // Key: setterName
-    simulatorOverrides: Record<string, SimulatorShift>; // Key: dateKey-gymCode-type
-    simulatorVarianceBuffer: number; // Global buffer slider %
-    simulatorGymDebt: Record<string, number>; // gymCode -> total boulders/routes needed
+    // WSP State
+    wspSettings: WSPSettings;
+    setWspSettings: (settings: Partial<WSPSettings>) => void;
 
-
+    // Budget State
+    budgetState: BudgetState;
+    setBudgetState: (budgetState: Partial<BudgetState>) => void;
+    addBudgetExpense: (expense: BudgetExpense) => void;
+    updateBudgetExpense: (expense: BudgetExpense) => void;
+    deleteBudgetExpense: (id: string) => void;
 
 
     // Actions
@@ -118,11 +123,6 @@ interface DashboardState {
     setWallTarget: (gymCode: string, wallName: string, target: Partial<WallTarget>) => void;
     resetWallTargets: (gymCode?: string) => void;
 
-    // Simulator Actions
-    setSimulatorSetter: (setter: SimulatorSetter) => void;
-    setSimulatorOverride: (shift: SimulatorShift) => void;
-    setSimulatorVarianceBuffer: (buffer: number) => void;
-    setSimulatorGymDebt: (gymCode: string, debt: number) => void;
 
     resetAll: () => void;
 }
@@ -205,19 +205,63 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     })(),
 
 
-    // Simulator Initial State
-    simulatorSetters: (() => {
-        const saved = localStorage.getItem('simulator_setters');
-        return saved ? JSON.parse(saved) : {};
+    // WSP Initial State
+    wspSettings: (() => {
+        const saved = localStorage.getItem('wsp_app_settings');
+        const defaultSettings: WSPSettings = {
+            nameFormat: 'first',
+            marketingEmail: 'Leslie.Valdez@movementgyms.com',
+            includeDefaultText: true,
+            gymEmails: {
+                'Design District': { gd: 'Chad.Dietz@movementgyms.com', agd: 'Louis.Rodriguez@movementgyms.com' },
+                'Grapevine': { gd: 'Carver.Bomboy@movementgyms.com', agd: '' },
+                'Plano': { gd: 'David.Moreno@movementgyms.com', agd: 'Ana.Alamilla@movementgyms.com' },
+                'The Hill': { gd: 'Adam.Hughes@movementgyms.com', agd: 'Tyler.VanStrien@movementgyms.com' },
+                'Fort Worth': { gd: '', agd: '' },
+                'Denton': { gd: 'Abbie.Micke@movementgyms.com', agd: '' }
+            }
+        };
+        if (!saved) return defaultSettings;
+        try {
+            const parsed = JSON.parse(saved);
+            return {
+                nameFormat: parsed.nameFormat || defaultSettings.nameFormat,
+                marketingEmail: parsed.marketingEmail || defaultSettings.marketingEmail,
+                includeDefaultText: parsed.includeDefaultText !== undefined ? parsed.includeDefaultText : defaultSettings.includeDefaultText,
+                gymEmails: { ...defaultSettings.gymEmails, ...(parsed.gymEmails || {}) }
+            };
+        } catch {
+            return defaultSettings;
+        }
     })(),
-    simulatorOverrides: (() => {
-        const saved = localStorage.getItem('simulator_overrides');
-        return saved ? JSON.parse(saved) : {};
-    })(),
-    simulatorVarianceBuffer: Number(localStorage.getItem('simulator_variance_buffer') || '0'),
-    simulatorGymDebt: (() => {
-        const saved = localStorage.getItem('simulator_gym_debt');
-        return saved ? JSON.parse(saved) : {};
+
+    // Budget Initial State
+    budgetState: (() => {
+        const saved = localStorage.getItem('budgetTrackerState');
+        const defaultState: BudgetState = {
+            config: {
+                annualBudget: 0,
+                categories: []
+            },
+            expenses: []
+        };
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                // Backwards compatibility if they used a flat structure temporarily
+                if (!parsed.config) {
+                    return {
+                        config: {
+                            annualBudget: parsed.annualBudget || 0,
+                            categories: parsed.categories || []
+                        },
+                        expenses: parsed.expenses || []
+                    };
+                }
+                return parsed;
+            } catch (e) { return defaultState; }
+        }
+        return defaultState;
     })(),
 
 
@@ -454,27 +498,36 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
         selectedBaselineGym: 'DEFAULT'
     }),
 
-    // Simulator Actions
-    setSimulatorSetter: (setter) => {
-        const current = get().simulatorSetters;
-        const newState = { ...current, [setter.name]: setter };
-        localStorage.setItem('simulator_setters', JSON.stringify(newState));
-        set({ simulatorSetters: newState });
+    // WSP & Budget Actions
+    setWspSettings: (settings) => {
+        const newState = { ...get().wspSettings, ...settings };
+        localStorage.setItem('wsp_app_settings', JSON.stringify(newState));
+        set({ wspSettings: newState });
     },
-    setSimulatorOverride: (shift) => {
-        const key = `${shift.dateKey}-${shift.gymCode}-${shift.type}`;
-        const newState = { ...get().simulatorOverrides, [key]: shift };
-        localStorage.setItem('simulator_overrides', JSON.stringify(newState));
-        set({ simulatorOverrides: newState });
+    
+    setBudgetState: (budgetState) => {
+        const newState = { ...get().budgetState, ...budgetState };
+        localStorage.setItem('budgetTrackerState', JSON.stringify(newState));
+        set({ budgetState: newState });
     },
-    setSimulatorVarianceBuffer: (simulatorVarianceBuffer) => {
-        localStorage.setItem('simulator_variance_buffer', String(simulatorVarianceBuffer));
-        set({ simulatorVarianceBuffer });
+    
+    addBudgetExpense: (expense) => {
+        const state = get().budgetState;
+        const newState = { ...state, expenses: [...state.expenses, expense].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()) };
+        localStorage.setItem('budgetTrackerState', JSON.stringify(newState));
+        set({ budgetState: newState });
     },
-    setSimulatorGymDebt: (gymCode, debt) => {
-        const newState = { ...get().simulatorGymDebt, [gymCode]: debt };
-        localStorage.setItem('simulator_gym_debt', JSON.stringify(newState));
-        set({ simulatorGymDebt: newState });
+    updateBudgetExpense: (expense) => {
+        const state = get().budgetState;
+        const newState = { ...state, expenses: state.expenses.map(e => e.id === expense.id ? expense : e) };
+        localStorage.setItem('budgetTrackerState', JSON.stringify(newState));
+        set({ budgetState: newState });
+    },
+    deleteBudgetExpense: (id) => {
+        const state = get().budgetState;
+        const newState = { ...state, expenses: state.expenses.filter(e => e.id !== id) };
+        localStorage.setItem('budgetTrackerState', JSON.stringify(newState));
+        set({ budgetState: newState });
     }
 }));
 

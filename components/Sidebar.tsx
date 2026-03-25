@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     FileText, Edit3, Sparkles, LayoutDashboard, Database, LogOut,
-    ChevronRight, Map, BarChart2, Save, RotateCcw, Mail,
+    ChevronRight, Map, BarChart2, Save, RotateCcw, Mail, Calendar, DollarSign,
     Download, Printer, Plus, Target, ClipboardList, Zap, Compass, HelpCircle,
     TrendingUp, LineChart, Gauge
 } from 'lucide-react';
@@ -149,8 +149,32 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 : 'text-white/40 hover:bg-white/5 hover:text-white/60'
                                 }`}
                         >
-                            <Edit3 size={18} style={{ color: activeView === 'mapper' ? TYPE_COLORS.routes : undefined }} />
+                            <Map size={18} style={{ color: activeView === 'mapper' ? TYPE_COLORS.routes : undefined }} />
                             <span className="text-xs font-black uppercase tracking-widest">Route Mapper</span>
+                        </button>
+
+                        <button
+                            id="nav-wsp-generator"
+                            onClick={() => setActiveView('wsp-generator')}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'wsp-generator'
+                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
+                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
+                                }`}
+                        >
+                            <Calendar size={18} style={{ color: activeView === 'wsp-generator' ? '#008C95' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">WSP Generator</span>
+                        </button>
+
+                        <button
+                            id="nav-budget-tracker"
+                            onClick={() => setActiveView('budget-tracker')}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'budget-tracker'
+                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
+                                : 'text-white/40 hover:bg-white/5 hover:text-white/60'
+                                }`}
+                        >
+                            <DollarSign size={18} style={{ color: activeView === 'budget-tracker' ? '#10b981' : undefined }} />
+                            <span className="text-xs font-black uppercase tracking-widest text-left">Budget Tracker</span>
                         </button>
                     </div>
                 </div>

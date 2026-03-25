@@ -9,13 +9,15 @@ import Sidebar from './components/Sidebar';
 import BaselineModal from './components/BaselineModal';
 import DiscoveryModal from './components/DiscoveryModal';
 import CommentModal from './components/CommentModal';
+import WSPGenerator from './components/WSPGenerator';
+import BudgetTracker from './components/BudgetTracker';
 import { Climb, EmailSettings, AppView, BaselineSettings } from './types';
 import { MOCK_CSV_DATA, MOCK_HUMANITY_DATA } from './constants/mockData';
 
 import { useDashboardStore } from './store/useDashboardStore';
 import TutorialGuide, { TutorialStep } from './components/TutorialGuide';
 import { getGymCode } from './constants/mapTemplates';
-import { parseKayaCSV, parseHumanityCSV } from './utils/csvParser';
+import { parseKayaCSV } from './utils/csvParser';
 
 const TUTORIAL_STEPS: TutorialStep[] = [
   // ... (keeping tutorial steps same)
@@ -209,6 +211,17 @@ function App() {
           )
         )}
 
+        {activeView === 'wsp-generator' && (
+          <div className="h-full animate-in fade-in duration-700">
+            <WSPGenerator />
+          </div>
+        )}
+
+        {activeView === 'budget-tracker' && (
+          <div className="h-full animate-in fade-in duration-700">
+            <BudgetTracker />
+          </div>
+        )}
 
       </main>
 
