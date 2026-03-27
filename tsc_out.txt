@@ -1,0 +1,93 @@
+﻿src/features/analytics/Dashboard.tsx(2,36): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/analytics/Dashboard.tsx(6,41): error TS2307: Cannot find module '../constants/colors' or its corresponding type declarations.
+src/features/analytics/Dashboard.tsx(9,41): error TS2307: Cannot find module '../services/reports' or its corresponding type declarations.
+src/features/analytics/Dashboard.tsx(10,28): error TS2307: Cannot find module '../constants/mapTemplates' or its corresponding type declarations.
+src/features/analytics/Dashboard.tsx(11,35): error TS2307: Cannot find module '../constants/gyms' or its corresponding type declarations.
+src/features/analytics/Dashboard.tsx(14,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/analytics/DataExplorer.tsx(2,23): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/analytics/GymComparison.tsx(2,23): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/analytics/GymComparison.tsx(5,41): error TS2307: Cannot find module '../constants/colors' or its corresponding type declarations.
+src/features/analytics/MissionControl.tsx(6,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/analytics/MissionControl.tsx(7,42): error TS2307: Cannot find module '../constants/messages' or its corresponding type declarations.
+src/features/analytics/MissionControl.tsx(59,44): error TS2339: Property 'dateSet' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(59,72): error TS2339: Property 'dateSet' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(63,9): error TS2339: Property 'setter' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(70,23): error TS2339: Property 'setter' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(74,15): error TS2339: Property 'isRoute' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(123,77): error TS2339: Property 'rows' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(126,9): error TS2339: Property 'rows' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(140,7): error TS2365: Operator '+' cannot be applied to types 'unknown' and 'number'.
+src/features/analytics/MissionControl.tsx(140,32): error TS2339: Property 'progress' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(140,56): error TS2339: Property 'status' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(143,7): error TS2365: Operator '+' cannot be applied to types 'unknown' and 'number'.
+src/features/analytics/MissionControl.tsx(143,32): error TS2339: Property 'progress' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(143,56): error TS2339: Property 'status' does not exist on type 'unknown'.
+src/features/analytics/MissionControl.tsx(149,53): error TS2339: Property 'setterName' does not exist on type 'unknown'.
+src/features/analytics/ShiftAnalyzer.tsx(2,38): error TS2307: Cannot find module '../utils/analyticsEngine' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(6,26): error TS2307: Cannot find module './analyzer/AnalyzerKPIs' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(7,84): error TS2307: Cannot find module './analyzer/EfficiencyCharts' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(8,85): error TS2307: Cannot find module './analyzer/DistributionCharts' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(9,26): error TS2307: Cannot find module './analyzer/SynergyTable' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(10,29): error TS2307: Cannot find module './analyzer/WallPerformance' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(11,35): error TS2307: Cannot find module '../constants/gyms' or its corresponding type declarations.
+src/features/analytics/ShiftAnalyzer.tsx(15,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/analytics/WallHealth.tsx(2,27): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/apprenticeship/PathEditor.tsx(8,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/apprenticeship/PathEditor.tsx(14,8): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/apprenticeship/PathEditor.tsx(15,34): error TS2307: Cannot find module '../constants/apprenticeship' or its corresponding type declarations.
+src/features/apprenticeship/ResourceHub.tsx(7,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/apprenticeship/ResourceHub.tsx(8,54): error TS2307: Cannot find module '../constants/setterLibrary' or its corresponding type declarations.
+src/features/apprenticeship/SetterCard.tsx(3,29): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/apprenticeship/SetterCard.tsx(6,44): error TS2307: Cannot find module '../utils/gradeUtils' or its corresponding type declarations.
+src/features/apprenticeship/SetterCard.tsx(7,29): error TS2307: Cannot find module '../constants/colors' or its corresponding type declarations.
+src/features/apprenticeship/SetterLibrary.tsx(3,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/apprenticeship/SetterLibrary.tsx(4,48): error TS2307: Cannot find module '../constants/setterLibrary' or its corresponding type declarations.
+src/features/apprenticeship/SetterPath.tsx(8,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/apprenticeship/SetterPath.tsx(17,8): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/apprenticeship/SetterPath.tsx(18,34): error TS2307: Cannot find module '../constants/apprenticeship' or its corresponding type declarations.
+src/features/apprenticeship/SetterPath.tsx(101,64): error TS2339: Property 'setter' does not exist on type 'unknown'.
+src/features/budget/BudgetTracker.tsx(2,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/budget/BudgetTracker.tsx(5,47): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/core/BaselineModal.tsx(3,34): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/core/BaselineModal.tsx(4,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/core/BaselineModal.tsx(5,35): error TS2307: Cannot find module '../constants/gyms' or its corresponding type declarations.
+src/features/core/ChangelogModal.tsx(3,40): error TS2307: Cannot find module '../constants/version' or its corresponding type declarations.
+src/features/core/ChangelogModal.tsx(4,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/core/DiscoveryModal.tsx(3,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/core/DvdLogo.tsx(3,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/core/FileUpload.tsx(3,30): error TS2307: Cannot find module '../utils/csvParser' or its corresponding type declarations.
+src/features/core/FileUpload.tsx(4,23): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/core/FileUpload.tsx(5,31): error TS2307: Cannot find module '../constants/mockData' or its corresponding type declarations.
+src/features/core/FileUpload.tsx(6,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/core/FileUpload.tsx(7,42): error TS2307: Cannot find module '../constants/messages' or its corresponding type declarations.
+src/features/core/Sidebar.tsx(8,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/core/Sidebar.tsx(9,41): error TS2307: Cannot find module '../constants/colors' or its corresponding type declarations.
+src/features/core/Sidebar.tsx(10,22): error TS2307: Cannot find module '../constants/gyms' or its corresponding type declarations.
+src/features/core/Sidebar.tsx(11,29): error TS2307: Cannot find module '../constants/version' or its corresponding type declarations.
+src/features/mapper/RouteMapper.tsx(3,42): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/report/analyzer/AnalyzerKPIs.tsx(3,37): error TS2307: Cannot find module '../../utils/analyticsEngine' or its corresponding type declarations.
+src/features/report/analyzer/DistributionCharts.tsx(7,37): error TS2307: Cannot find module '../../utils/analyticsEngine' or its corresponding type declarations.
+src/features/report/analyzer/EfficiencyCharts.tsx(7,37): error TS2307: Cannot find module '../../utils/analyticsEngine' or its corresponding type declarations.
+src/features/report/analyzer/SynergyTable.tsx(4,37): error TS2307: Cannot find module '../../utils/analyticsEngine' or its corresponding type declarations.
+src/features/report/analyzer/WallPerformance.tsx(3,37): error TS2307: Cannot find module '../../utils/analyticsEngine' or its corresponding type declarations.
+src/features/report/analyzer/WallPerformance.tsx(4,35): error TS2307: Cannot find module '../../store/useDashboardStore' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(4,41): error TS2307: Cannot find module '../constants/colors' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(5,58): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(6,35): error TS2307: Cannot find module '../constants/gyms' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(7,42): error TS2307: Cannot find module '../utils/analyticsEngine' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(8,35): error TS2307: Cannot find module '../utils/productionStats' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(10,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/report/ProductionReport.tsx(12,29): error TS2307: Cannot find module '../utils/ModernPDFExport' or its corresponding type declarations.
+src/features/report/ProductionReportView.tsx(3,51): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/report/report/KPICards.tsx(3,33): error TS2307: Cannot find module '../../types' or its corresponding type declarations.
+src/features/report/report/KPICards.tsx(4,41): error TS2307: Cannot find module '../../constants/colors' or its corresponding type declarations.
+src/features/report/report/ProductionCharts.tsx(3,33): error TS2307: Cannot find module '../../types' or its corresponding type declarations.
+src/features/report/report/ProductionCharts.tsx(4,41): error TS2307: Cannot find module '../../constants/colors' or its corresponding type declarations.
+src/features/report/report/SetterProductionGrid.tsx(3,34): error TS2307: Cannot find module '../../types' or its corresponding type declarations.
+src/features/report/report/SetterProductionGrid.tsx(4,41): error TS2307: Cannot find module '../../constants/colors' or its corresponding type declarations.
+src/features/wsp/WSPGenerator.tsx(3,35): error TS2307: Cannot find module '../store/useDashboardStore' or its corresponding type declarations.
+src/features/wsp/WSPGenerator.tsx(4,29): error TS2307: Cannot find module '../utils/wspParser' or its corresponding type declarations.
+src/features/wsp/WSPGenerator.tsx(5,28): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/features/wsp/WSPGenerator.tsx(7,22): error TS2307: Cannot find module '../constants/gyms' or its corresponding type declarations.
+src/features/wsp/WSPGenerator.tsx(54,15): error TS2339: Property 'forEach' does not exist on type 'unknown'.
+src/features/wsp/WSPGenerator.tsx(105,19): error TS2339: Property 'forEach' does not exist on type 'unknown'.

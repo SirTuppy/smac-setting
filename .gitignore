@@ -47,3 +47,5 @@ test_quotes.ts
 test_setters.ts
 sample_data/sample_humanity.csv
 sample_data/sample_payroll.xlsx
+
+tmp/

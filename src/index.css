@@ -1,0 +1,433 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Print Styles */
+@media print {
+
+    /* 1. RESET ROOT CONTAINERS to be simple blocks */
+    html,
+    body,
+    #root {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        overflow: visible !important;
+        background: white !important;
+    }
+
+    /* 2. COMPLETELY REMOVE SIDEBAR AND UI */
+    aside,
+    nav,
+    .print\:hidden {
+        display: none !important;
+    }
+
+    /* 3. RESET THE DASHBOARD LAYOUT (Remove the 72px sidebar margin) */
+    main {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-left: 0 !important;
+        /* Extremely important to reset the .ml-72 */
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        position: static !important;
+        overflow: visible !important;
+    }
+
+    /* 4. RESET THE MAP CONTAINER (Remove flex-row and scrolling) */
+    #map-print-section {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Force each gym block to be a vertical section */
+    #map-print-section>div {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Hide the preview header text in print */
+    #map-print-section h2,
+    #map-print-section .bg-\[\#00205B\],
+    #map-print-section button {
+        display: none !important;
+    }
+
+    /* STRIP UI ARTIFACTS: Pure rectangle export */
+    .bg-white.p-4.rounded-2xl.shadow-2xl.shadow-slate-200.border.border-slate-200 {
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    /* INDIVIDUAL MAP (Canvas) FORMATTING */
+    canvas {
+        display: block !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        height: auto !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Avoid page breaks inside table sections if they were separate (not applicable here as it's a canvas, but good practice) */
+}
+
+/* Custom Scrollbar for Sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DARK MODE — Pure CSS override, toggled by .dark-mode on <html>
+   Zero component changes required.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Root & Body ────────────────────────────────────────── */
+html.dark-mode {
+    color-scheme: dark;
+}
+
+html.dark-mode body {
+    background-color: #0f1117 !important;
+    color: #c8cdd5 !important;
+}
+
+/* ── Scrollbar (dark) ───────────────────────────────────── */
+html.dark-mode ::-webkit-scrollbar-track {
+    background: #1a1d27;
+}
+html.dark-mode ::-webkit-scrollbar-thumb {
+    background: #2d3040;
+}
+html.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #3d4155;
+}
+
+/* ── Main content area (the <main> flex-1) ──────────────── */
+html.dark-mode main {
+    background-color: #0f1117;
+}
+
+/* ── Primary backgrounds ────────────────────────────────── */
+html.dark-mode .bg-white {
+    background-color: #1a1d27 !important;
+}
+html.dark-mode .bg-slate-50 {
+    background-color: #12141c !important;
+}
+html.dark-mode .bg-slate-100 {
+    background-color: #1e2130 !important;
+}
+html.dark-mode .bg-slate-200 {
+    background-color: #252838 !important;
+}
+
+/* ── Hover backgrounds ──────────────────────────────────── */
+html.dark-mode .hover\:bg-slate-50:hover {
+    background-color: #1e2130 !important;
+}
+html.dark-mode .hover\:bg-slate-100:hover {
+    background-color: #252838 !important;
+}
+html.dark-mode .hover\:bg-slate-200:hover {
+    background-color: #2d3040 !important;
+}
+html.dark-mode .hover\:bg-white:hover {
+    background-color: #1e2130 !important;
+}
+
+/* ── Card pills / stat backgrounds ──────────────────────── */
+html.dark-mode .bg-blue-100 {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+}
+html.dark-mode .bg-emerald-100 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+}
+html.dark-mode .bg-teal-100 {
+    background-color: rgba(20, 184, 166, 0.15) !important;
+}
+html.dark-mode .bg-teal-50 {
+    background-color: rgba(20, 184, 166, 0.1) !important;
+}
+html.dark-mode .bg-violet-100 {
+    background-color: rgba(139, 92, 246, 0.15) !important;
+}
+html.dark-mode .bg-indigo-100 {
+    background-color: rgba(99, 102, 241, 0.15) !important;
+}
+html.dark-mode .bg-rose-100 {
+    background-color: rgba(244, 63, 94, 0.15) !important;
+}
+html.dark-mode .bg-amber-100 {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+}
+
+/* ── Text colors ────────────────────────────────────────── */
+html.dark-mode .text-\[\#00205B\] {
+    color: #a8c4e0 !important;
+}
+html.dark-mode .text-slate-900 {
+    color: #e2e5ea !important;
+}
+html.dark-mode .text-slate-800 {
+    color: #d0d4dc !important;
+}
+html.dark-mode .text-slate-700 {
+    color: #b8bec8 !important;
+}
+html.dark-mode .text-slate-600 {
+    color: #9ca3af !important;
+}
+html.dark-mode .text-slate-500 {
+    color: #8891a0 !important;
+}
+html.dark-mode .text-slate-400 {
+    color: #6b7280 !important;
+}
+
+/* ── Borders ────────────────────────────────────────────── */
+html.dark-mode .border-slate-100 {
+    border-color: #252838 !important;
+}
+html.dark-mode .border-slate-200 {
+    border-color: #2d3040 !important;
+}
+html.dark-mode .border-slate-300 {
+    border-color: #3d4155 !important;
+}
+html.dark-mode .border-dashed {
+    border-color: #3d4155 !important;
+}
+
+/* ── Shadows (suppress glow on dark) ────────────────────── */
+html.dark-mode .shadow-lg,
+html.dark-mode .shadow-xl,
+html.dark-mode .shadow-2xl {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+html.dark-mode .shadow-sm {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+html.dark-mode .shadow-slate-200\/50,
+html.dark-mode .shadow-slate-200 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ── Form inputs ────────────────────────────────────────── */
+html.dark-mode input[type="text"],
+html.dark-mode input[type="email"],
+html.dark-mode input[type="number"],
+html.dark-mode input[type="date"],
+html.dark-mode input[type="search"],
+html.dark-mode textarea,
+html.dark-mode select {
+    background-color: #12141c !important;
+    color: #c8cdd5 !important;
+    border-color: #3d4155 !important;
+}
+html.dark-mode input::placeholder,
+html.dark-mode textarea::placeholder {
+    color: #4b5263 !important;
+}
+
+/* ── Modals & overlays ──────────────────────────────────── */
+html.dark-mode .bg-black\/50 {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ── Tables ─────────────────────────────────────────────── */
+html.dark-mode table th {
+    background-color: #1a1d27 !important;
+    color: #9ca3af !important;
+    border-color: #2d3040 !important;
+}
+html.dark-mode table td {
+    border-color: #252838 !important;
+    color: #b8bec8 !important;
+}
+html.dark-mode table tr:nth-child(even) {
+    background-color: #12141c !important;
+}
+html.dark-mode table tr:nth-child(odd) {
+    background-color: #1a1d27 !important;
+}
+
+/* ── Recharts ───────────────────────────────────────────── */
+html.dark-mode .recharts-cartesian-grid line {
+    stroke: #252838 !important;
+}
+html.dark-mode .recharts-text {
+    fill: #8891a0 !important;
+}
+html.dark-mode .recharts-tooltip-wrapper .recharts-default-tooltip {
+    background-color: #1a1d27 !important;
+    border-color: #2d3040 !important;
+    color: #c8cdd5 !important;
+}
+
+/* ── Badges & pills (keep readable) ─────────────────────── */
+html.dark-mode .bg-emerald-50 {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+}
+html.dark-mode .bg-blue-50 {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+}
+html.dark-mode .bg-rose-50 {
+    background-color: rgba(244, 63, 94, 0.1) !important;
+}
+html.dark-mode .bg-amber-50 {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+}
+
+/* ── Mission Control specific ───────────────────────────── */
+html.dark-mode .bg-slate-50\/50 {
+    background-color: rgba(18, 20, 28, 0.5) !important;
+}
+
+/* ── WSP Generator — entire content area stays light ─────── */
+html.dark-mode .wsp-content {
+    color: #00205B;
+}
+html.dark-mode .wsp-content .bg-white {
+    background-color: #ffffff !important;
+}
+html.dark-mode .wsp-content .bg-slate-50,
+html.dark-mode .wsp-content .bg-slate-100 {
+    background-color: initial !important;
+}
+html.dark-mode .wsp-content .hover\:bg-slate-50:hover {
+    background-color: #f8fafc !important;
+}
+html.dark-mode .wsp-content .hover\:bg-slate-200:hover {
+    background-color: #e2e8f0 !important;
+}
+html.dark-mode .wsp-content .text-\[\#00205B\] {
+    color: #00205B !important;
+}
+html.dark-mode .wsp-content .text-slate-800,
+html.dark-mode .wsp-content .text-slate-700,
+html.dark-mode .wsp-content .text-slate-600,
+html.dark-mode .wsp-content .text-slate-500,
+html.dark-mode .wsp-content .text-slate-400 {
+    color: revert !important;
+}
+html.dark-mode .wsp-content .border-slate-100,
+html.dark-mode .wsp-content .border-slate-200,
+html.dark-mode .wsp-content .border-slate-300,
+html.dark-mode .wsp-content .border-dashed {
+    border-color: revert !important;
+}
+html.dark-mode .wsp-content .shadow-lg,
+html.dark-mode .wsp-content .shadow-xl,
+html.dark-mode .wsp-content .shadow-2xl,
+html.dark-mode .wsp-content .shadow-sm {
+    box-shadow: revert !important;
+}
+html.dark-mode .wsp-content table th {
+    background-color: white !important;
+    color: #666666 !important;
+    border-color: #d3d3d3 !important;
+}
+html.dark-mode .wsp-content table td {
+    border-color: #d3d3d3 !important;
+    color: #666666 !important;
+}
+html.dark-mode .wsp-content table tr:nth-child(even) {
+    background-color: #f5f5f5 !important;
+}
+html.dark-mode .wsp-content table tr:nth-child(odd) {
+    background-color: #ffffff !important;
+}
+html.dark-mode .wsp-content input[type="text"],
+html.dark-mode .wsp-content input[type="email"],
+html.dark-mode .wsp-content textarea,
+html.dark-mode .wsp-content select {
+    background-color: revert !important;
+    color: revert !important;
+    border-color: revert !important;
+}
+
+/* ── No-scrollbar for story modals ──────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Dark mode toggle animation ─────────────────────────── */
+.dark-toggle-track {
+    transition: background-color 0.3s ease;
+}
+.dark-toggle-knob {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Polish: Animations & Skeletons ────────────────────── */
+:root {
+    --skeleton-bg: rgba(0, 0, 0, 0.05);
+    --skeleton-pulse: rgba(0, 0, 0, 0.1);
+}
+
+html.dark-mode {
+    --skeleton-bg: rgba(255, 255, 255, 0.05);
+    --skeleton-pulse: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes skeleton-pulse {
+    0% { background-color: var(--skeleton-bg); }
+    50% { background-color: var(--skeleton-pulse); }
+    100% { background-color: var(--skeleton-bg); }
+}
+
+.animate-skeleton {
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes slide-up-subtle {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slide-up-subtle 0.5s ease-out forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
